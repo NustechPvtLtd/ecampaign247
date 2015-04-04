@@ -7,8 +7,6 @@ class Sitemodel extends CI_Model {
         parent::__construct();
         
         $this->load->database();
-        $this->load->library('session');
-        $this->load->library('ion_auth');
         
     }
     
@@ -194,7 +192,6 @@ class Sitemodel extends CI_Model {
     	
     	$userID = $user->id;
     	
-    	
     	//create the site item first
     	
     	$data = array(
@@ -205,12 +202,10 @@ class Sitemodel extends CI_Model {
     	
     	$this->db->insert('sites', $data); 
     	
-    	
     	$siteID = $this->db->insert_id();
     	
     	//die( "ID: ".$this->db->insert_id() );
-    	    	
-    	
+    	    
     	//next we create the pages and frames
     	
     	foreach( $siteData as $pageName => $frames ) {
@@ -225,15 +220,20 @@ class Sitemodel extends CI_Model {
     		
     		$pageID = $this->db->insert_id();
     		
-    		
-    		
     		//page is done, now all the frames for this page
     		
     		foreach( $frames as $frameData ) {
                 
                 $frameContent = $frameData['frameContent'];
-                $frameContent = str_replace('href="','href="http://localhost/ecampaign247/elements/',$frameContent);
-                $frameContent = str_replace('src="','src="http://localhost/ecampaign247/elements/',$frameContent);
+                if(stristr($frameContent, '<link href="'. base_url('elements'))){
+                    $frameContent = str_replace('<link href="'. base_url('elements').'/','<link href="',$frameContent);
+                }
+                if(stristr($frameContent, '<script src="'. base_url('elements'))){
+                    $frameContent = str_replace('<script src="'. base_url('elements').'/','<script src="',$frameContent);
+                }
+                if(stristr($frameContent, 'src="'. base_url('elements').'/images')){
+                    $frameContent = str_replace('src="'. base_url('elements').'/images','src="images',$frameContent);
+                }
     			$data = array(
     				'pages_id' => $pageID,
     				'sites_id' => $siteID,
@@ -252,8 +252,6 @@ class Sitemodel extends CI_Model {
     	return $siteID;
     
     }
-    
-    
     
     /*
     	
@@ -328,8 +326,15 @@ class Sitemodel extends CI_Model {
     		
     			foreach( $frames as $frameData ) {
                     $frameContent = $frameData['frameContent'];
-                    $frameContent = str_replace('href="','href="http://localhost/ecampaign247/elements/',$frameContent);
-                    $frameContent = str_replace('src="','src="http://localhost/ecampaign247/elements/',$frameContent);
+                    if(stristr($frameContent, '<link href="'. base_url('elements'))){
+                        $frameContent = str_replace('<link href="'. base_url('elements').'/','<link href="',$frameContent);
+                    }
+                    if(stristr($frameContent, '<script src="'. base_url('elements'))){
+                        $frameContent = str_replace('<script src="'. base_url('elements').'/','<script src="',$frameContent);
+                    }
+                    if(stristr($frameContent, 'src="'. base_url('elements').'/images')){
+                        $frameContent = str_replace('src="'. base_url('elements').'/images','src="images',$frameContent);
+                    }
     				$data = array(
     					'pages_id' => $pageID,
     					'sites_id' => $siteID,

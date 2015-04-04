@@ -22,8 +22,9 @@
         	            		
         		<a href="#" id="savePage" data-toggle="modal" class="btn btn-primary btn-embossed pull-right disabled actionButtons" style="margin-right: 10px;"><span class="fui-check"></span> <span class="bLabel"><?php echo $this->lang->line('actionbuttons_save')?></span></a>
         	
-        		<a href="#exportModal" id="exportPage" data-toggle="modal" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_export')?></a>
-        		
+        		<!--<a href="#exportModal" id="exportPage" data-toggle="modal" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_export')?></a>-->
+        		<a href="#previewModal" id="previewPage" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_preview')?></a>
+                
         		<a href="#" id="publishPage" class="btn btn-inverse btn-embossed pull-right disabled actionButtons" data-siteid="<?php echo $siteData['site']->sites_id;?>" <?php if( $siteData['site']->ftp_ok == 0 ):?>data-toggle="tooltip"<?php endif;?> data-placement="bottom" title="You can not publish your site right now. Please update your FTP details." ><span class="fui-upload"></span> <?php echo $this->lang->line('actionbuttons_publish')?> <span class="fui-alert text-danger" <?php if( $siteData['site']->ftp_ok == 1 ):?>style="display:none"<?php endif;?>></span></a>
         	
         		<div class="modes">

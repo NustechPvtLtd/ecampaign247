@@ -130,6 +130,7 @@ $lang['actionbuttons_sitesettings'] = "Site Settings";
 $lang['actionbuttons_pagesettings'] = "Page Settings";
 $lang['actionbuttons_save'] = "Save";
 $lang['actionbuttons_export'] = "Export";
+$lang['actionbuttons_preview'] = "Preview";
 $lang['actionbuttons_publish'] = "Publish";
 
 $lang['label_building_mode'] = "Building Mode";

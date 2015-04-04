@@ -415,8 +415,17 @@ class Sites extends MY_Controller {
 	public function getframe($frameID) {
 	
 		$frame = $this->sitemodel->getSingleFrame($frameID);
-		
-		echo $frame->frames_content;
+        $frameContent = $frame->frames_content;
+        if(!stristr($frameContent, '<link href="'. base_url('elements'))){
+            $frameContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$frameContent);
+        }
+        if(!stristr($frameContent, '<script src="'. base_url('elements'))){
+            $frameContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$frameContent);
+        }
+        if(!stristr($frameContent, 'src="'. base_url('elements').'/images')){
+            $frameContent = str_replace('src="images','src="'. base_url('elements').'/images',$frameContent);
+        }
+		echo $frameContent;
 	
 	}
 	
@@ -474,7 +483,6 @@ class Sites extends MY_Controller {
 		}
 		
 		
-		
 		/*
 			
 			establish FTP connection, needs error reporting
@@ -505,22 +513,12 @@ class Sites extends MY_Controller {
 			
 		}
 		
-		
-		
-		
-		
-		
-	
-		
 		/* 
 			
 			uploading
 		
 		*/
-		
-		
-		
-		
+
 		if( $type == 'asset' ) {//asset publishing
 		
 			set_time_limit(0);//prevent timeout
@@ -830,7 +828,63 @@ class Sites extends MY_Controller {
 	}
 	
 	
+
+    /*
+		
+		preview a site
 	
+	*/
+	
+	public function preview() {
+        
+        $user = $this->ion_auth->user()->row();
+        $userID = $user->id;
+
+		foreach( $_POST['pages'] as $page=>$content ) {
+		
+			//get page meta
+			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
+			
+			if( $pageMeta ) {
+			
+				//insert title, meta keywords and meta description
+				
+				$meta = '<title>'.$pageMeta->pages_title.'</title>'."\r\n";
+				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
+				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
+								
+				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
+				
+				//insert header includes;
+				
+				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);
+				
+				
+				//remove frameCovers
+				
+				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
+			
+			} else {
+			
+				$pageContent = $content;
+			
+			}
+			
+		}
+        if(!stristr($pageContent, '<link href="'. base_url('elements'))){
+            $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
+        }
+        if(!stristr($pageContent, '<script src="'. base_url('elements'))){
+            $pageContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$pageContent);
+        }
+        if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
+            $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
+        }
+        echo '<html>'.$pageContent.'</html>';
+	}
+    
+    
+    
 	/*
 	
 		moves a single site to the trash bin

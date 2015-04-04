@@ -2237,7 +2237,58 @@ $(function(){
 				
 	});
 	
-	
+	$("#previewPage").on('click', function(e){
+            var htmlForm = $('<form action="'+siteUrl+'sites/preview" method="POST" target="_blank" style="display:none">');
+            
+            $('#pageList > ul').each(function(){
+                //grab the skeleton markup
+                newDocMainParent = $('iframe#skeleton').contents().find( pageContainer );
+
+                //empty out the skeleton
+                newDocMainParent.find('*').remove();
+
+                //loop through page iframes and grab the body stuff
+                $(this).find('iframe').each(function(){
+                    //remove .frameCovers
+                    theContents = $(this).contents().find( pageContainer );
+
+                    theContents.find('.frameCover').each(function(){
+                        $(this).remove();
+                    });
+                    toAdd = theContents.html();
+
+                    //grab scripts
+                    scripts = $(this).contents().find( pageContainer ).find('script');
+
+                    if( scripts.size() > 0 ) {
+                        theIframe = document.getElementById("skeleton");
+                        scripts.each(function(){
+                            if( $(this).text() != '' ) {//script tags with content
+                                var script = theIframe.contentWindow.document.createElement("script");
+                                script.type = 'text/javascript';
+                                script.innerHTML = $(this).text();
+                                theIframe.contentWindow.document.getElementById( pageContainer.substring(1) ).appendChild(script);
+                            } else if( $(this).attr('src') != null ) {
+                                var script = theIframe.contentWindow.document.createElement("script");
+                                script.type = 'text/javascript';
+                                script.src = $(this).attr('src');
+                                theIframe.contentWindow.document.getElementById( pageContainer.substring(1) ).appendChild(script);
+                            }
+                        });
+                    }
+                    newDocMainParent.append( $(toAdd) );
+                });
+                newInput = $('<input type="hidden" name="pages['+$('#pages li:eq('+($(this).index()+1)+') a:first').text()+']" class="pages" value="">');
+			
+                htmlForm.prepend( newInput );
+
+                newInput.val( $('iframe#skeleton').contents().find('html').html() );
+            });
+            siteInput = $('<input type="hidden" name="siteID" class="pages" value="">');
+            htmlForm.prepend( siteInput );
+            siteInput.val( siteID );
+            htmlForm.appendTo("body").submit().remove();
+        });
 	
 	$('#exportModal > form').submit(function(){
 	
