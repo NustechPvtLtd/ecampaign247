@@ -43,7 +43,7 @@ $route['404_override'] = '';
 $route['forgot-password'] = 'login/forgot-password';
 $route['register'] = 'login/register';
 $route['logout'] = 'login/logout';
-
+$route['assets/images'] = "sites/assets/images";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

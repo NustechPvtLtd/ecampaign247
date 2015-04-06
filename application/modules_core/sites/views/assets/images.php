@@ -1,23 +1,4 @@
-<?php $this->load->view("shared/header.php");?>
-
-<body>
-  	
-  	<?php $this->load->view("shared/nav.php");?> 
-  	
-    <div class="container-fluid">
-    
-    	<div class="row">
-    	
-    		<div class="col-md-9 col-sm-8">
-    		
-    		    <h1><span class="fui-image"></span> <?php echo $this->lang->line('images_heading')?></h1>
-    		
-    		</div><!-- /.col -->
-    		    	
-    	</div><!-- /.row -->
-    	
-    	<hr class="dashed margin-bottom-50">
-    	    	
+    <div class="container-fluid">	
     	<div class="row">
     	
     		<div class="col-md-3">
@@ -32,7 +13,7 @@
     				
     				<div class="bottom">
     					
-    					<form action="<?php echo site_url('assets/imageUpload')?>" enctype="multipart/form-data" method="post">
+    					<form action="<?php echo site_url('sites/assets/imageUpload')?>" enctype="multipart/form-data" method="post">
     					
     						<div class="form-group">
     							<div class="fileinput fileinput-new" data-provides="fileinput">
@@ -224,20 +205,6 @@
 		
 	<!-- /modals -->	
 		
-
-    <!-- Load JS here for greater good =============================-->
-    <script src="<?php echo base_url();?>js/jquery-1.8.3.min.js"></script>
-    <script src="<?php echo base_url();?>js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="<?php echo base_url();?>js/jquery.ui.touch-punch.min.js"></script>
-    <script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url();?>js/bootstrap-select.js"></script>
-    <script src="<?php echo base_url();?>js/bootstrap-switch.js"></script>
-    <script src="<?php echo base_url();?>js/flatui-checkbox.js"></script>
-    <script src="<?php echo base_url();?>js/flatui-radio.js"></script>
-    <script src="<?php echo base_url();?>js/jquery.tagsinput.js"></script>
-    <script src="<?php echo base_url();?>js/flatui-fileinput.js"></script>
-    <script src="<?php echo base_url();?>js/jquery.placeholder.js"></script>
-    <script src="<?php echo base_url();?>js/application.js"></script>
     <script>
     $(function(){
     
@@ -326,5 +293,3 @@
     })
     </script>
     <![endif]-->
-  </body>
-</html>

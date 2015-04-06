@@ -836,19 +836,40 @@ class Sites extends MY_Controller {
 	*/
 	
 	public function preview() {
-        
+        $this->load->helper('file');
+        $this->load->helper('directory');
         $user = $this->ion_auth->user()->row();
         $userID = $user->id;
 
-		foreach( $_POST['pages'] as $page=>$content ) {
+        //some error prevention first
 		
+		//siteID ok?
+		
+		$siteDetails = $this->sitemodel->getSite( $_POST['siteID'] );
+		
+		if( $siteDetails == false ) {
+			exit();
+		}
+		
+		//do we have anythin to preview at all?
+		if( !isset( $_POST['pages'] ) || $_POST['pages'] == '' ) {
+			exit();
+		}
+        if( !is_writable('./tmp/') ) {
+            exit();
+        }
+        if (!is_dir('./tmp/'.$userID)) {
+            mkdir('./tmp/'.$userID,0777);
+        }
+        if(recurse_copy('./elements/images/', './tmp/'.$userID.'/images/')){
+            
+        }
+		foreach( $_POST['pages'] as $page=>$content ) {
 			//get page meta
 			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
 			
 			if( $pageMeta ) {
-			
 				//insert title, meta keywords and meta description
-				
 				$meta = '<title>'.$pageMeta->pages_title.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
@@ -856,31 +877,26 @@ class Sites extends MY_Controller {
 				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 				
 				//insert header includes;
-				
 				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);
 				
-				
 				//remove frameCovers
-				
 				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
 			
 			} else {
-			
 				$pageContent = $content;
-			
 			}
-			
+            if(!stristr($pageContent, '<link href="'. base_url('elements'))){
+                $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
+            }
+            if(!stristr($pageContent, '<script src="'. base_url('elements'))){
+                $pageContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$pageContent);
+            }
+            if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
+                $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
+            }
+			write_file('./tmp/'.$userID.'/'.$page.".html", '<html>'.$pageContent.'</html>');
 		}
-        if(!stristr($pageContent, '<link href="'. base_url('elements'))){
-            $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
-        }
-        if(!stristr($pageContent, '<script src="'. base_url('elements'))){
-            $pageContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$pageContent);
-        }
-        if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
-            $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
-        }
-        echo '<html>'.$pageContent.'</html>';
+        redirect(base_url().'tmp/'.$userID);
 	}
     
     

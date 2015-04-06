@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Assets extends CI_Controller {
+class Assets extends MY_Controller {
     
     public $data = array();
     
@@ -58,7 +58,12 @@ class Assets extends CI_Controller {
 		$this->data['userID'] = $userID;
 	
 		$this->data['page'] = "images";
-		$this->load->view('assets/images', $this->data);
+		$this->data['pageHeading'] = $this->lang->line('images_heading');
+        $this->data['css'] = array(
+		    '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
+		);
+        $this->template->load('sites', 'sites', 'assets/images', $this->data);
+//		$this->load->view(, $this->data);
 	
 	}
 	
