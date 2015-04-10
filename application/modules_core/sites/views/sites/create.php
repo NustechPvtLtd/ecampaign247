@@ -25,7 +25,7 @@
         		<!--<a href="#exportModal" id="exportPage" data-toggle="modal" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_export')?></a>-->
         		<a href="#previewModal" id="previewPage" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_preview')?></a>
                 
-        		<a href="#" id="publishPage" class="btn btn-inverse btn-embossed pull-right disabled actionButtons" data-siteid="<?php echo $siteData['site']->sites_id;?>" <?php if( $siteData['site']->ftp_ok == 0 ):?>data-toggle="tooltip"<?php endif;?> data-placement="bottom" title="You can not publish your site right now. Please update your FTP details." ><span class="fui-upload"></span> <?php echo $this->lang->line('actionbuttons_publish')?> <span class="fui-alert text-danger" <?php if( $siteData['site']->ftp_ok == 1 ):?>style="display:none"<?php endif;?>></span></a>
+        		<a href="#" id="publishPage" class="btn btn-inverse btn-embossed pull-right disabled actionButtons" data-siteid="<?php echo $siteData['site']->sites_id;?>" <?php if( $siteData['site']->domain_ok == 0 ):?>data-toggle="tooltip"<?php endif;?> data-placement="bottom" title="You can not publish your site right now. Please update your domain details." ><span class="fui-upload"></span> <?php echo $this->lang->line('actionbuttons_publish')?> <span class="fui-alert text-danger" <?php if( $siteData['site']->domain_ok == 1 ):?>style="display:none"<?php endif;?>></span></a>
         	
         		<div class="modes">
         		
@@ -1916,44 +1916,6 @@
     	      			</div>
     	      				      		
     	      			<div class="modal-body-content">
-    	      				<div class="optionPane export">
-    	      					
-    	      					<h6><?php echo $this->lang->line('modalpublish_siteassets')?></h6>
-    	      					
-    	      					<div class="table-responsive" id="publishModal_assets">
-    	      						<table class="table table-bordered">
-    	      					    	<thead>
-    	      					      		<tr>
-    	      					        		<th class="text-center" style="width: 30px;">
-    	      					        			<label class="checkbox no-label toggle-all" for="checkbox-table-1">
-    	      					        				<input type="checkbox" value="" id="checkbox-table-1" data-toggle="checkbox" class="toggleAll">
-    	      					        			</label>
-    	      					        		</th>
-    	      					        		<th><?php echo $this->lang->line('modalpublish_asset')?></th>
-    	      					      		</tr>
-    	      					    	</thead>
-    	      					    	<tbody>
-    	      					    		<?php foreach( $siteData['assetFolders'] as $folder ):?>
-    	      					      		<tr>
-    	      					        		<td class="text-center" style="width: 30px;">
-    	      					        			<label class="checkbox no-label">
-    	      					        				<input type="checkbox" value="<?php echo $folder;?>" id="" data-type="asset" name="assetFolders[]" data-toggle="checkbox">
-    	      					        			</label>
-    	      					        		</td>
-    	      					        		<td>
-    	      					        			<?php echo $folder;?>
-    	      					        			<span class="publishing">
-    	      					        				<span class="working"><?php echo $this->lang->line('modalpublish_publishing')?> <img src="<?php echo base_url();?>assets/sites/images/publishLoader.gif"></span>
-    	      					        				<span class="done text-primary"><?php echo $this->lang->line('modalpublish_published')?> &nbsp;<span class="fui-check"></span></span>
-    	      					        			</span>
-    	      					        		</td>
-    	      					     	 	</tr>
-    	      					     	 	<?php endforeach;?>
-    	      					    	</tbody>
-    	      					  	</table>
-    	      					</div><!-- /.table-responsive -->
-    	      				    	      					
-    	      				</div><!-- /.optionPane -->
     	      				
     	      				<div class="optionPane export">
     	      					

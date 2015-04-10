@@ -17,6 +17,6 @@ class User extends MY_Controller {
         $data['title'] = 'User';
         $data['pageMetaDescription'] = 'ecampaign247.com';
         $data['pageHeading'] = 'User List';
-        $this->template->load('main', 'customer', 'user/index', $data);
+        $this->template->load('main', 'services', 'user/index', $data);
     }    
 }

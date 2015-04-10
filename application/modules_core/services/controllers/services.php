@@ -1,5 +1,5 @@
 <?php  (defined('BASEPATH')) OR exit('No direct script access allowed');
-class Customer extends MY_Controller {
+class Services extends MY_Controller {
     
     function __construct()
     {
@@ -19,6 +19,6 @@ class Customer extends MY_Controller {
         $data['css'] = array(
             '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/customer/css/style.css"/>'
         );
-        $this->template->load('main', 'customer', 'customer/index', $data);
+        $this->template->load('main', 'services', 'services/index', $data);
     }
 }

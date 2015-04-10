@@ -362,53 +362,26 @@ class Sitemodel extends CI_Model {
     */
      
   	public function updateSiteData($siteData) {
-  	
+  		$domainOk = 0;
   		
-  		//test the FTP data
-  		
-  		$this->load->model('ftpmodel');
-  		
-  		$path = ( $siteData['siteSettings_ftpPath'] != '' )? $siteData['siteSettings_ftpPath'] : "/";
-  		
-  		$result = $this->ftpmodel->test( $siteData['siteSettings_ftpServer'], $siteData['siteSettings_ftpUser'], $siteData['siteSettings_ftpPassword'], $siteData['siteSettings_ftpPort'], $path );
-  		
-  		$ftpOk = 0;
-  		
-  		if ( $result['connection'] ) {
-  		
-  			$ftpOk = 1;
-  			  		
+  		if ( ($siteData['siteSettings_domain']!='') && $this->checkDomainAvailability($siteData['siteSettings_domain']) ) {
+  			$domainOk = 1;
   		}
-  		
-  		
   		$data = array(
   			'sites_name' => $siteData['siteSettings_siteName'],
-			'ftp_server' => $siteData['siteSettings_ftpServer'],
-  			'ftp_user' => $siteData['siteSettings_ftpUser'],
-  			'ftp_password' => $siteData['siteSettings_ftpPassword'],
-  			'ftp_path' => $siteData['siteSettings_ftpPath'],
-  			'ftp_port' => $siteData['siteSettings_ftpPort'],
-  			'ftp_ok' => $ftpOk,
-  			'remote_url' => $siteData['siteSettings_remoteUrl']
+			'domain' => $siteData['siteSettings_domain'],
+  			'domain_ok' => $domainOk,
  		);
   		
   		$this->db->where('sites_id', $siteData['siteID']);
   		$this->db->update('sites', $data);
   		
-  		if( $ftpOk == 1 ) {
-  		
+  		if( $domainOk == 1 ) {
   			return true;
-  		
   		} else {
-  		
   			return false;
-  		
   		}
-  	
 	}
-     
-    
-    
     
     /*
     
@@ -562,7 +535,23 @@ class Sitemodel extends CI_Model {
     
     }
     
+    /*
     
+    	publish a site 
+    	
+    */
+    
+    public function publish($siteID,$remote_url) {
+    
+    	$data = array(
+    		'published' => 1,
+			'remote_url'=>$remote_url,
+    	);
+    	
+    	$this->db->where('sites_id', $siteID);
+    	$this->db->update('sites', $data); 
+    
+    }
     
     /*
     	
@@ -633,4 +622,12 @@ class Sitemodel extends CI_Model {
     
     }
     
+    public function checkDomainAvailability( $domain ) {
+        $query = $this->db->from('sites')->where('domain', $domain)->get();
+        if( $query->num_rows() > 0 ) {
+            return FALSE;
+        }  else {
+            return TRUE;
+        }
+    }
 }

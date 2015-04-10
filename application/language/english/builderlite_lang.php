@@ -99,6 +99,8 @@ $lang['sitedata_publishingdetails'] = "Publishing details";
 
 $lang['sitedata_label_publicurl'] = "Public URL";
 $lang['sitedata_label_publicurl_placeholder'] = "Public URL, ie http://mysite.com";
+$lang['sitedata_label_domain'] = "Domain";
+$lang['sitedata_label_domain_placeholder'] = "Domain Name";
 $lang['sitedata_label_ftpserver'] = "FTP Server";
 $lang['sitedata_label_ftpuser'] = "FTP User";
 $lang['sitedata_label_ftppassword'] = "FTP Password";

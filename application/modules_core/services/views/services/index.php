@@ -31,7 +31,7 @@
         <div class="col-lg-4 col-md-4">
         <div class="panel_new">
         <div class="login-wrapper">
-        <a href="<?php echo base_url();?>customer/index.php/campaigns/index">
+        <a href="<?php echo site_url('services');?>">
             <div id="user-info">
             <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/campaign.jpg" alt="user-image">
             <h4 class="headline">Email Campaign</h4>
@@ -59,7 +59,7 @@
     <div class="col-lg-4 col-md-4">
     <div class="panel_new">
         <div class="login-wrapper">
-            <a href="<?php echo base_url();?>customer/index.php/services">
+            <a href="<?php echo site_url('services');?>">
             <div id="user-info">
                 <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/social_media.jpg" alt="user-image">
                     <h4 class="headline">Social Media</h4>
@@ -87,7 +87,7 @@
     <div class="col-lg-4 col-md-4">
     <div class="panel_new">
     <div class="login-wrapper">
-    <a href="<?php echo base_url();?>customer/index.php/lists/index">
+    <a href="<?php echo site_url('services');?>">
     <div id="user-info">
     <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/build_your_database.jpg" alt="user-image">
     <h4 class="headline">Build Your Database</h4>
@@ -115,7 +115,7 @@
 <div class="col-lg-4 col-md-4">
     <div class="panel_new">
         <div class="login-wrapper">
-        <a href="<?php echo base_url();?>customer/index.php/services">
+        <a href="<?php echo site_url('services');?>">
         <div id="user-info">
         <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/report.jpg" alt="user-image">
         <h4 class="headline">Report</h4>
@@ -143,7 +143,7 @@
 <div class="col-lg-4 col-md-4">
 <div class="panel_new">
 <div class="login-wrapper">
-<a href="<?php echo base_url();?>customer/index.php/services">
+<a href="<?php echo site_url('services');?>">
                     <div id="user-info">
                     <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/crm.jpg" alt="user-image">
                         <h4 class="headline">CRM</h4>

@@ -4,10 +4,10 @@
 | URI ROUTING
 | -------------------------------------------------------------------------
 | This file lets you re-map URI requests to specific controller functions
-| for customer modules
+| for services modules
 |
 */
 
-$route['module_name'] = "customer";
-$route['default_controller'] = 'customer';
-$route['user'] = "customer/user/index";
+$route['module_name'] = "services";
+$route['default_controller'] = 'services';
+$route['user'] = "services/user/index";

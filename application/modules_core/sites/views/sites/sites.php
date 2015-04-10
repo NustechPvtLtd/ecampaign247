@@ -96,13 +96,13 @@
     						</p>
     						
     						<p class="siteLink">
-    							<?php if( $site['siteData']->ftp_published == 1 ):?>
+    							<?php if( $site['siteData']->published == 1 ):?>
     								<span class="fui-link"></span> <a href="<?php echo $site['siteData']->remote_url?>" target="_blank"><?php echo $site['siteData']->remote_url?></a>
     							<?php else:?>
     								<span class="pull-left text-danger">
     									<b><?php echo $this->lang->line('sites_sitehasnotbeenpublished')?></b>
     								</span> &nbsp;&nbsp;
-    								<?php if( $site['siteData']->ftp_ok == 1 ):?>
+    								<?php if( $site['siteData']->domain_ok == 1 ):?>
     								<a class="btn btn-inverse btn-xs" href="<?php echo site_url('sites/'.$site['siteData']->sites_id)?>#publish">
     									<span class="fui-export"></span> <?php echo $this->lang->line('sites_button_publishnow')?>
     								</a>

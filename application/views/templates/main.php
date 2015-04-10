@@ -53,13 +53,13 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span><?php echo ($fullName = userdata( 'username' )) ? $fullName : 'Welcome';?> <i class="caret"></i></span>
+                                <span><?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
                                     <img src="avatar<?php //echo Yii::app()->customer->getModel()->getAvatarUrl(90, 90);?>" class="img-circle"/>
                                     <p>
-                                        <?php echo ($fullName = userdata( 'username' )) ? $fullName : 'Welcome';?>
+                                        <?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?>
                                     </p>
                                 </li>
                                 <li class="user-footer">
@@ -84,7 +84,7 @@
                             <img src="<?php //echo Yii::app()->customer->getModel()->getAvatarUrl(90, 90);?>" class="img-circle" />
                         </div>
                         <div class="pull-left info">
-                            <p><?php echo ($fullName = userdata( 'username' )) ? $fullName : 'Welcome';?></p>
+                            <p><?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?></p>
                         </div>
                     </div>
                     <ul class="sidebar-menu">

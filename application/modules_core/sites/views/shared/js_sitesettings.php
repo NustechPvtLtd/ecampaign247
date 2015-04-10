@@ -71,7 +71,7 @@ $(function(){
     	
     	} )
     	
-    	
+	
     	//site name input field
     	$('button#saveSiteSettingsButton').click(function(){
     		
@@ -136,7 +136,7 @@ $(function(){
     					
     					//is the FTP stuff all good?
     					
-    					if( ret.ftpOk == 1 ) {//yes, all good
+    					if( ret.domainOk == 1 ) {//yes, all good
     					
     						$('#publishPage').removeAttr('data-toggle');
     						$('#publishPage span.text-danger').hide();
@@ -403,5 +403,5 @@ $(function(){
 		})
 	
 	})
-	
+	  
 })

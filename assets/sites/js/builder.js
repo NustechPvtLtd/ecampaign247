@@ -2815,7 +2815,7 @@ $(function(){
 			
 					thePage = $(this).find('a:first').text();
 				
-					theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+baseUrl+'images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>')
+					theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+baseUrl+'assets/sites/images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>')
 								
 					//checkboxify
 					theRow.find('input').checkbox();
@@ -2916,7 +2916,7 @@ $(function(){
 				
 					thePage = $(this).find('a:first').text();
 					
-					theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+baseUrl+'images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>')
+					theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+baseUrl+'assets/sites/images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>')
 									
 					//checkboxify
 					theRow.find('input').checkbox();
@@ -3240,37 +3240,21 @@ var theItem;
 
 function publishAsset() {
 
-	toPublish = $('#publishModal_assets input[type=checkbox]:checked:not(.published, .toggleAll), #publishModal_pages input[type=checkbox]:checked:not(.published, .toggleAll)');
-	
+	toPublish = $('#publishModal_pages input[type=checkbox]:checked:not(.published, .toggleAll)');
+
 	if( toPublish.size() > 0 ) {
-	
-		theItem = toPublish.first();
-		
-		//display the asset loader
-		theItem.closest('td').next().find('.publishing').fadeIn(500);
-		
-		
-		if( theItem.attr('data-type') == 'page' ) {
-		
-			theData = {siteID: $('form#publishForm input[name=siteID]').val(), item: theItem.val(), pageContent: $('form#publishForm input[name="xpages['+theItem.val()+']"]').val()};
-				
-		} else if( theItem.attr('data-type') == 'asset' ) {
-		
-			theData = {siteID: $('form#publishForm input[name=siteID]').val(), item: theItem.val()};
-		
-		}
-						
+                theFirstItem = toPublish.first();		
 		$.ajax({
-			url: $('form#publishForm').attr('action')+"/"+theItem.attr('data-type'),
-			type: 'post',
-			data: theData,
-			dataType: 'json'
+                    url: $('form#publishForm').attr('action'),
+                    type: 'post',
+                    data: $('#publishForm').serialize(),
+                    dataType: 'json'
 		}).done(function(ret){
 		
 			if( ret.responseCode == 0 ) {//fatal error, publishing will stop
 			
 				//hide indicators
-				theItem.closest('td').next().find('.working').hide();
+				theFirstItem.closest('td').next().find('.working').hide();
 				
 				//enable buttons
 				$('#publishSubmit, #publishCancel').removeClass('disabled');
@@ -3280,12 +3264,12 @@ function publishAsset() {
 			} else if( ret.responseCode == 1 ) {//no issues
 				
 				//show done
-				theItem.closest('td').next().find('.working').hide();
-				theItem.closest('td').next().find('.done').fadeIn();
+				theFirstItem.closest('td').next().find('.working').hide();
+				theFirstItem.closest('td').next().find('.done').fadeIn();
 					
-				theItem.addClass('published');
+				theFirstItem.addClass('published');
 					
-				publishAsset();
+//				publishAsset();
 			
 			}
 				

@@ -42,7 +42,7 @@ class Login extends MX_Controller {
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
 					if ($this->ion_auth->in_group(array('comp-admin', 'end-user')))
 					{
-					    redirect('customer', 'refresh');
+					    redirect('services', 'refresh');
 					}
 					else 
 					{
@@ -82,8 +82,13 @@ class Login extends MX_Controller {
 		}
 		elseif (!$this->ion_auth->is_admin()) //remove this elseif if you want to enable this for non-admins
 		{
-			//redirect them to the home page because they must be an administrator to view this
-			return show_error('You must be an administrator to view this page.');
+            if ($this->ion_auth->in_group(array('comp-admin', 'end-user')))
+            {
+                redirect('services', 'refresh');
+            }
+            else {
+                return show_error('You must be an administrator to view this page.');
+            }
 		}
 		else
 		{

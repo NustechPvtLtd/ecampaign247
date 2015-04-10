@@ -176,9 +176,6 @@ class Sites extends MY_Controller {
 		
 		}		
 		
-		
-		
-	
 	}
 	
 	
@@ -359,7 +356,7 @@ class Sites extends MY_Controller {
 		
 		} else {//all good with the data, let's update
 		
-			$ftpOk = $this->sitemodel->updateSiteData( $_POST );
+			$domainOk = $this->sitemodel->updateSiteData( $_POST );
 			
 			//all did went well
 			$return = array();
@@ -367,7 +364,7 @@ class Sites extends MY_Controller {
 			$temp = array();
 			$temp['header'] = $this->lang->line('sites_siteAjaxUpdate_success_heading');
 			
-			if( $ftpOk ) {
+			if( $domainOk ) {
 			
 				$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_success_message1');
 			
@@ -380,10 +377,10 @@ class Sites extends MY_Controller {
 			$return['responseCode'] = 1;
 			$return['responseHTML'] = $this->load->view('partials/success', array('data'=>$temp), true);
 			
-			if( $ftpOk ) {
-				$return['ftpOk'] = 1;
+			if( $domainOk ) {
+				$return['domainOk'] = 1;
 			} else {
-				$return['ftpOk'] = 0;
+				$return['domainOk'] = 0;
 			}
 			
 			
@@ -399,9 +396,6 @@ class Sites extends MY_Controller {
 		
 		}
 		
-	
-		
-	
 	}
 	
 	
@@ -419,8 +413,8 @@ class Sites extends MY_Controller {
         if(!stristr($frameContent, '<link href="'. base_url('elements'))){
             $frameContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$frameContent);
         }
-        if(!stristr($frameContent, '<script src="'. base_url('elements'))){
-            $frameContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$frameContent);
+        if(!stristr($frameContent, '<script src="js'. base_url('elements'))){
+            $frameContent = str_replace('<script src="js','<script src="'. base_url('elements').'/js',$frameContent);
         }
         if(!stristr($frameContent, 'src="'. base_url('elements').'/images')){
             $frameContent = str_replace('src="images','src="'. base_url('elements').'/images',$frameContent);
@@ -433,19 +427,20 @@ class Sites extends MY_Controller {
 	
 	/*
 	
-		publishes a site via FTP
+		publishes a site 
 	
 	*/
 	
-	public function publish($type = 'page') {
+	public function publish() {
 	
 		$this->load->helper('file');
         $this->load->helper('directory');
-		
+        $user = $this->ion_auth->user()->row();
+        $userID = $user->id;
+		$path = './'.$userID;
 		//some error prevention first
 		
 		//siteID ok?
-		
 		$siteDetails = $this->sitemodel->getSite( $_POST['siteID'] );
 		
 		if( $siteDetails == false ) {
@@ -460,12 +455,10 @@ class Sites extends MY_Controller {
 			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
 			
 			die( json_encode( $return ) );
-		
 		}
 		
-		
 		//do we have anythin to publish at all?
-		if( !isset( $_POST['item'] ) || $_POST['item'] == '' ) {
+		if( !isset( $_POST['xpages'] ) || $_POST['xpages'] == '' ) {
 		
 			//nothing to upload
 			
@@ -482,193 +475,44 @@ class Sites extends MY_Controller {
 		
 		}
 		
-		
-		/*
-			
-			establish FTP connection, needs error reporting
-			
-		*/
-		
-		
-		$this->load->library('ftp');
-		
-		$config['hostname'] = $siteDetails['site']->ftp_server;
-		$config['username'] = $siteDetails['site']->ftp_user;
-		$config['password'] = $siteDetails['site']->ftp_password;
-		$config['port'] = $siteDetails['site']->ftp_port;
-		
-		if( !$this->ftp->connect($config) ) {
-			
-			//connection details are messed up
-			$return = array();
-				
-			$temp = array();
-			$temp['header'] = $this->lang->line('sites_publish_error2_heading');
-			$temp['content'] = $this->lang->line('sites_publish_error3_message');
-				
-			$return['responseCode'] = 0;
-			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
-				
-			die( json_encode( $return ) );
-			
-		}
-		
-		/* 
-			
-			uploading
-		
-		*/
-
-		if( $type == 'asset' ) {//asset publishing
-		
-			set_time_limit(0);//prevent timeout
-            
-            if( $_POST['item'] == 'images' ) {
-            
-                //echo './elements/'.$_POST['item'].'/<br>';
-                
-                //create the /imaged folder?
-                if( !$this->ftp->list_files( $siteDetails['site']->ftp_path."/images/" ) ) {
-                 
-                    $this->ftp->mkdir( $siteDetails['site']->ftp_path."/images/" );
-                    
-                }
-                
-                
-                $dirMap = directory_map( './elements/images/', 2 );
-                
-                foreach( $dirMap as $key => $entry ) {
-                 
-                    if( is_array($entry) ) {
-                        
-                        //folder, do all but take special care of /uploads
-                        
-                        if( $key != 'uploads' ) {
-                            
-                            $this->ftp->mirror('./elements/images/'.$key."/", $siteDetails['site']->ftp_path."/images/".$key."/");
-                            
-                        } else {//take special care of the uploads folder
-                            
-                            $user = $this->ion_auth->user()->row();
-                            $userID = $user->id;
-                            
-                            $uploadsMap = directory_map( './elements/images/uploads/', 1 );
-                            
-                            foreach( $uploadsMap as $userIDFolder ) {
-                                
-                                if( $userIDFolder == $userID ) {
-                                    
-                                    //echo $userIDFolder."\n";
-                                    
-                                    //create the /imaged folder?
-                                    if( !$this->ftp->list_files( $siteDetails['site']->ftp_path."/images/uploads/" ) ) {
-                 
-                                        $this->ftp->mkdir( $siteDetails['site']->ftp_path."/images/uploads/" );
-                    
-                                    }
-                                    
-                                    $this->ftp->mirror('./elements/images/uploads/'.$userIDFolder."/", $siteDetails['site']->ftp_path."/images/uploads/".$userIDFolder."/");
-                                    
-                                }
-                                
-                            }
-                            
-                        }
-                        
-                        
-                    } else {
-                     
-                        //file
-                        $sourceFile = '/elements/images/'.$entry;
-                        $destinationFile = $siteDetails['site']->ftp_path."/images/".$entry;
-                        
-                        //echo $sourceFile."\n";
-                        //echo $_SERVER['DOCUMENT_ROOT'].$sourceFile."\n";
-                        
-                        $this->ftp->upload('.'.$sourceFile, $destinationFile, 'ascii', 0775);
-                        
-                    }
-                    
-                }
-                
-            } else {
-		
-                $this->ftp->mirror('./elements/'.$_POST['item'].'/', $siteDetails['site']->ftp_path."/".$_POST['item']."/");
-                
-            }
-		
-		} elseif( $type == 'page' ) {//page publishing
-		
-			//create temp files
-						
-			//check to make sure the /tmp folder is writable
-				
-			if( !is_writable('./tmp/') ) {
-				
-				$return = array();
-					
-				$temp = array();
-				$temp['header'] = $this->lang->line('sites_publish_error2_heading');
-				$temp['content'] = $this->lang->line('sites_publish_error4_message');
-					
-				$return['responseCode'] = 0;
-				$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
-					
-				die( json_encode( $return ) );
-				
-			}
-			
-			
+        if (!is_dir($path)) {
+            mkdir($path,0777);
+        }
+        
+		foreach( $_POST['xpages'] as $page=>$content ) {
 			//get page meta
-			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $_POST['item']);
+			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
 			
 			if( $pageMeta ) {
-			
 				//insert title, meta keywords and meta description
-				
 				$meta = '<title>'.$pageMeta->pages_title.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
-											
-				$pageContent = str_replace('<!--pageMeta-->', $meta, $_POST['pageContent']);
+								
+				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 				
 				//insert header includes;
+				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);
 				
-				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);		
+				//remove frameCovers
+				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
 			
 			} else {
-			
-				$pageContent = $_POST['pageContent'];
-				
-			
+				$pageContent = $content;
 			}
-			
-						
-			if ( ! write_file('./tmp/'.$_POST['item'].".html", $pageContent)) {
-				
-				//echo 'Unable to write the file';
-				
-			} else {
-				     
-				//echo 'File written!';
-				
-			}
-						
-			
-			//upload temp files
-			
-			set_time_limit(0);//prevent timeout
-			$this->ftp->mirror('./tmp/', $siteDetails['site']->ftp_path."/");
-				
-				
-			//remove all temp fiels
-				
-			delete_files('./tmp/');
-				
-					
+            if(!stristr($pageContent, '<link href="'. base_url('elements'))){
+                $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
+            }
+            if(!stristr($pageContent, '<script src="js'. base_url('elements'))){
+                $pageContent = str_replace('<script src="js','<script src="'. base_url('elements').'/js',$pageContent);
+            }
+            if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
+                $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
+            }
+			write_file($path.'/'.$page.".html",$pageContent);
 		}
-		
-		
+        remove_directory('./tmp/'.$userID);
+		$this->sitemodel->publish( $_POST['siteID'],base_url($userID));
 		//all went well
 		$return = array();
 				
@@ -840,11 +684,9 @@ class Sites extends MY_Controller {
         $this->load->helper('directory');
         $user = $this->ion_auth->user()->row();
         $userID = $user->id;
-
+        
+        remove_directory('./tmp/'.$userID);
         //some error prevention first
-		
-		//siteID ok?
-		
 		$siteDetails = $this->sitemodel->getSite( $_POST['siteID'] );
 		
 		if( $siteDetails == false ) {
@@ -861,9 +703,9 @@ class Sites extends MY_Controller {
         if (!is_dir('./tmp/'.$userID)) {
             mkdir('./tmp/'.$userID,0777);
         }
-        if(recurse_copy('./elements/images/', './tmp/'.$userID.'/images/')){
+        /*if(recurse_copy('./elements/images/', './tmp/'.$userID.'/images/')){
             
-        }
+        }*/
 		foreach( $_POST['pages'] as $page=>$content ) {
 			//get page meta
 			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
@@ -993,6 +835,21 @@ class Sites extends MY_Controller {
 	
 	}
  
+    public function checkDomain()
+    {
+        if (isset($_POST['domain']) && $_POST['domain']!='') {
+            $url = 'http://'.$_POST['domain'].'.'.$_SERVER['HTTP_HOST'].'.com';
+            if($this->sitemodel->checkDomainAvailability($_POST['domain'])){
+                $return['error'] = 0;
+                $return['errorMessage'] = $url.' is available.';
+                echo json_encode( $return ) ;
+            }  else {
+                $return['error'] = 1;
+                $return['errorMessage'] = $url.' is not available.';
+                die( json_encode( $return ) );
+            }
+        }
+    }
 }
 
 /* End of file sites.php */
