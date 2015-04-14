@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/skin-green.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/common.css" />
 	<?php if(isset($css)) echo implode("\n", $css) . "\n";?>
+	<script src="<?php echo base_url();?>assets/sites/js/jquery-1.8.3.min.js"></script>
 </head>
 <body class="skin-green">
     <header class="header">
@@ -124,7 +125,6 @@
         <footer>
             <div class="clearfix"><!-- --></div>
         </footer>
-		<script src="<?php echo base_url();?>assets/sites/js/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/knockout-3.1.0.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/notify.js"></script>
@@ -133,5 +133,6 @@
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.resize.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.categories.min.js"></script>
+        <?php if(isset($js)) echo implode("\n", $js) . "\n";?>
     </body>
 </html>

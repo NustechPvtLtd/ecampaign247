@@ -1,4 +1,4 @@
-<?php
+<?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
 class Login extends MX_Controller {
 	
@@ -279,6 +279,10 @@ class Login extends MX_Controller {
 
 		if ($user)
 		{
+            $data = array(
+				'title' => 'Reset Password',
+				'pageMetaDescription' => 'Ecampaign247.com'
+			);
 			//if the code is valid then display the password reset form
 
 			$this->form_validation->set_rules('new', $this->lang->line('reset_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[new_confirm]');
@@ -289,32 +293,36 @@ class Login extends MX_Controller {
 				//display the form
 
 				//set the flash data error message if there is one
-				$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+				$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-				$this->data['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
-				$this->data['new_password'] = array(
+				$data['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
+				$data['new_password'] = array(
 					'name' => 'new',
 					'id'   => 'new',
-				'type' => 'password',
-					'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+                    'type' => 'password',
+					'class' => "form-control",
+					'pattern' => '^.{'.$data['min_password_length'].'}.*$',
 				);
-				$this->data['new_password_confirm'] = array(
+				$data['new_password_confirm'] = array(
 					'name' => 'new_confirm',
 					'id'   => 'new_confirm',
 					'type' => 'password',
-					'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+					'class' => "form-control",
+					'pattern' => '^.{'.$data['min_password_length'].'}.*$',
 				);
-				$this->data['user_id'] = array(
+				$data['user_id'] = array(
 					'name'  => 'user_id',
 					'id'    => 'user_id',
 					'type'  => 'hidden',
+					'class' => "form-control",
 					'value' => $user->id,
 				);
-				$this->data['csrf'] = $this->_get_csrf_nonce();
-				$this->data['code'] = $code;
+				$data['csrf'] = $this->_get_csrf_nonce();
+				$data['code'] = $code;
 
 				//render
-				$this->_render_page('auth/reset_password', $this->data);
+                $this->template->load('guest', 'login', 'reset_password', $data);
+//				$this->_render_page('login/reset_password', $data);
 			}
 			else
 			{
@@ -344,7 +352,7 @@ class Login extends MX_Controller {
 					else
 					{
 						$this->session->set_flashdata('message', $this->ion_auth->errors());
-						redirect('auth/reset_password/' . $code, 'refresh');
+						redirect('reset-password' . $code, 'refresh');
 					}
 				}
 			}
@@ -353,7 +361,7 @@ class Login extends MX_Controller {
 		{
 			//if the code is invalid then send them back to the forgot password page
 			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			redirect("auth/forgot_password", 'refresh');
+			redirect("forgot-password", 'refresh');
 		}
 	}
 
