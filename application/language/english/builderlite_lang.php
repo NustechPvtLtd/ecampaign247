@@ -392,11 +392,11 @@ $lang['sites_siteAjax_error2_message'] = "Something went wrong when loading the 
 
 // controllers/sites.php -> siteAjaxUpdate()
 $lang['sites_siteAjaxUpdate_error1_heading'] = "Ouch! Something went wrong:";
-$lang['sites_siteAjaxUpdate_error1_message'] = "Something went wrong when saving the site data, please see the errors below:<br><br>";
+$lang['sites_siteAjaxUpdate_error1_message1'] = "Something went wrong when saving the site data, please see the errors below:<br><br>";
+$lang['sites_siteAjaxUpdate_error1_message2'] = "Something went wrong when saving the site data, please check the site's detaila again!";
 
 $lang['sites_siteAjaxUpdate_success_heading'] = "Yeah! All went well.";
-$lang['sites_siteAjaxUpdate_success_message1'] = "The site's details were saved successfully!";
-$lang['sites_siteAjaxUpdate_success_message2'] = "The site's details were saved successfully, <b>however the provided FTP details could not be used to successfully establish a connection; you won't be able to publish your site.</b>";
+$lang['sites_siteAjaxUpdate_success_message'] = "The site's details were saved successfully!";
 
 // controllers/sites.php -> publish()
 $lang['sites_publish_error1_heading'] = "Ouch! Something went wrong:";
@@ -406,7 +406,7 @@ $lang['sites_publish_error2_heading'] = "Ouch! Something went wrong:";
 $lang['sites_publish_error2_message'] = "It appears there are no assets selected for publication. Please select the assets you'd like to publish and try again.";
 
 $lang['sites_publish_error3_heading'] = "Ouch! Something went wrong:";
-$lang['sites_publish_error3_message'] = "We can not establish a connection to your FTP server, this caused by faulty connection data (server, user, password and/or port number). Please verify your connection details and update if needed before trying again. If you keep getting this error, your FTP server could be down as well.";
+$lang['sites_publish_error3_message'] = "It appears the site sub-domain is missing OR incorrect. Please check your sub-domain under settings->site settings option and try again.";
 
 $lang['sites_publish_error4_heading'] = "Ouch! Something went wrong:";
 $lang['sites_publish_error4_message'] = "It appears the /tmp folder is not writable. Please make sure the server can write to this folder.";

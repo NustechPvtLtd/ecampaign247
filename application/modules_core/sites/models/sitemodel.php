@@ -373,10 +373,9 @@ class Sitemodel extends CI_Model {
   			'domain_ok' => $domainOk,
  		);
   		
-  		$this->db->where('sites_id', $siteData['siteID']);
-  		$this->db->update('sites', $data);
-  		
   		if( $domainOk == 1 ) {
+            $this->db->where('sites_id', $siteData['siteID']);
+            $this->db->update('sites', $data);
   			return true;
   		} else {
   			return false;

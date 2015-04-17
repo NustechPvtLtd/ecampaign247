@@ -3,6 +3,10 @@
 class Sites extends MY_Controller {
 
     public $data = array();
+    public $pages = array();
+    private $_hostName = 'webzero.in';
+	private $_userName = 'webzero';
+	private $_password = 'koregaonpark123';
     
 	function __construct()
 	{
@@ -347,7 +351,7 @@ class Sites extends MY_Controller {
 			
 			$temp = array();
 			$temp['header'] = $this->lang->line('sites_siteAjaxUpdate_error1_heading');
-			$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_error1_message').validation_errors();
+			$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_error1_message1').validation_errors();
 			
 			$return['responseCode'] = 0;
 			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
@@ -362,20 +366,18 @@ class Sites extends MY_Controller {
 			$return = array();
 			
 			$temp = array();
-			$temp['header'] = $this->lang->line('sites_siteAjaxUpdate_success_heading');
 			
 			if( $domainOk ) {
-			
+                $temp['header'] = $this->lang->line('sites_siteAjaxUpdate_success_heading');
 				$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_success_message1');
-			
+                $return['responseCode'] = 1;
+                $return['responseHTML'] = $this->load->view('partials/success', array('data'=>$temp), true);
 			} else {
-				
-				$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_success_message2');
-			
+				$temp['header'] = $this->lang->line('sites_siteAjaxUpdate_error1_heading');
+				$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_error1_message2');
+                $return['responseCode'] = 0;
+                $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
 			}
-			
-			$return['responseCode'] = 1;
-			$return['responseHTML'] = $this->load->view('partials/success', array('data'=>$temp), true);
 			
 			if( $domainOk ) {
 				$return['domainOk'] = 1;
@@ -435,9 +437,12 @@ class Sites extends MY_Controller {
 	
 		$this->load->helper('file');
         $this->load->helper('directory');
+        $params = array('hostname'=>$this -> _hostName, 'username'=>$this -> _userName, 'password'=>$this -> _password);
+        $this->load->library('CPanelAddons', $params,'CPanelAddons');
+//        $this->load->library('CPanelAddons');
         $user = $this->ion_auth->user()->row();
         $userID = $user->id;
-		$path = './'.$userID;
+		
 		//some error prevention first
 		
 		//siteID ok?
@@ -457,6 +462,23 @@ class Sites extends MY_Controller {
 			die( json_encode( $return ) );
 		}
 		
+        if($siteDetails['site']->domain_ok!=1 || !isset($siteDetails['site']->domain)){
+            $return = array();
+			
+			$temp = array();
+			$temp['header'] = $this->lang->line('sites_publish_error3_heading');
+			$temp['content'] = $this->lang->line('sites_publish_error3_message');
+			
+			$return['responseCode'] = 0;
+			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
+			
+			die( json_encode( $return ) );
+        }
+        $path = 'public_html/'.$siteDetails['site']->domain;
+        $absPath = './'.$siteDetails['site']->domain;
+        if (!is_dir($absPath)) {
+            mkdir($absPath,0777);
+        }
 		//do we have anythin to publish at all?
 		if( !isset( $_POST['xpages'] ) || $_POST['xpages'] == '' ) {
 		
@@ -474,11 +496,19 @@ class Sites extends MY_Controller {
 			die( json_encode( $return ) );
 		
 		}
-		
-        if (!is_dir($path)) {
-            mkdir($path,0777);
-        }
-        
+
+        $result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
+        if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
+		) {
+            $return = array();
+			
+			$temp = array();
+			$temp['header'] = $this->lang->line('sites_publish_error2_heading');
+			$temp['content'] = "cPanel: " . $result['cpanelresult']['data'][0]['reason'];
+			
+			$return['responseCode'] = 0;
+			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
+		}
 		foreach( $_POST['xpages'] as $page=>$content ) {
 			//get page meta
 			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
@@ -509,10 +539,11 @@ class Sites extends MY_Controller {
             if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
                 $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
             }
-			write_file($path.'/'.$page.".html",$pageContent);
+			write_file($absPath.'/'.$page.".html",$pageContent);
 		}
-        remove_directory('./tmp/'.$userID);
-		$this->sitemodel->publish( $_POST['siteID'],base_url($userID));
+        remove_directory('./temp/'.$userID);
+        
+		$this->sitemodel->publish( $_POST['siteID'],$siteDetails['site']->domain.".webzero.in");
 		//all went well
 		$return = array();
 				
@@ -679,29 +710,31 @@ class Sites extends MY_Controller {
 	
 	*/
 	
-	public function preview() {
+	public function preview($pageName='') {
         $this->load->helper('file');
         $this->load->helper('directory');
         $user = $this->ion_auth->user()->row();
         $userID = $user->id;
         
-        remove_directory('./tmp/'.$userID);
+        remove_directory('./temp/'.$userID);
         //some error prevention first
 		$siteDetails = $this->sitemodel->getSite( $_POST['siteID'] );
 		
 		if( $siteDetails == false ) {
-			exit();
+			die("No details found");
 		}
 		
 		//do we have anythin to preview at all?
 		if( !isset( $_POST['pages'] ) || $_POST['pages'] == '' ) {
-			exit();
+			die("No page found");
 		}
-        if( !is_writable('./tmp/') ) {
-            exit();
+        if( !is_writable('./temp/') ) {
+            chmod('./temp/', 0777);
         }
-        if (!is_dir('./tmp/'.$userID)) {
-            mkdir('./tmp/'.$userID,0777);
+        if (!is_dir('./temp/'.$userID)) {
+            if(!mkdir('./temp/'.$userID,0777)){
+                die('Directory not created');
+            }
         }
         /*if(recurse_copy('./elements/images/', './tmp/'.$userID.'/images/')){
             
@@ -736,9 +769,11 @@ class Sites extends MY_Controller {
             if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
                 $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
             }
-			write_file('./tmp/'.$userID.'/'.$page.".html", '<html>'.$pageContent.'</html>');
+            if(!write_file('./temp/'.$userID.'/'.$page.".html", '<html>'.$pageContent.'</html>')){
+                die("Page not created!");
+            }
 		}
-        redirect(base_url().'tmp/'.$userID);
+        redirect(base_url().'temp/'.$userID);
 	}
     
     
@@ -838,7 +873,7 @@ class Sites extends MY_Controller {
     public function checkDomain()
     {
         if (isset($_POST['domain']) && $_POST['domain']!='') {
-            $url = 'http://'.$_POST['domain'].'.'.$_SERVER['HTTP_HOST'].'.com';
+            $url = 'http://'.$_POST['domain'].'.'.$_SERVER['HTTP_HOST'];
             if($this->sitemodel->checkDomainAvailability($_POST['domain'])){
                 $return['error'] = 0;
                 $return['errorMessage'] = $url.' is available.';

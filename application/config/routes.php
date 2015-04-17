@@ -43,6 +43,8 @@ $route['404_override'] = '';
 $route['forgot-password'] = 'login/forgot-password';
 $route['reset-password/(:any)'] = 'login/reset-password/$1';
 $route['register'] = 'login/register';
+$route['create-user'] = 'login/create_user';
+$route['create-group'] = 'login/create_group';
 $route['logout'] = 'login/logout';
 $route['assets/images'] = "sites/assets/images";
 

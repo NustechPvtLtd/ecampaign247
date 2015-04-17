@@ -18,7 +18,7 @@
     		
     			<select name="userDropDown" id="userDropDown" class="select-block drop" <?php if( !isset($sites) || count( $sites ) == 0 ):?>disabled<?php endif;?>>
     				<option value=""><?php echo $this->lang->line('sites_filterbyuser')?></option>
-    				<option value="All"><?php echo $this->lang->line('sites_filterbyuserall')?></option>
+    				<?php if($this->ion_auth->is_admin()):?><option value="All"><?php echo $this->lang->line('sites_filterbyuserall')?></option><?php endif;?>
     				<?php foreach( $users as $user ):?>
     			  	<option value="<?php echo $user->first_name;?> <?php echo $user->last_name;?>"><?php echo $user->first_name;?> <?php echo $user->last_name;?></option>
     			  	<?php endforeach?>
@@ -38,9 +38,9 @@
     		</div><!-- /.col -->
     	   
 	       	<div class="col-md-2 col-sm-6">
-		
+                <?php if(! $this->ion_auth->is_admin() && count( $sites ) <= 0):?>
                 <a href="<?php echo site_url('sites/create')?>" class="btn btn-primary btn-embossed btn-wide"><span class="fui-plus"></span> <?php echo $this->lang->line('sites_createnewsite')?></a>
-    		
+                <?php endif;?>
     		</div><!-- /.col -->
     	
     	</div><!-- /.row -->
@@ -97,7 +97,7 @@
     						
     						<p class="siteLink">
     							<?php if( $site['siteData']->published == 1 ):?>
-    								<span class="fui-link"></span> <a href="<?php echo $site['siteData']->remote_url?>" target="_blank"><?php echo $site['siteData']->remote_url?></a>
+    								<span class="fui-link"></span> <a href="http://<?php echo $site['siteData']->remote_url?>" target="_blank"><?php echo $site['siteData']->remote_url?></a>
     							<?php else:?>
     								<span class="pull-left text-danger">
     									<b><?php echo $this->lang->line('sites_sitehasnotbeenpublished')?></b>

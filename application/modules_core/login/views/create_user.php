@@ -1,4 +1,4 @@
-<?php echo form_open("login/create_user");?>
+<?php echo form_open("create-user");?>
 	<div class="box box-primary">
 		<div class="box-header">
 			<h3 class="box-title"><?php echo lang('create_user_subheading');?></h3>

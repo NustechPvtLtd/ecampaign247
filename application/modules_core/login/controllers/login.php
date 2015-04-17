@@ -1,7 +1,9 @@
 <?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
 class Login extends MX_Controller {
-	
+    
+	public $data = array();
+    
 	function __construct()
 	{
 		parent::__construct();
@@ -11,6 +13,9 @@ class Login extends MX_Controller {
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
 		$this->lang->load('auth');
+        $this->data['title'] = $this->router->fetch_method();
+        $this->data['pageMetaDescription'] = $this->router->fetch_class().'-'.$this->router->fetch_method();
+
 	}
 	
 	function index()
@@ -101,9 +106,19 @@ class Login extends MX_Controller {
 			{
 				$data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
-			$data['title'] = 'Home';
+			$data['title'] = 'Users';
 			$data['pageMetaDescription'] = 'ecampaign247.com';
 			$data['pageHeading'] = lang('index_heading');
+			$data['css'] = array(
+                '<link href="'. base_url().'assets/datatable/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet">',
+                '<link href="'. base_url().'assets/datatable/css/dataTables.responsive.css" type="text/css" rel="stylesheet">',
+                '<style>td.child{text-align:left !important}</style>'
+            );
+			$data['js'] = array(
+                '<script type="text/javascript" src="'. base_url().'assets/datatable/js/jquery.dataTables.min.js"></script>',
+                '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.bootstrap.js"></script>',
+                '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.responsive.js"></script>',
+            );
 			$this->template->load('main', 'login', 'index', $data);
 			//$this->_render_page('auth/index', $this->data);
 		}
@@ -129,7 +144,7 @@ class Login extends MX_Controller {
 
 		if (!$this->ion_auth->logged_in())
 		{
-			redirect('auth/login', 'refresh');
+			redirect('login', 'refresh');
 		}
 
 		$user = $this->ion_auth->user()->row();
@@ -166,7 +181,7 @@ class Login extends MX_Controller {
 			);
 
 			//render
-			$this->_render_page('auth/change_password', $this->data);
+			$this->_render_page('login/change_password', $this->data);
 		}
 		else
 		{
@@ -183,7 +198,7 @@ class Login extends MX_Controller {
 			else
 			{
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect('auth/change_password', 'refresh');
+				redirect('login/change_password', 'refresh');
 			}
 		}
 	}
@@ -247,7 +262,7 @@ class Login extends MX_Controller {
             	}
 
                 $this->session->set_flashdata('message', $this->ion_auth->messages());
-        		redirect("login/forgot_password", 'refresh');
+        		redirect("forgot-password", 'refresh');
     		}
 
 			//run the forgotten password method to email an activation code to the user
@@ -262,7 +277,7 @@ class Login extends MX_Controller {
 			else
 			{
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect("login/forgot_password", 'refresh');
+				redirect("forgot-password", 'refresh');
 			}
 		}
 	}
@@ -382,13 +397,13 @@ class Login extends MX_Controller {
 		{
 			//redirect them to the auth page
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
-			redirect("auth", 'refresh');
+			redirect("login", 'refresh');
 		}
 		else
 		{
 			//redirect them to the forgot password page
 			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			redirect("auth/forgot_password", 'refresh');
+			redirect("forgot-password", 'refresh');
 		}
 	}
 
@@ -412,8 +427,9 @@ class Login extends MX_Controller {
 			// insert csrf check
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['user'] = $this->ion_auth->user($id)->row();
-
-			$this->_render_page('auth/deactivate_user', $this->data);
+            
+            $this->template->load('main', 'login', 'deactivate_user', $this->data);
+//			$this->_render_page('login/deactivate_user', $this->data);
 		}
 		else
 		{
@@ -434,7 +450,7 @@ class Login extends MX_Controller {
 			}
 
 			//redirect them back to the auth page
-			redirect('auth', 'refresh');
+			redirect('/', 'refresh');
 		}
 	}
 
@@ -481,7 +497,7 @@ class Login extends MX_Controller {
 			//check to see if we are creating the user
 			//redirect them back to the admin page
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
-			redirect("login", 'refresh');
+			redirect("/", 'refresh');
 		}
 		else
 		{
@@ -551,7 +567,7 @@ class Login extends MX_Controller {
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id)))
 		{
-			redirect('auth', 'refresh');
+			redirect('login', 'refresh');
 		}
 
 		$user = $this->ion_auth->user($id)->row();
@@ -594,8 +610,6 @@ class Login extends MX_Controller {
 					$data['password'] = $this->input->post('password');
 				}
 
-
-
 				// Only allow updating groups if user is admin
 				if ($this->ion_auth->is_admin())
 				{
@@ -609,7 +623,6 @@ class Login extends MX_Controller {
 						foreach ($groupData as $grp) {
 							$this->ion_auth->add_to_group($grp, $id);
 						}
-
 					}
 				}
 
@@ -620,7 +633,7 @@ class Login extends MX_Controller {
 				    $this->session->set_flashdata('message', $this->ion_auth->messages() );
 				    if ($this->ion_auth->is_admin())
 					{
-						redirect('auth', 'refresh');
+						redirect('/', 'refresh');
 					}
 					else
 					{
@@ -634,7 +647,7 @@ class Login extends MX_Controller {
 				    $this->session->set_flashdata('message', $this->ion_auth->errors() );
 				    if ($this->ion_auth->is_admin())
 					{
-						redirect('auth', 'refresh');
+						redirect('/', 'refresh');
 					}
 					else
 					{
@@ -691,8 +704,8 @@ class Login extends MX_Controller {
 			'id'   => 'password_confirm',
 			'type' => 'password'
 		);
-
-		$this->_render_page('auth/edit_user', $this->data);
+        $this->template->load('main', 'login', 'edit_user', $this->data);
+//		$this->_render_page('login/edit_user', $this->data);
 	}
 
 	// create a new group
@@ -702,7 +715,7 @@ class Login extends MX_Controller {
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
-			redirect('auth', 'refresh');
+			redirect('login', 'refresh');
 		}
 
 		//validate form input
@@ -716,7 +729,7 @@ class Login extends MX_Controller {
 				// check to see if we are creating the group
 				// redirect them back to the admin page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				redirect("auth", 'refresh');
+				redirect("login", 'refresh');
 			}
 		}
 		else
@@ -729,16 +742,19 @@ class Login extends MX_Controller {
 				'name'  => 'group_name',
 				'id'    => 'group_name',
 				'type'  => 'text',
+                "class" => "form-control",
 				'value' => $this->form_validation->set_value('group_name'),
 			);
 			$this->data['description'] = array(
 				'name'  => 'description',
 				'id'    => 'description',
 				'type'  => 'text',
+                "class" => "form-control",
 				'value' => $this->form_validation->set_value('description'),
 			);
-
-			$this->_render_page('auth/create_group', $this->data);
+            $this->data['pageHeading'] = lang('create_group_heading');
+//			$this->_render_page('login/create_group', $this->data);
+            $this->template->load('main', 'login', 'create_group', $this->data);
 		}
 	}
 
@@ -748,14 +764,14 @@ class Login extends MX_Controller {
 		// bail if no group id given
 		if(!$id || empty($id))
 		{
-			redirect('auth', 'refresh');
+			redirect('login', 'refresh');
 		}
 
 		$this->data['title'] = $this->lang->line('edit_group_title');
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
-			redirect('auth', 'refresh');
+			redirect('login', 'refresh');
 		}
 
 		$group = $this->ion_auth->group($id)->row();
@@ -777,7 +793,7 @@ class Login extends MX_Controller {
 				{
 					$this->session->set_flashdata('message', $this->ion_auth->errors());
 				}
-				redirect("auth", 'refresh');
+				redirect("login", 'refresh');
 			}
 		}
 
@@ -800,7 +816,7 @@ class Login extends MX_Controller {
 			'value' => $this->form_validation->set_value('group_description', $group->description),
 		);
 
-		$this->_render_page('auth/edit_group', $this->data);
+		$this->_render_page('login/edit_group', $this->data);
 	}
     
 	function register()

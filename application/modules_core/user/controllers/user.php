@@ -61,11 +61,14 @@ class User extends MY_Controller {
 			'filter_error' => array(),
 			'debug_message' => array()
 		);
+        $user = $this->ion_auth->user()->row();
+        $userID = $user->id;
         $query = "SELECT `users`.`id`, `users`.`username`, `users`.`email`, `users`.`first_name`, `users`.`last_name`, `users`.`company`, `users`.`phone`, `users`.`active` AS `status`, CONCAT(`p`.`first_name`,' ',`p`.`last_name`) AS `parent`, `groups`.`name` AS `role`, `groups`.`description` AS `role_name`
 FROM `users` 
 JOIN `users_groups` ON `users_groups`.`user_id` = `users`.`id`
 JOIN `groups` ON `users_groups`.`group_id`=`groups`.`id`
-LEFT JOIN `users` `p` ON `p`.`id`=`users`.`parent_id`";
+LEFT JOIN `users` `p` ON `p`.`id`=`users`.`parent_id`
+WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         $result = $this->db->query($query);
         if($result->num_rows() > 0){
             $page_data = $result->result_array();

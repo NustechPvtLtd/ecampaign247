@@ -12,11 +12,31 @@ class User extends MY_Controller {
         }
     }
     
-    function index()
+    public function index()
     {
         $data['title'] = 'User';
         $data['pageMetaDescription'] = 'ecampaign247.com';
         $data['pageHeading'] = 'User List';
+        $data['js'] = array(
+            '<script type="text/javascript" src="'.base_url().'assets/js/root.js"></script>',
+		    '<script type="text/javascript" src="'.base_url().'assets/js/grid.js"></script>',
+		);
+        $data['css'] = array(
+            '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/css/grid.css" />',
+		);
+
         $this->template->load('main', 'services', 'user/index', $data);
-    }    
+    }
+    
+    public function ajaxLoadUserGrid()
+    {
+        $this->load->library(
+            "grid",
+            array(
+                "table"=>"users", 
+                "options"=>array(
+                )
+            )
+        );
+    }
 }

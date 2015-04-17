@@ -20,7 +20,13 @@ class Usermodel extends CI_Model {
     */
     
     public function getAll() {
-    
+        
+        $user = $this->ion_auth->user()->row();
+    	$userID = $user->id;
+        
+        if( !$this->ion_auth->is_admin() ) { 
+            $this->db->where('id', $userID);
+        }
     	$query = $this->db->from('users')->get();
     	
     	return $query->result();

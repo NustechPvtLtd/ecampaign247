@@ -91,17 +91,17 @@
 
                         <?php else:?>
 
-                            <li><a href="<?php echo site_url('sites')?>" id="backButton"><span class="fui-arrow-left"></span> <?php echo $this->lang->line('nav_goback_users')?></a></li>
+                            <li><a href="<?php echo site_url('sites')?>" id="backButton"><span class="fui-arrow-left"></span> <?php echo $this->lang->line('nav_goback_sites')?></a></li>
 
                         <?php endif;?>
 
                     <?php else:?>
 
                         <li <?php if( isset($page) && $page == "sites" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('sites')?>"><span class="fui-windows"></span> <?php echo $this->lang->line('nav_sites')?></a></li>
-                        <li <?php if( isset($page) && $page == "images" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('assets/images')?>"><span class="fui-image"></span> <?php echo $this->lang->line('nav_imagelibrary')?></a></li>
+                        <!--<li <?php if( isset($page) && $page == "images" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('assets/images')?>"><span class="fui-image"></span> <?php echo $this->lang->line('nav_imagelibrary')?></a></li>-->
                         <?php if( $this->ion_auth->is_admin() ):?>
-                        <li <?php if( isset($page) && $page == "users" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('users')?>"><span class="fui-user"></span> <?php echo $this->lang->line('nav_users')?></a></li>
-                        <li <?php if( isset($page) && $page == "settings" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('settings')?>"><span class="fui-gear"></span> <?php echo $this->lang->line('nav_settings')?></a></li>
+                        <!--<li <?php if( isset($page) && $page == "users" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('users')?>"><span class="fui-user"></span> <?php echo $this->lang->line('nav_users')?></a></li>-->
+                        <!--<li <?php if( isset($page) && $page == "settings" ):?>class="active"<?php endif;?>><a href="<?php echo site_url('settings')?>"><span class="fui-gear"></span> <?php echo $this->lang->line('nav_settings')?></a></li>-->
                         <?php endif;?>
 
                     <?php endif;?>
@@ -123,7 +123,7 @@
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="<?php echo site_url('account/index');?>" class="btn btn-default btn-flat"><?php echo 'My Account';?></a>
+                                        <a href="<?php echo site_url('/');?>" class="btn btn-default btn-flat"><?php echo 'My Account';?></a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="<?php echo site_url('login/logout');?>" class="btn btn-default btn-flat"><?php echo 'Logout';?></a>
@@ -207,6 +207,7 @@
 	    <script src="<?php echo base_url();?>assets/sites/js/jquery.placeholder.js"></script>
 	    <script src="<?php echo base_url();?>assets/sites/js/jquery.zoomer.js"></script>
 	    <script src="<?php echo base_url();?>assets/sites/js/application.js"></script>
+        <script src="<?php echo base_url();?>assets/js/adminlte.js" ></script>
         <?php if(isset($js)) echo implode("\n", $js) . "\n";?>
         <script>
                 var baseUrl = "<?php echo base_url();?>";

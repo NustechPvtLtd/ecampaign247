@@ -29,9 +29,6 @@
             <div class="row" style="height: 50px;"><!-- --></div>
             <div class="col-lg-4"></div>
             <div class="col-lg-4">
-                <div id="notify-container">
-                    <?php //echo Yii::app()->notify->show();?>
-                </div>
                 <?php echo $body; ?>
             </div>
             <div class="col-lg-4"></div>
