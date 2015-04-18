@@ -393,10 +393,10 @@ $lang['sites_siteAjax_error2_message'] = "Something went wrong when loading the 
 // controllers/sites.php -> siteAjaxUpdate()
 $lang['sites_siteAjaxUpdate_error1_heading'] = "Ouch! Something went wrong:";
 $lang['sites_siteAjaxUpdate_error1_message1'] = "Something went wrong when saving the site data, please see the errors below:<br><br>";
-$lang['sites_siteAjaxUpdate_error1_message2'] = "Something went wrong when saving the site data, please check the site's detaila again!";
+$lang['sites_siteAjaxUpdate_error1_message2'] = "Entered domain name is not available. Please check and try again!";
 
 $lang['sites_siteAjaxUpdate_success_heading'] = "Yeah! All went well.";
-$lang['sites_siteAjaxUpdate_success_message'] = "The site's details were saved successfully!";
+$lang['sites_siteAjaxUpdate_success_message'] = "The site's details were saved successfully. To see the changes please publish the site again!";
 
 // controllers/sites.php -> publish()
 $lang['sites_publish_error1_heading'] = "Ouch! Something went wrong:";

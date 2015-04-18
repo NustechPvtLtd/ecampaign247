@@ -52,9 +52,9 @@ $(function(){
 	$(".nav-tabs a").on('click', function (e) {
 	  e.preventDefault();
 	  $(this).tab("show");
-	})
+	});
 
-})
+});
 
 
 /* END SETTINGS */
@@ -65,14 +65,16 @@ var secondMenuWidth = 300;
 $( window ).load(function() {
 	
 	$('#loader').fadeOut();
+        pageEmpty();
 
+        allEmpty();
 	
 	//header tooltips
 	if( $('#publishPage').attr('data-toggle') == 'tooltip' ) {
 		
 		$('#publishPage').tooltip('show');
 	
-		setTimeout(function(){$('#publishPage').tooltip('hide')}, 5000)
+		setTimeout(function(){$('#publishPage').tooltip('hide')}, 5000);
 	
 	}
 	
@@ -126,7 +128,7 @@ function allEmpty() {
 
 	var allEmpty = false;
 	
-	if( $('#pageList li').size() == 0 ) {
+	if( $('#pageList ul').size() == 0 ) {
 	
 		allEmpty = true;
 	
@@ -2771,18 +2773,14 @@ $(function(){
 	
 		e.preventDefault();
 	
-		
 		if( publishActive == 0 ) {//check if we're currently publishing anything
-		
 		
 			//hide alerts
 			$('#publishModal .modal-alerts > *').each(function(){
 				$(this).remove();
-			})
-		
+			});
 		
 			$('#publishModal .modal-body > .alert-success').hide();
-		
 		
 			//hide loaders
 			$('#publishModal_assets .publishing').each(function(){
@@ -2791,12 +2789,12 @@ $(function(){
 				$(this).find('.working').show();
 				$(this).find('.done').hide();
 		
-			})
+			});
 		
 			//remove published class from asset checkboxes
 			$('#publishModal_assets input').each(function(){
 				$(this).removeClass('published');
-			})
+			});
 		
 			//do we have pending changes?
 		
@@ -2815,29 +2813,27 @@ $(function(){
 			
 					thePage = $(this).find('a:first').text();
 				
-					theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+baseUrl+'assets/sites/images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>')
+					theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+baseUrl+'assets/sites/images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>');
 								
 					//checkboxify
 					theRow.find('input').checkbox();
 				
 					theRow.find('input').on('check uncheck toggle', function(){
 				
-						$(this).closest('tr')[$(this).prop('checked') ? 'addClass' : 'removeClass']('selected-row');
+                                            $(this).closest('tr')[$(this).prop('checked') ? 'addClass' : 'removeClass']('selected-row');
 				
-					})
+					});
 				
 					$('#publishModal_pages tbody').append( theRow )
 				
-				})
+				});
 				
-		
 				$('#publishModal #publishPendingChangesMessage').hide();
 				$('#publishModal .modal-body-content').show();
 		
 			}
 				
 		}
-		
 		
 		//enable/disable publish button
 		activateButton = false;
@@ -2852,7 +2848,7 @@ $(function(){
 				
 			}
 				
-		})
+		});
 			
 		if( activateButton ) {
 			
@@ -2975,7 +2971,6 @@ $(function(){
 	
 	//submit publish
 	$('#publishSubmit').click(function(){
-	
 		
 		//track the publishing state
 		publishActive = 1;
@@ -2983,48 +2978,36 @@ $(function(){
 		//disable button
 		$('#publishSubmit, #publishCancel').addClass('disabled');
 		
-		
 		//remove existing alerts
 		$('#publishModal .modal-alerts > *').remove();
 		
-		
 		//prepare stuff
-		
 		$('#publishModal form input[type="hidden"].page').remove();
 		
 		//loop through all pages
 		$('#pageList > ul').each(function(){
 		
 			//export this page?
-			
 			if( $('#publishModal #publishModal_pages input:eq('+($(this).index()+1)+')').prop('checked') ) {
-			
-				//grab the skeleton markup
-								
+				//grab the skeleton markup		
 				newDocMainParent = $('iframe#skeleton').contents().find( pageContainer );
 				
 				//empty out the skeleton
 				newDocMainParent.find('*').remove();
 				
 				//loop through page iframes and grab the body stuff
-					
 				$(this).find('iframe').each(function(){
 					
-					//remove .frameCovers
-										
+					//remove .frameCovers				
 					theContents = $(this).contents().find( pageContainer );
 					
 					theContents.find('.frameCover').each(function(){
 						$(this).remove();
-					})
-					
+					});
 					
 					toAdd = theContents.html();
 					
-					
-					
 					//grab scripts
-					
 					scripts = $(this).contents().find( pageContainer ).find('script');
 					
 					if( scripts.size() > 0 ) {
@@ -3047,11 +3030,11 @@ $(function(){
 								script.type = 'text/javascript';
 								script.src = $(this).attr('src');
 								
-								theIframe.contentWindow.document.getElementById( pageContainer.substring(1) ).appendChild(script)
+								theIframe.contentWindow.document.getElementById( pageContainer.substring(1) ).appendChild(script);
 							
 							}
 					
-						})
+						});
 					
 					}
 					
@@ -3071,18 +3054,16 @@ $(function(){
 				
 				$('#publishModal form').prepend( newInput );
 				
-				newInput.val( "<html>"+$('iframe#skeleton').contents().find('html').html()+"</html>" )
+				newInput.val( "<html>"+$('iframe#skeleton').contents().find('html').html()+"</html>" );
 				
 			}
 		
-		})
-		
+		});
 		
 		//we'll publish everything item by item, to prevent time outs and to give somewhat of an indication
-		
 		publishAsset();
 	
-	})
+	});
 	
 	
 	
@@ -3240,21 +3221,36 @@ var theItem;
 
 function publishAsset() {
 
-	toPublish = $('#publishModal_pages input[type=checkbox]:checked:not(.published, .toggleAll)');
-
+	toPublish = $('#publishModal_assets input[type=checkbox]:checked:not(.published, .toggleAll), #publishModal_pages input[type=checkbox]:checked:not(.published, .toggleAll)');
+	
 	if( toPublish.size() > 0 ) {
-                theFirstItem = toPublish.first();		
+	
+		theItem = toPublish.first();
+		
+		//display the asset loader
+		theItem.closest('td').next().find('.publishing').fadeIn(500);
+		
+		if( theItem.attr('data-type') == 'page' ) {
+		
+                    theData = {siteID: $('form#publishForm input[name=siteID]').val(), item: theItem.val(), pageContent: $('form#publishForm input[name="xpages['+theItem.val()+']"]').val()};
+				
+		} else if( theItem.attr('data-type') == 'asset' ) {
+		
+                    theData = {siteID: $('form#publishForm input[name=siteID]').val(), item: theItem.val()};
+		
+		}
+						
 		$.ajax({
-                    url: $('form#publishForm').attr('action'),
-                    type: 'post',
-                    data: $('#publishForm').serialize(),
-                    dataType: 'json'
+			url: $('form#publishForm').attr('action'),
+			type: 'post',
+			data: theData,
+			dataType: 'json'
 		}).done(function(ret){
 		
 			if( ret.responseCode == 0 ) {//fatal error, publishing will stop
 			
 				//hide indicators
-				theFirstItem.closest('td').next().find('.working').hide();
+				theItem.closest('td').next().find('.working').hide();
 				
 				//enable buttons
 				$('#publishSubmit, #publishCancel').removeClass('disabled');
@@ -3264,16 +3260,16 @@ function publishAsset() {
 			} else if( ret.responseCode == 1 ) {//no issues
 				
 				//show done
-				theFirstItem.closest('td').next().find('.working').hide();
-				theFirstItem.closest('td').next().find('.done').fadeIn();
+				theItem.closest('td').next().find('.working').hide();
+				theItem.closest('td').next().find('.done').fadeIn();
 					
-				theFirstItem.addClass('published');
+				theItem.addClass('published');
 					
-//				publishAsset();
+				publishAsset();
 			
 			}
 				
-		})
+		});
 	
 	} else {
 	

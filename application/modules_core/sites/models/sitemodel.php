@@ -7,7 +7,7 @@ class Sitemodel extends CI_Model {
         parent::__construct();
         
         $this->load->database();
-        
+        $this->load->helper('file');
     }
     
     
@@ -364,16 +364,22 @@ class Sitemodel extends CI_Model {
   	public function updateSiteData($siteData) {
   		$domainOk = 0;
   		
-  		if ( ($siteData['siteSettings_domain']!='') && $this->checkDomainAvailability($siteData['siteSettings_domain']) ) {
-  			$domainOk = 1;
-  		}
-  		$data = array(
-  			'sites_name' => $siteData['siteSettings_siteName'],
-			'domain' => $siteData['siteSettings_domain'],
-  			'domain_ok' => $domainOk,
- 		);
-  		
+  		if (($siteData['siteSettings_domain']!='') && $this->checkDomainAvailability($siteData['siteSettings_domain'])){
+            $domainOk = 1;
+            $data = array(
+                'sites_name' => $siteData['siteSettings_siteName'],
+                'domain' => $siteData['siteSettings_domain'],
+                'domain_ok' => $domainOk,
+            );
+        }
+
   		if( $domainOk == 1 ) {
+            $siteDetails = $this->db->select('domain')->from('sites')->where('sites_id', $siteData['siteID'])->get();
+            $result = $siteDetails->result();
+            $absPath = './'.$result[0]->domain;
+            if (is_dir($absPath)) {
+                remove_directory($absPath);
+            }
             $this->db->where('sites_id', $siteData['siteID']);
             $this->db->update('sites', $data);
   			return true;

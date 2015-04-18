@@ -343,6 +343,7 @@ class Sites extends MY_Controller {
 	
 		$this->form_validation->set_rules('siteID', 'Site ID', 'required');
 		$this->form_validation->set_rules('siteSettings_siteName', 'Site name', 'required');
+		$this->form_validation->set_rules('siteSettings_domain', 'Domain', 'required');
 		
 		if ($this->form_validation->run() == FALSE) {
 			
@@ -369,7 +370,7 @@ class Sites extends MY_Controller {
 			
 			if( $domainOk ) {
                 $temp['header'] = $this->lang->line('sites_siteAjaxUpdate_success_heading');
-				$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_success_message1');
+				$temp['content'] = $this->lang->line('sites_siteAjaxUpdate_success_message');
                 $return['responseCode'] = 1;
                 $return['responseHTML'] = $this->load->view('partials/success', array('data'=>$temp), true);
 			} else {
@@ -480,8 +481,8 @@ class Sites extends MY_Controller {
             mkdir($absPath,0777);
         }
 		//do we have anythin to publish at all?
-		if( !isset( $_POST['xpages'] ) || $_POST['xpages'] == '' ) {
-		
+//		if( !isset( $_POST['xpages'] ) || $_POST['xpages'] == '' ) {
+		if( !isset( $_POST['item'] ) || $_POST['item'] == '' ) {
 			//nothing to upload
 			
 			$return = array();
@@ -497,7 +498,7 @@ class Sites extends MY_Controller {
 		
 		}
 
-        $result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
+        /*$result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
         if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
 		) {
             $return = array();
@@ -508,8 +509,11 @@ class Sites extends MY_Controller {
 			
 			$return['responseCode'] = 0;
 			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
-		}
-		foreach( $_POST['xpages'] as $page=>$content ) {
+		}*/
+
+//		foreach( $_POST['xpages'] as $page=>$content ) {
+		$page = $_POST['item'];
+		$content = $_POST['pageContent'];
 			//get page meta
 			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
 			
@@ -540,7 +544,7 @@ class Sites extends MY_Controller {
                 $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
             }
 			write_file($absPath.'/'.$page.".html",$pageContent);
-		}
+//		}
         remove_directory('./temp/'.$userID);
         
 		$this->sitemodel->publish( $_POST['siteID'],$siteDetails['site']->domain.".webzero.in");
