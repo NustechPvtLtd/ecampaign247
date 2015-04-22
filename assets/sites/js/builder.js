@@ -128,7 +128,7 @@ function allEmpty() {
 
 	var allEmpty = false;
 	
-	if( $('#pageList ul').size() == 0 ) {
+	if( $('#pageList ul li').size() == 0 ) {
 	
 		allEmpty = true;
 	

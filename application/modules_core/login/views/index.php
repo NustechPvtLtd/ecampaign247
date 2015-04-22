@@ -1,10 +1,10 @@
-
+    
 <p><?php echo lang('index_subheading');?></p>
 
 <div id="infoMessage"><?php echo $message;?></div>
 
 <table id="user-dataTable" class="table table-striped table-bordered  no-wrap" cellspacing="0" width="100%">
-    
+
     <thead>
         <tr>
             <th><?php echo lang('index_fname_th');?></th>
@@ -43,11 +43,11 @@
             </tr>
         <?php endforeach;?>
     </tbody>
-
+    
 </table>
 
 <p><?php echo anchor('create-user', lang('index_create_user_link'), array('class' => 'btn btn-primary'))?> <?php echo anchor('create-group', lang('index_create_group_link'), array('class' => 'btn btn-primary'))?></p>
-
+    
 <script>
     $(document).ready( function () {
         $("#user-dataTable").DataTable({

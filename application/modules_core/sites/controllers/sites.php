@@ -477,7 +477,7 @@ class Sites extends MY_Controller {
         }
         $path = 'public_html/'.$siteDetails['site']->domain;
         $absPath = './'.$siteDetails['site']->domain;
-        if (!is_dir($absPath)) {
+        if (!is_dir($absPath)&& $siteDetails['site']->domain!='') {
             mkdir($absPath,0777);
         }
 		//do we have anythin to publish at all?
@@ -545,7 +545,7 @@ class Sites extends MY_Controller {
             }
 			write_file($absPath.'/'.$page.".html",$pageContent);
 //		}
-        remove_directory('./temp/'.$userID);
+        (isset($userID)&&$userID!='')?remove_directory('./temp/'.$userID):'';
         
 		$this->sitemodel->publish( $_POST['siteID'],$siteDetails['site']->domain.".webzero.in");
 		//all went well
@@ -720,7 +720,7 @@ class Sites extends MY_Controller {
         $user = $this->ion_auth->user()->row();
         $userID = $user->id;
         
-        remove_directory('./temp/'.$userID);
+        (isset($userID)&&$userID!='')?remove_directory('./temp/'.$userID):'';
         //some error prevention first
 		$siteDetails = $this->sitemodel->getSite( $_POST['siteID'] );
 		

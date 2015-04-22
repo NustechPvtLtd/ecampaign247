@@ -376,9 +376,11 @@ class Sitemodel extends CI_Model {
   		if( $domainOk == 1 ) {
             $siteDetails = $this->db->select('domain')->from('sites')->where('sites_id', $siteData['siteID'])->get();
             $result = $siteDetails->result();
-            $absPath = './'.$result[0]->domain;
-            if (is_dir($absPath)) {
-                remove_directory($absPath);
+            if(isset($result[0]->domain)&& $result[0]->domain!=''){
+                $absPath = './'.$result[0]->domain;
+                if (is_dir($absPath)) {
+                    remove_directory($absPath);
+                }
             }
             $this->db->where('sites_id', $siteData['siteID']);
             $this->db->update('sites', $data);
