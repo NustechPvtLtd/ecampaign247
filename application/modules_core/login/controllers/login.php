@@ -945,5 +945,13 @@ class Login extends MX_Controller {
 
 		if (!$render) return $view_html;
 	}
-
+    
+    function site_contact()
+    {
+        if($this->input->post('email')){
+            echo $this->input->post('email');
+        } else {
+            return FALSE;
+        }
+    }
 }

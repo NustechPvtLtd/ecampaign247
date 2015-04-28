@@ -59,7 +59,7 @@
       	
       		<div class="second" id="second">
       		
-      			<ul id="elements">
+      			<ul id="element">
       			
       			</ul>
       

@@ -35,24 +35,34 @@
     		
     			<div class="col-md-4 col-md-offset-2">
     			
-    				<h4>Say what?</h4>
+    				<h4 class="editContent">Say what?</h4>
     				
-    				<p>
+    				<p class="editContent">
     					We have a weak spot for static HTML sites and truly believe they often are the better choice compared to CMS sites. That said, dealing with forms on those static sites is often a pain, and with Sent we're hoping to make life a bit easier.
     				</p>
     					
-    				<p class="small">
-    					Sent is built and maintained by <a href="http://chillyorange.com">Chilly Orange</a>.
+    				<p class="small editContent">
+    					Sent is built and maintained by <a href="http://webzero.in">Web Zero</a>.
     				</p>
     			
     			</div><!-- ./col-md-4 -->
     			
     			<div class="col-md-4 col-offset-2">
     			
-    				<h4>Get in touch</h4>
+    				<h4 class="editContent">Get in touch</h4>
     			
-    				<form role="form">
-    				
+                                <form role="form" id="contact_form">
+                                    <div class="form-group error">
+                                        <p class="small errorMessage" id="name_error" style="display:none">
+                                            Name can not be blank.
+                                        </p>
+                                        <p class="small errorMessage" id="email_error" style="display:none">
+                                            Email should be email and can not be blank.
+                                        </p>
+                                        <p class="small errorMessage" id="phone_error" style="display:none">
+                                            Phone no can not be blank.
+                                        </p>
+                                    </div>
     					<div class="form-group">
     				    	<input type="text" class="form-control input-lg" id="name" name="name" placeholder="Your name *">
     				  	</div>
@@ -62,10 +72,10 @@
     				  	</div>
     				  	
     				  	<div class="form-group">
-    				  		<textarea class="form-control" rows="4" placeholder="Add comment..."></textarea>
+    				  		<textarea class="form-control" rows="4" name="message" placeholder="Add comment..."></textarea>
     				  	</div>
     				      				  	
-    				  	<button type="submit" class="btn btn-primary btn-embossed btn-lg btn-wide"><span class="fui-mail"></span> Submit</button>
+    				  	<button type="button" class="btn btn-primary btn-embossed btn-lg btn-wide submit"><span class="fui-mail"></span> Submit</button>
     				
     				</form>
     			

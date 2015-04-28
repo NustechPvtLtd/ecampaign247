@@ -214,4 +214,58 @@ String.prototype.repeat = function(num) {
     // make code pretty
     window.prettyPrint && prettyPrint();
   });
+  
+    $('.error').hide();
+    $(".submit").click(function() {
+        // validate and process form here
+        
+        var name = $("input#name").val();
+        if (name == "") {
+            $('.error').show();
+            $("#name_error").show();
+            $("input#name").focus();
+            return false;
+        }
+        var email = $("input#email").val();
+        var emailReg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        if (!emailReg.test(email)) {
+            $('.error').show();
+            $("#email_error").show();
+            $("input#email").focus();
+            return false;
+        }
+        var phone = $("input#phone").val();
+        if (phone == "") {
+            $('.error').show();
+            $("#phone_error").show();
+            $("input#phone").focus();
+            return false;
+        }
+
+        $.ajax({
+          type: "POST",
+          url: window.location.protocol + '//' + window.location.hostname+'/login/site_contact',
+          data: $("#contact_form").serialize(),
+          success: function() {
+            $('#contact_form').html("<div id='message'></div>");
+            $('#message').html("<h2>Contact Form Submitted!</h2>")
+            .append("<p>We will be in touch soon.</p>")
+            .hide()
+            .fadeIn(1500, function() {
+              $('#message').append("<img id='checkmark' src='"+window.location.protocol + "//" + window.location.hostname+"/elements/images/check.png' />");
+            });
+          },
+          error:function(){
+            $('#contact_form').html("<div id='message'></div>");
+            $('#message').html("<h2>There is some issue!</h2>")
+            .append("<p>Please try again.</p>")
+            .hide()
+            .fadeIn(1500, function() {
+              $('#message').append("<img id='crossmark' src='"+window.location.protocol + "//" + window.location.hostname+"/elements/images/abort.png' />");
+            });
+          }
+        });
+        return false;
+    });
+  
 })(jQuery);

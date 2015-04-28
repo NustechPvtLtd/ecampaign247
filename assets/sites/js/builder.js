@@ -24,9 +24,10 @@ editableItems['p'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color'];
 editableItems['img'] = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width'];
 editableItems['hr.dashed'] = ['border-color', 'border-width'];
-editableItems['.divider > span'] = ['color', 'font-size'];
+editableItems['.divider > span'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['hr.shadowDown'] = ['margin-top', 'margin-bottom'];
 editableItems['.footer a'] = ['color'];
+editableItems['.item'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['.bg.bg1, .bg.bg2, .header10, .header11'] = ['background-image', 'background-color'];
 
 var editableItemOptions = new Array();
@@ -41,7 +42,7 @@ editableItemOptions['h3 : font-family'] = ['default', 'Lato', 'Helvetica', 'Aria
 editableItemOptions['p : font-family'] = ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'];
 
 
-var editableContent = ['.editContent, .navbar a, button, a.btn, .footer a:not(.fa), .tableWrapper'];
+var editableContent = ['.editContent, .navbar a, button, a.btn, .footer a:not(.icon), .tableWrapper, .title'];
 
 
 /* FLAT UI PRO INITS */
@@ -239,51 +240,51 @@ function prepPagesforSave() {
 
 function makeDraggable(theID) {
 
-	$('#elements li').each(function(){
+	$('#element li').each(function(){
 	
 		$(this).draggable({
-			helper: function() {
-				return $('<div style="height: 100px; width: 300px; background: #F9FAFA; box-shadow: 5px 5px 1px rgba(0,0,0,0.1); text-align: center; line-height: 100px; font-size: 28px; color: #16A085"><span class="fui-list"></span></div>');
-			},
-			revert: 'invalid',
-			appendTo: 'body',
-			connectToSortable: theID,
-			stop: function(){
-				
-				pageEmpty();
-				
-				allEmpty();
-				
-			},
-			start: function(){
-			
-				//switch to block mode
-				$('input:radio[name=mode]').parent().addClass('disabled');
-				$('input:radio[name=mode]#modeBlock').radio('check');
-				
-				//show all iframe covers and activate designMode
-				
-				$('#pageList ul .zoomer-wrapper .zoomer-cover').each(function(){
-				
-					$(this).show();
-				
-				})
-				
-				//deactivate designmode
-				
-				$('#pageList ul li iframe').each(function(){
-				
-					this.contentDocument.designMode = "off";
-				
-				})
-			
-			}
-		});	
-	
+                    helper: function() {
+                            return $('<div style="height: 100px; width: 300px; background: #F9FAFA; box-shadow: 5px 5px 1px rgba(0,0,0,0.1); text-align: center; line-height: 100px; font-size: 28px; color: #16A085"><span class="fui-list"></span></div>');
+                    },
+                    revert: 'invalid',
+                    appendTo: 'body',
+                    connectToSortable: theID,
+                    stop: function(){
+
+                        pageEmpty();
+
+                        allEmpty();
+
+                    },
+                    start: function(){
+
+                            //switch to block mode
+                            $('input:radio[name=mode]').parent().addClass('disabled');
+                            $('input:radio[name=mode]#modeBlock').radio('check');
+
+                            //show all iframe covers and activate designMode
+
+                            $('#pageList ul .zoomer-wrapper .zoomer-cover').each(function(){
+
+                                    $(this).show();
+
+                            })
+
+                            //deactivate designmode
+
+                            $('#pageList ul li iframe').each(function(){
+
+                                    this.contentDocument.designMode = "off";
+
+                            })
+
+                    }
+            });
+
 	})
 	
 	$('#elements li a').each(function(){
-	
+
 		$(this).unbind('click').bind('click', function(e){
 		
 			e.preventDefault();
@@ -302,9 +303,9 @@ function makeSortable(el) {
 		beforeStop: function(event, ui){
 			
 			//alert( ui.item.find('iframe').attr('src') )
-						
+			                        
 			if( ui.item.find('.zoomer-cover > button').size() == 0 ) {
-			
+						
 				if( ui.item.find('iframe').size() > 0 ) {//iframe thumbnails
 			   				
 					theHeight = ui.item.height()/0.25;
@@ -400,7 +401,48 @@ function makeSortable(el) {
 
 }
 
+$('#element').on('click', 'li', function() {
+    ui = $(this);
+    var el = ui.clone();
 
+    theHeight = ui.find('img').attr('data-height')*0.8;
+    el.html('<iframe src="'+ui.find('img').attr('data-src')+'" scrolling="no" data-originalurl="'+ui.find('img').attr('data-src')+'" frameborder="0"><iframe>');
+					
+    el.find('iframe').uniqueId();
+
+    el.find('iframe').zoomer({
+            zoom: 0.8,
+            width: $('#screen').width(),
+            height: theHeight,
+            message: "Drag&Drop Me!"
+    });
+
+    el.find('iframe').load(function(){
+        heightAdjustment( el.find('iframe').attr('id'), true );
+    });
+
+    //remove the link if it excists
+    el.find('.zoomer-cover a').remove();
+    
+    //add a delete button
+    delButton = $('<button type="button" class="btn btn-danger deleteBlock"><span class="fui-trash"></span> remove</button>');
+    resetButton = $('<button type="button" class="btn btn-warning resetBlock"><i class="fa fa-refresh"></i> reset</button>');
+    htmlButton = $('<button type="button" class="btn btn-inverse htmlBlock"><i class="fa fa-code"></i> source</button>');
+
+    el.find('.zoomer-cover').append( delButton );
+    el.find('.zoomer-cover').append( $('<div style="clear:both; height:0px">'));
+    el.find('.zoomer-cover').append( resetButton );
+    el.find('.zoomer-cover').append( $('<div style="clear:both; height:0px">'));
+    el.find('.zoomer-cover').append( htmlButton );
+
+    //dropped element, so we've got pending changes
+    setPendingChanges(true);
+    $('#pageList ul:visible').append(el);
+    $('#pageList ul:visible li').each(function(){
+        $(this).find('.zoomer-cover > a').remove();
+    });
+    $('#start').hide();
+ });
 function buildeStyleElements(el, theSelector) {
 
 	for( x=0; x<editableItems[theSelector].length; x++ ) {
@@ -1796,7 +1838,6 @@ $(function(){
 					} ).click( function(e){
 				
 						elToUpdate = $(this);
-					
 						e.preventDefault();
 						
 						e.stopPropagation();

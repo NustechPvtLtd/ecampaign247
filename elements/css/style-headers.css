@@ -188,7 +188,7 @@ header.dark .navbar.plain a {
 
 .carousel.carousel2 img {
 	max-width: 100%;
-	width: 100%;
+	/*width: 100%;*/
 }
 
 .carousel.carousel2 .carousel-control.left {
