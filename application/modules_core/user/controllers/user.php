@@ -15,7 +15,7 @@ class User extends MY_Controller {
     public function index()
     {
         $data['title'] = 'User';
-        $data['pageMetaDescription'] = 'ecampaign247.com';
+        $data['pageMetaDescription'] = 'Webzero.in';
         $data['pageHeading'] = 'User List';
 
         $data['js'] = array(

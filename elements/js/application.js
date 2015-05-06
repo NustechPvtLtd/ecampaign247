@@ -241,18 +241,21 @@ String.prototype.repeat = function(num) {
             $("input#phone").focus();
             return false;
         }
-
+        var parts = location.hostname.split('.');
+        var subdomain = parts.shift();
+        var upperleveldomain = parts.join('.');
         $.ajax({
           type: "POST",
-          url: window.location.protocol + '//' + window.location.hostname+'/login/site_contact',
-          data: $("#contact_form").serialize(),
+          url: window.location.protocol + '//' +upperleveldomain+'/index.php/login/site_contact',
+          data: $("#contact_form").serialize()+'&subdomain='+subdomain,
+          crossDomain: true,
           success: function() {
             $('#contact_form').html("<div id='message'></div>");
             $('#message').html("<h2>Contact Form Submitted!</h2>")
             .append("<p>We will be in touch soon.</p>")
             .hide()
-            .fadeIn(1500, function() {
-              $('#message').append("<img id='checkmark' src='"+window.location.protocol + "//" + window.location.hostname+"/elements/images/check.png' />");
+            .fadeIn(300, function() {
+              $('#message').append("<img id='checkmark' src='"+window.location.protocol + "//" + upperleveldomain+"/elements/images/check.png' width=26 />");
             });
           },
           error:function(){
@@ -260,8 +263,8 @@ String.prototype.repeat = function(num) {
             $('#message').html("<h2>There is some issue!</h2>")
             .append("<p>Please try again.</p>")
             .hide()
-            .fadeIn(1500, function() {
-              $('#message').append("<img id='crossmark' src='"+window.location.protocol + "//" + window.location.hostname+"/elements/images/abort.png' />");
+            .fadeIn(300, function() {
+              $('#message').append("<img id='crossmark' src='"+window.location.protocol + "//" + upperleveldomain+"/elements/images/abort.png' width=26 />");
             });
           }
         });

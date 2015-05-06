@@ -159,6 +159,14 @@ $config['email_forgot_password_complete'] = 'new_password.tpl.php';
 
 /*
  | -------------------------------------------------------------------------
+ | Contact Webpage Owner Email Template
+ | -------------------------------------------------------------------------
+ | Default: contact_webpage_owner.tpl.php
+ */
+$config['email_forgot_password_complete'] = 'contact_webpage_owner.tpl.php';
+
+/*
+ | -------------------------------------------------------------------------
  | Salt options
  | -------------------------------------------------------------------------
  | salt_length Default: 22

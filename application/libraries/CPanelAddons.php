@@ -203,6 +203,29 @@ class CPanelAddons {
 
 		return $json;
 	}
+    
+    
+	/**
+	 * Add an sub-domain
+	 *
+	 * @link http://docs.cpanel.net/twiki/bin/view/ApiDocs/Api2/ApiAddonDomain#SubDomain::addsubdomain
+	 * @param string $domain Valid sub-domain name
+	 * @param string $rootdomain root domain name
+	 * @return array Output from the cPanel
+	 */
+	public function delSub( $domain, $rootdomain )
+	{
+		$result = $this -> _api( array (
+			'cpanel_jsonapi_apiversion' => 2,
+			'user' => $this -> _username,
+			'cpanel_jsonapi_module' => 'SubDomain',
+			'cpanel_jsonapi_func' => 'delsubdomain',
+			'domain' => $domain.'.'.$rootdomain
+				) );
+		$json = json_decode( $result, true );
+
+		return $json;
+	}
 
 	public function saveFile( $relativeDir, $content )
 	{

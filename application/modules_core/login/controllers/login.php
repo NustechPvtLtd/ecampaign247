@@ -217,7 +217,7 @@ class Login extends MX_Controller {
 		}
         
 		$data['title'] = 'Forgot Password';
-		$data['pageMetaDescription'] = 'ecampaign247.com';
+		$data['pageMetaDescription'] = 'webzero.in';
 
 		if ($this->form_validation->run() == false)
 		{
@@ -948,8 +948,14 @@ class Login extends MX_Controller {
     
     function site_contact()
     {
-        if($this->input->post('email')){
-            echo $this->input->post('email');
+        header('Access-Control-Allow-Origin: *');
+        if(!empty($_REQUEST['email']) && !empty($_REQUEST['subdomain'])){
+            $result = $this->ion_auth->contact_webpage_owner($_REQUEST['email'], $_REQUEST['name'], $_REQUEST['message'], $_REQUEST['subdomain']);
+            if($result){
+                return TRUE;
+            }  else {
+                return FALSE;
+            }
         } else {
             return FALSE;
         }

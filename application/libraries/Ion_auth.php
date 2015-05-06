@@ -512,5 +512,40 @@ class Ion_auth
 		 */
 		return $check_all;
 	}
+    
+    /*
+     * 
+     * 
+     */
+    public function contact_webpage_owner($sender_email, $sender_name, $message, $subdomain, $phone='')
+    {
+        $query = "SELECT `users`.`email`, CONCAT(`users`.`first_name`,' ',`users`.`last_name`) AS `name`
+FROM `users` JOIN `sites` ON `sites`.`users_id` = `users`.`id` WHERE `sites`.`domain` = '{$subdomain}';";
+        $result = $this->db->query($query);
+        $data = array(
+            'message' => $message,
+            'phone' => ($phone)?$phone:''
+        );
+        if($result->num_rows() > 0){
+            $result = $result->result_array();
+            $data['name'] = $result[0]['name'];
+            $message = $this->load->view($this->config->item('email_templates', 'ion_auth').$this->config->item('email_forgot_password_complete', 'ion_auth'), $data, true);
+            $this->email->clear();
+            $this->email->from($sender_email, $sender_name);
+            $this->email->to($result[0]['email']);
+            $this->email->subject($sender_name.' Contact you');
+            $this->email->message($message);
+
+            if ($this->email->send())
+            {
+                return TRUE;
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        
+    }
 
 }

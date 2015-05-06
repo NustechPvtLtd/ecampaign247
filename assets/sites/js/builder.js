@@ -21,7 +21,7 @@ editableItems['h3'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['h4'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['h5'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['p'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color'];
+editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color', 'border'];
 editableItems['img'] = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width'];
 editableItems['hr.dashed'] = ['border-color', 'border-width'];
 editableItems['.divider > span'] = ['color', 'font-size', 'background-color', 'font-family'];
@@ -441,6 +441,8 @@ $('#element').on('click', 'li', function() {
     $('#pageList ul:visible li').each(function(){
         $(this).find('.zoomer-cover > a').remove();
     });
+    pageEmpty();
+    allEmpty();
     $('#start').hide();
  });
 function buildeStyleElements(el, theSelector) {

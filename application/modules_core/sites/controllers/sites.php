@@ -498,18 +498,21 @@ class Sites extends MY_Controller {
 		
 		}
 
-        /*$result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
-        if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
-		) {
-            $return = array();
-			
-			$temp = array();
-			$temp['header'] = $this->lang->line('sites_publish_error2_heading');
-			$temp['content'] = "cPanel: " . $result['cpanelresult']['data'][0]['reason'];
-			
-			$return['responseCode'] = 0;
-			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
-		}*/
+        if(!$siteDetails['site']->published){//Check wheather subdomain is register or not
+            $result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
+            if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
+            ) {
+                $return = array();
+
+                $temp = array();
+                $temp['header'] = $this->lang->line('sites_publish_error2_heading');
+                $temp['content'] = "cPanel: " . $result['cpanelresult']['data'][0]['reason'];
+
+                $return['responseCode'] = 0;
+                $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
+                die( json_encode( $return ) );
+            }
+        }
 
 //		foreach( $_POST['xpages'] as $page=>$content ) {
 		$page = $_POST['item'];
@@ -789,7 +792,8 @@ class Sites extends MY_Controller {
 	*/
 	
 	public function trash($siteID = '') {
-	
+        
+        $this->load->helper('file');
 		if( $siteID == '' || $siteID == 'undefined' ) {
 		
 			$return = array();
@@ -804,9 +808,28 @@ class Sites extends MY_Controller {
 			die( json_encode( $return ) );
 		
 		}
+        
+        $params = array('hostname'=>$this -> _hostName, 'username'=>$this -> _userName, 'password'=>$this -> _password);
+        $this->load->library('CPanelAddons', $params,'CPanelAddons');
+        
+		$siteData = $this->sitemodel->getSite( $siteID );
 		
-		
-		
+        if(isset($siteData['site']->domain) && $siteData['site']->published){
+            $result = $this->CPanelAddons->delSub($siteData['site']->domain, "webzero.in");
+            if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0') {
+                $return = array();
+
+                $temp = array();
+                $temp['header'] = $this->lang->line('sites_trash_error1_heading');
+                $temp['content'] = "cPanel: " . $result['cpanelresult']['data'][0]['reason'];
+
+                $return['responseCode'] = 0;
+                $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
+                die( json_encode( $return ) );
+            }
+            $absPath = './'.$siteData['site']->domain;
+            remove_directory($absPath);
+        }
 		//all good, move to trash
 		
 		$this->sitemodel->trash( $siteID );
