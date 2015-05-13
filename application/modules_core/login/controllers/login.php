@@ -8,7 +8,7 @@ class Login extends MX_Controller {
 	{
 		parent::__construct();
 		$this->load->database();
-		$this->load->library(array('ion_auth','form_validation', 'template'));
+		$this->load->library(array('ion_auth','form_validation', 'template', 'visitor_count'));
         //$this->form_validation->CI =& $this;
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
@@ -946,18 +946,30 @@ class Login extends MX_Controller {
 		if (!$render) return $view_html;
 	}
     
-    function site_contact()
+    function site_contact($id)
     {
         header('Access-Control-Allow-Origin: *');
-        if(!empty($_REQUEST['email']) && !empty($_REQUEST['subdomain'])){
-            $result = $this->ion_auth->contact_webpage_owner($_REQUEST['email'], $_REQUEST['name'], $_REQUEST['message'], $_REQUEST['subdomain']);
+        $site_id = $this->encrypt->decode($id);
+
+        if(!empty($_REQUEST['email']) ){
+            $result = $this->ion_auth->contact_webpage_owner($_REQUEST['email'], $_REQUEST['name'], $_REQUEST['message'], $site_id);
             if($result){
                 return TRUE;
             }  else {
                 return FALSE;
             }
-        } else {
+        } /*else {
             return FALSE;
+        }*/
+    }
+    
+    function visitor_counter($id)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $site_id = $this->encrypt->decode($id);
+
+        if(!empty($_REQUEST['ip']) && $site_id ){
+            $this->visitor_count->visitors( $_REQUEST['ip'], $site_id, $_REQUEST['page_id'], $_REQUEST['page_url'] );
         }
     }
 }

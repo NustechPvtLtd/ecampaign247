@@ -517,10 +517,10 @@ class Ion_auth
      * 
      * 
      */
-    public function contact_webpage_owner($sender_email, $sender_name, $message, $subdomain, $phone='')
+    public function contact_webpage_owner($sender_email, $sender_name, $message, $site_id, $phone='')
     {
         $query = "SELECT `users`.`email`, CONCAT(`users`.`first_name`,' ',`users`.`last_name`) AS `name`
-FROM `users` JOIN `sites` ON `sites`.`users_id` = `users`.`id` WHERE `sites`.`domain` = '{$subdomain}';";
+FROM `users` JOIN `sites` ON `sites`.`users_id` = `users`.`id` WHERE `sites`.`sites_id` = '{$site_id}';";
         $result = $this->db->query($query);
         $data = array(
             'message' => $message,

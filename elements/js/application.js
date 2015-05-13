@@ -215,6 +215,11 @@ String.prototype.repeat = function(num) {
     window.prettyPrint && prettyPrint();
   });
   
+  var counter_url = $('#counter-url').data("content");
+  var site_url = $('#site-url').data("content");
+  var contact_url = $('#contact-url').data("content");
+  var page_id = $('#page-id').data("content");
+  var page_url = $('#page-url').data("content");
     $('.error').hide();
     $(".submit").click(function() {
         // validate and process form here
@@ -241,13 +246,11 @@ String.prototype.repeat = function(num) {
             $("input#phone").focus();
             return false;
         }
-        var parts = location.hostname.split('.');
-        var subdomain = parts.shift();
-        var upperleveldomain = parts.join('.');
+
         $.ajax({
           type: "POST",
-          url: window.location.protocol + '//' +upperleveldomain+'/index.php/login/site_contact',
-          data: $("#contact_form").serialize()+'&subdomain='+subdomain,
+          url: contact_url,
+          data: $("#contact_form").serialize(),
           crossDomain: true,
           success: function() {
             $('#contact_form').html("<div id='message'></div>");
@@ -255,7 +258,7 @@ String.prototype.repeat = function(num) {
             .append("<p>We will be in touch soon.</p>")
             .hide()
             .fadeIn(300, function() {
-              $('#message').append("<img id='checkmark' src='"+window.location.protocol + "//" + upperleveldomain+"/elements/images/check.png' width=26 />");
+              $('#message').append("<img id='checkmark' src='"+site_url + "/images/check.png' width=26 />");
             });
           },
           error:function(){
@@ -264,11 +267,17 @@ String.prototype.repeat = function(num) {
             .append("<p>Please try again.</p>")
             .hide()
             .fadeIn(300, function() {
-              $('#message').append("<img id='crossmark' src='"+window.location.protocol + "//" + upperleveldomain+"/elements/images/abort.png' width=26 />");
+              $('#message').append("<img id='crossmark' src='"+site_url + "/images/abort.png' width=26 />");
             });
           }
         });
         return false;
     });
-  
+  $.getJSON("http://jsonip.com?callback=?", function (data) {
+    var ip = data.ip;
+    $.post( counter_url, { ip:ip, page_id: page_id, page_url:page_url}, function( data )
+    {
+        console.log(data);
+    });
+  });
 })(jQuery);

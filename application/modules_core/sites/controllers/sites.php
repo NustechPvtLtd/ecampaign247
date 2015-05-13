@@ -520,9 +520,9 @@ class Sites extends MY_Controller {
 			//get page meta
 			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
 			
-			if( $pageMeta ) {
+			if( !empty($pageMeta->pages_title) ) {
 				//insert title, meta keywords and meta description
-				$meta = '<title>'.$pageMeta->pages_title.'</title>'."\r\n";
+				$meta = '<title>'.$siteDetails['site']->sites_name.' | '.$pageMeta->pages_title.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
 								
@@ -535,8 +535,17 @@ class Sites extends MY_Controller {
 				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
 			
 			} else {
-				$pageContent = $content;
+                //insert title
+				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>';
+								
+				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 			}
+            $pageContent = str_replace("<!-- site contact url div -->", '<div id="contact-url" data-content="'.site_url('login/site_contact/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
+            $pageContent = str_replace("<!-- site counter url div -->", '<div id="counter-url" data-content="'.site_url('login/visitor_counter/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
+            $pageContent = str_replace("<!-- site url div -->", '<div id="site-url" data-content="'. base_url('elements').'"></div>', $pageContent);
+            $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
+            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.$siteDetails['site']->remote_url.'/'. $pageMeta->pages_name.'.html"></div>', $pageContent);
+            
             if(!stristr($pageContent, '<link href="'. base_url('elements'))){
                 $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
             }
