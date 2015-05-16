@@ -90,6 +90,10 @@ $lang['sitesettings_sitesettings'] = "Site Settings";
 $lang['sitesettings_button_savesettings'] = "Save Settings";
 
 
+// views/partials/sitedomaindata.php
+$lang['domainSubmittButton'] = "Book Domain";
+$lang['domainCheckButton'] = "Check Availability";
+
 // views/partials/sitedata.php
 $lang['sitedata_sitedetails'] = "Site details";
 
@@ -130,6 +134,7 @@ $lang['button_publish_page'] = "Publish";
 
 $lang['actionbuttons_sitesettings'] = "Site Settings";
 $lang['actionbuttons_pagesettings'] = "Page Settings";
+$lang['actionbuttons_premiumdomain'] = "Premium Domain";
 $lang['actionbuttons_save'] = "Save";
 $lang['actionbuttons_export'] = "Export";
 $lang['actionbuttons_preview'] = "Preview";
@@ -236,7 +241,9 @@ $lang['modal_imagelibrary_button_insert'] = "Insert Image";
 $lang['modal_imagelibrary_button_insertimage'] = "Insert Image";
 
 $lang['modal_pagesettings_header'] = "Page Settings for";
+$lang['modal_domain_header'] = "Premium Domain";
 $lang['modal_pagesettings_loadertext'] = "Saving page settings...";
+$lang['modal_domain_loadertext'] = "Saving domain...";
 
 
 // views/partials/pagedata.php

@@ -10,6 +10,7 @@
     </div>
   </div>
 </div>
+<div id="site-url" data-content="<?php echo site_url();?>"></div>
 <script>
     /**
     * Convert local timezone date string to UTC timestamp
@@ -61,13 +62,13 @@
    var grid_status;
  
     $(document).on("click", "#take_snapshot", function() {
-      grid_status = $("#demo_grid1").bs_grid("takeSnapshot");
+      grid_status = $("#user_grid1").bs_grid("takeSnapshot");
       $("#restore_snapshot").prop("disabled", false);
     });
 
 
     $(document).on("click", "#restore_snapshot", function() {
       $("#restore_snapshot").prop("disabled", true);
-      $("#demo_grid1").bs_grid("restoreSnapshot", grid_status);
+      $("#user_grid1").bs_grid("restoreSnapshot", grid_status);
     });
 </script>

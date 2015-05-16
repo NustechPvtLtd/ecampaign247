@@ -807,3 +807,13 @@ li.element {
 .dropdown-menu > li > a{
     padding: 3px 20px;
 }
+
+.tld-container > label, .tld-select > label{
+    margin: 0;
+    padding: 0 5px;
+}
+
+.tld-container {
+    clear: both;
+    margin-left: 10px;
+}

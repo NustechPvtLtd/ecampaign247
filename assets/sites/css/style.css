@@ -454,6 +454,7 @@ body .panel-default > .panel-heading {
 	background: #eee;
 	border: 2px dashed #ddd;
 	padding: 30px 20px;
+        overflow: auto;
 	margin-bottom: 15px;
 }
 
@@ -616,7 +617,13 @@ body .panel-default > .panel-heading {
 	margin: 0px auto 0px;
 }
 
-
+.tld-container-primary {
+    padding-left: 15px;
+}
+.tld-select {
+    max-height: 150px;
+    overflow-y: scroll;
+}
 /* end site settings */
 
 

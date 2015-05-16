@@ -1,10 +1,10 @@
 $(function() {
- 
+    var site_url = $('#site-url').data("content");
     $("#user_grid1").bs_grid({
         pageNum: 1,
         rowsPerPage: 10,
         maxRowsPerPage: 100,
-        ajaxFetchDataURL: "/ecampaign247/index.php/user/getUserData",
+        ajaxFetchDataURL: site_url+"/user/getUserData",
         row_primary_key: "id",
 
         columns: [

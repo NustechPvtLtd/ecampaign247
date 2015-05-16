@@ -21,7 +21,7 @@
 </head>
 <body class="skin-green">
     <header class="header">
-            <a href="<?php echo base_url();?>index.php/" class="logo icon">
+            <a href="<?php echo site_url();?>" class="logo icon">
                 <img src="<?php echo base_url();?>assets/img/logo.png" alt="Customer area" />            
 			</a>
             <nav class="navbar navbar-static-top" role="navigation">
@@ -58,14 +58,14 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
-                                    <img src="avatar<?php //echo Yii::app()->customer->getModel()->getAvatarUrl(90, 90);?>" class="img-circle"/>
+                                    <img src="<?php //echo Yii::app()->customer->getModel()->getAvatarUrl(90, 90);?>" class="img-circle"/>
                                     <p>
                                         <?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?>
                                     </p>
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="<?php echo site_url('account/index');?>" class="btn btn-default btn-flat"><?php echo 'My Account';?></a>
+                                        <a href="<?php echo site_url();?>" class="btn btn-default btn-flat"><?php echo 'Profile';?></a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="<?php echo site_url('login/logout');?>" class="btn btn-default btn-flat"><?php echo 'Logout';?></a>

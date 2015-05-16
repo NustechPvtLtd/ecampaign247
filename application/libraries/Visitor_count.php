@@ -71,7 +71,7 @@ class Visitor_count {
 
 		try {
 			if ( !$this-> visitor_count_model-> find($ip, $site_id, $page_id ) ) {
-				$geoLocation = $this -> getGeoLocation( $ip_address );
+				$geoLocation = $this -> getWhoIs( $ip_address );
                 $data = array(
                     'site_id' => $site_id,
                     'page_id' => $page_id,
@@ -82,11 +82,11 @@ class Visitor_count {
                 isset( $geoLocation -> isp ) ? $data['isp'] = $geoLocation -> isp : '';
 				isset( $geoLocation -> city ) ? $data['city'] = $geoLocation -> city : '';
 				isset( $geoLocation -> country ) ? $data['country'] = $geoLocation -> country : '';
-				isset( $geoLocation -> region ) ? $data['region'] = $geoLocation -> region : '';
-				isset( $geoLocation -> longitude ) ? $data['longitude'] = $geoLocation -> longitude : '';
-				isset( $geoLocation -> latitude ) ? $data['latitude'] = $geoLocation -> latitude : '';
-				isset( $geoLocation -> country_code ) ? $data['country_code'] = strtolower( $geoLocation -> country_code ) : '';
-				isset( $geoLocation -> postal_code ) ? $data['zipcode'] = $geoLocation -> postal_code : '';
+				isset( $geoLocation -> regionName ) ? $data['region'] = $geoLocation -> regionName : '';
+				isset( $geoLocation -> lon ) ? $data['longitude'] = $geoLocation -> lon : '';
+				isset( $geoLocation -> lat ) ? $data['latitude'] = $geoLocation -> lat : '';
+				isset( $geoLocation -> countryCode ) ? $data['country_code'] = strtolower( $geoLocation -> countryCode ) : '';
+				isset( $geoLocation -> zip ) ? $data['zipcode'] = $geoLocation -> zip : '';
 				if ( $this-> visitor_count_model-> create_visitor($data) ) {
                     $this->session->set_userdata('current_page', $page_url);
 				}
@@ -129,8 +129,7 @@ class Visitor_count {
 		// Set some options - we are passing in a useragent too here
 		curl_setopt_array( $curl, array (
 			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_URL => 'http://freegeoip.net/json/' . $ip
-//            CURLOPT_URL => 'http://ip-api.com/json/'.$ip
+            CURLOPT_URL => 'http://ip-api.com/json/'.$ip
 		) );
 		// Send the request & save response to $resp
 		$resp = curl_exec( $curl );

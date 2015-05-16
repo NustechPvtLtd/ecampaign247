@@ -17,6 +17,7 @@
         		  	<ul class="dropdown-menu dropdown-inverse">
         		    	<li><a href="#siteSettings" id="siteSettingsButton" class="siteSettingsModalButton" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_sitesettings')?></a></li>
         		    	<li><a href="#pageSettingsModal" id="pageSettingsButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_pagesettings')?></a></li>
+        		    	<li><a href="#premiumDomainModal" id="premiumDomainButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_premiumdomain')?></a></li>
         		  	</ul>
         		</div>
         	            		
@@ -2206,6 +2207,43 @@
           		<div class="modal-footer">
             		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <?php echo $this->lang->line('modal_cancelclose')?></button>
             		<button type="button" class="btn btn-primary btn-embossed" id="pageSettingsSubmittButton"><span class="fui-check"></span> <?php echo $this->lang->line('sitesettings_button_savesettings')?></button>
+          		</div>
+          		
+        	</div><!-- /.modal-content -->
+        	
+      	</div><!-- /.modal-dialog -->
+      		  	
+    </div><!-- /.modal -->
+    
+    <div class="modal fade premiumDomainModal" id="premiumDomainModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	
+    	<div class="modal-dialog modal-lg">
+            	
+        	<div class="modal-content">
+        	
+        		<div class="modal-header">
+        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->lang->line('modal_close')?></span></button>
+        			<h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <?php echo $this->lang->line('modal_domain_header')?></h4>
+        		</div>
+          		
+          		<div class="modal-body">
+          		
+          			<div class="loader" style="display: none;">
+          				<img src="<?php echo base_url();?>assets/sites/images/loading.gif" alt="Loading...">
+          				<?php echo $this->lang->line('modal_domain_loadertext')?>
+          			</div>
+          			
+          			<div class="modal-alerts"></div>
+          		
+          			<?php 
+                        echo $this->load->view('partials/sitedomaindata.php', array('siteData'=>$siteData['site']));
+          			?>
+          			          	
+          		</div><!-- /.modal-body -->
+                <div class="clearfix"></div>
+          		<div class="modal-footer">
+            		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <?php echo $this->lang->line('modal_cancelclose')?></button>
+            		<button type="button" class="btn btn-primary btn-embossed" id="domainSubmittButton"><span class="fui-check"></span> <?php echo $this->lang->line('domainSubmittButton')?></button>
           		</div>
           		
         	</div><!-- /.modal-content -->

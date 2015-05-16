@@ -41,7 +41,7 @@
 </head>
 <body class="skin-green">
     <header class="header">
-            <a href="<?php echo base_url();?>index.php/" class="logo icon">
+            <a href="<?php echo site_url();?>" class="logo icon">
                 <img src="<?php echo base_url();?>assets/img/logo.png" alt="Customer area" />            
 			</a>
             <nav class="navbar navbar-static-top" role="navigation">

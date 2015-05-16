@@ -931,9 +931,9 @@ body > .header .logo .icon {
   clear: both;
 }
 .navbar-nav > .user-menu > .dropdown-menu > li.user-footer .btn-default {
-    background-color: #50667b;
-    border-color: #ddd;
-    color: #fff;
+    background-color: #50667b !important;
+    border-color: #ddd !important;
+    color: #fff !important;
 }
 .navbar-nav > .user-menu > .dropdown-menu > li.user-footer .btn-default:hover {
     background-color: #354b60 !important;
