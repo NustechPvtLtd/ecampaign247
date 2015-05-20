@@ -44,6 +44,9 @@ class Sites extends MY_Controller {
 						
 		$this->data['page'] = "sites";
 		$this->data['pageHeading'] = $this->lang->line('sites_header');
+        $this->data['css'] = array(
+		    '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
+		);
 		$this->data['js'] = array(
 		    '<script type="text/javascript" src="'.base_url().'assets/sites/js/sites.js"></script>'
 		);

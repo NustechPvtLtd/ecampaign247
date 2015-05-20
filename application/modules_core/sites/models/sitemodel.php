@@ -278,20 +278,15 @@ class Sitemodel extends CI_Model {
     	$query = $this->db->from('pages')->where('sites_id', $siteID)->get();
     	    	
     	$pages = $query->result();
-    	
+    	$pageID = '';
+        
     	foreach( $pages as $page ) {
     	
     		//delete all frames 
-    		
     		$this->db->where('pages_id', $page->pages_id);
     		$this->db->delete('frames');
-    		    		
-    		
-    		//delete page
-    		
-    		$this->db->where('pages_id', $page->pages_id);
-    		$this->db->delete('pages');
-    	
+            
+            $pageID = $page->pages_id;
     	}
     	
     	
@@ -314,11 +309,8 @@ class Sitemodel extends CI_Model {
     		
     		}
     		
-    		$this->db->insert('pages', $data); 
-    		
-    		$pageID = $this->db->insert_id();
-    		
-    		
+            $this->db->where('pages_id', $pageID);
+    		$this->db->update('pages', $data); 
     		
     		//page is done, now all the frames for this page
     		

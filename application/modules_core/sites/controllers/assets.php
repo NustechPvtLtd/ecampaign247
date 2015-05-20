@@ -109,7 +109,7 @@ class Assets extends MY_Controller {
 		
 		}
 		
-		redirect('/assets/images', 'location');
+		redirect(site_url('sites/assets/images'), 'location');
 	
 	}
 	

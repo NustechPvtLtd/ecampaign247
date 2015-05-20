@@ -2,23 +2,27 @@
 
 class User extends MY_Controller {
     
+    public $data = array();
     function __construct()
     {
         parent::__construct();
+        $this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
+        $this->lang->load('auth');
+        $this->data['title'] = $this->router->fetch_method();
+        $this->data['pageMetaDescription'] = $this->router->fetch_class().'|'.$this->router->fetch_method();
+    }
+    
+    public function index()
+    {
+        
         $group = array('comp-admin', 'admin', 'sub-admin');
         if (!$this->ion_auth->in_group($group)){
             $this->session->set_flashdata('message', 'You must be a Company Admin OR a Application Admin to view this page');
             redirect('/');
         }
-    }
-    
-    public function index()
-    {
-        $data['title'] = 'User';
-        $data['pageMetaDescription'] = 'Webzero.in';
-        $data['pageHeading'] = 'User List';
-
-        $data['js'] = array(
+        
+        $this->data['pageHeading'] = 'User List';
+        $this->data['js'] = array(
             '<script type="text/javascript" src="'.base_url().'assets/js/user-grid.js"></script>',
             '<script type="text/javascript" src="'.base_url().'assets/jquery-ui/jquery-ui.min.js"></script>',
 		    '<script type="text/javascript" src="'.base_url().'assets/sites/js/jquery.ui.touch-punch.min.js"></script>',
@@ -30,14 +34,14 @@ class User extends MY_Controller {
 		    '<script type="text/javascript" src="'.base_url().'assets/grid/jquery.bs_grid.js"></script>',
 		    '<script type="text/javascript" src="'.base_url().'assets/grid/localization/en.js"></script>',
 		);
-        $data['css'] = array(
+        $this->data['css'] = array(
             '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/jquery-ui/jquery-ui.min.css" />',
             '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/pagination/jquery.bs_pagination.css" />',
             '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/filter/jquery.jui_filter_rules.css" />',
             '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/grid/jquery.bs_grid.css" />',
 		);
 
-        $this->template->load('main', 'user', 'index', $data);
+        $this->template->load('main', 'user', 'index', $this->data);
     }
     
     public function ajaxLoadUserGrid()
@@ -78,4 +82,186 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         $return ['page_data']=$page_data;
         echo json_encode($return);
     }
+    
+    public function profile()
+    {
+        $user = $this->ion_auth->user()->row();
+        //validation rule
+        $this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'required');
+        $this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required');
+        $this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'required');
+        $this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'));
+        $this->form_validation->set_rules('email', $this->lang->line('edit_user_validation_email_label'), 'required');
+        $this->data['message'] ='';
+		if (isset($_POST) && !empty($_POST))
+		{
+			// do we have a valid request?
+			if ($this->_valid_csrf_nonce() === FALSE )
+			{
+				show_error($this->lang->line('error_csrf'));
+			}
+            
+            //update the password if it was posted
+			if ($this->input->post('password'))
+			{
+				$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
+				$this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
+			}
+            
+            if ($this->form_validation->run() === TRUE)
+			{
+				$data = array(
+					'first_name' => $this->input->post('first_name'),
+					'last_name'  => $this->input->post('last_name'),
+					'company'    => $this->input->post('company'),
+					'phone'      => $this->input->post('phone'),
+				);
+
+				//update the password if it was posted
+				if ($this->input->post('password'))
+				{
+					$data['password'] = $this->input->post('password');
+				}
+
+                //check to see if we are updating the user
+			    if($this->ion_auth->update($user->id, $data))
+			    {
+			    	//redirect them back to the admin page if admin, or to the base url if non admin
+				    $this->data['message'] =  $this->ion_auth->messages() ;
+			    }
+			    else
+			    {
+			    	//redirect them back to the admin page if admin, or to the base url if non admin
+				    $this->data['message'] = $this->ion_auth->errors();
+			    }
+			}
+            else
+            {
+                $this->data['message'] = validation_errors();
+            }
+        }
+        
+        //display the edit user form
+		$this->data['csrf'] = $this->_get_csrf_nonce();
+
+		//pass the user to the view
+		$this->data['user'] = $user;
+        $this->data['first_name'] = array(
+			'name'  => 'first_name',
+			'id'    => 'first_name',
+			'type'  => 'text',
+			'value' => $this->form_validation->set_value('first_name', $user->first_name),
+            'class' => 'form-control',
+		);
+		$this->data['last_name'] = array(
+			'name'  => 'last_name',
+			'id'    => 'last_name',
+			'type'  => 'text',
+			'value' => $this->form_validation->set_value('last_name', $user->last_name),
+            'class' => 'form-control',
+		);
+		$this->data['email'] = array(
+			'name'      => 'email',
+			'id'        => 'email',
+			'type'      => 'email',
+			'value'     => $this->form_validation->set_value('email', $user->email),
+            'class'     => 'form-control',
+            'READONLY'  => true
+		);
+		$this->data['company'] = array(
+			'name'  => 'company',
+			'id'    => 'company',
+			'type'  => 'text',
+			'value' => $this->form_validation->set_value('company', $user->company),
+            'class' => 'form-control',
+		);
+		$this->data['phone'] = array(
+			'name'  => 'phone',
+			'id'    => 'phone',
+			'type'  => 'text',
+			'value' => $this->form_validation->set_value('phone', $user->phone),
+            'class' => 'form-control',
+		);
+		$this->data['password'] = array(
+			'name' => 'password',
+			'id'   => 'password',
+			'type' => 'password',
+            'class' => 'form-control',
+		);
+		$this->data['password_confirm'] = array(
+			'name' => 'password_confirm',
+			'id'   => 'password_confirm',
+			'type' => 'password',
+            'class' => 'form-control',
+		);
+        $this->data['avatar'] = $user->avatar;
+        $this->data['js'] = array(
+            '<script type="text/javascript" src="'.base_url().'assets/js/ajaxupload.3.5.js"></script>',
+            );
+        $this->data['pageHeading'] = 'My Profile';
+        $this->template->load('main', 'user', 'profile_personal', $this->data);
+        
+    }
+    
+    public function upload_avatar()
+    {
+        $userID = $this->ion_auth->get_user_id();
+        
+        //if the upload path does not exist, create it
+        if( !file_exists( './'.$this->config->item('images_uploadDir').'/'.$userID ) ) {
+            mkdir('./'.$this->config->item('images_uploadDir').'/'.$userID, 0777, true);
+        }
+
+        $config['upload_path'] = './'.$this->config->item('images_uploadDir').'/'.$userID.'/';
+        $config['allowed_types'] = $this->config->item('upload_allowed_types');
+        $config['max_size']	= $this->config->item('upload_max_size');
+        $config['max_width']  = $this->config->item('upload_max_width');
+        $config['max_height']  = $this->config->item('upload_max_height');
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('uploadfile')) {
+            $return['status'] = 'error';
+            $return['message'] = $this->upload->display_errors();
+        } else {
+            $imageData=$this->upload->data();
+            $data['avatar'] = $imageData['raw_name'].$imageData['file_ext'];
+            if($this->ion_auth->update($userID, $data))
+            {
+                $avatar = userdata( 'avatar' );
+                if(!empty($avatar)){
+                    unlink($config['upload_path'].$avatar);
+                    userdata( 'avatar', $data['avatar']);
+                }
+                
+                $return['status'] = 'success';
+                $return['message'] = $data['avatar'];
+            }
+        }
+        echo json_encode($return);
+    }
+    
+    function _get_csrf_nonce()
+	{
+		$this->load->helper('string');
+		$key   = random_string('alnum', 8);
+		$value = random_string('alnum', 20);
+		$this->session->set_flashdata('csrfkey', $key);
+		$this->session->set_flashdata('csrfvalue', $value);
+
+		return array($key => $value);
+	}
+
+	function _valid_csrf_nonce()
+	{
+		if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE &&
+			$this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue'))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }

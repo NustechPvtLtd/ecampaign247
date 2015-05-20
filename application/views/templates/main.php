@@ -58,14 +58,14 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
-                                    <img src="<?php //echo Yii::app()->customer->getModel()->getAvatarUrl(90, 90);?>" class="img-circle"/>
+                                    <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' );?>" class="img-circle"/>
                                     <p>
                                         <?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?>
                                     </p>
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="<?php echo site_url();?>" class="btn btn-default btn-flat"><?php echo 'Profile';?></a>
+                                        <a href="<?php echo site_url('user/profile')?>" class="btn btn-default btn-flat"><?php echo 'My Profile';?></a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="<?php echo site_url('login/logout');?>" class="btn btn-default btn-flat"><?php echo 'Logout';?></a>
@@ -82,7 +82,7 @@
                 <section class="sidebar">
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="<?php //echo Yii::app()->customer->getModel()->getAvatarUrl(90, 90);?>" class="img-circle" />
+                            <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' );?>" class="img-circle" />
                         </div>
                         <div class="pull-left info">
                             <p><?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?></p>
@@ -93,7 +93,7 @@
                         include_once 'user_menu.php';
                     } elseif ($this->ion_auth->in_group(array('comp-admin'))){
                         include_once 'user_menu.php';
-                        include_once 'customer_menu.php';
+//                        include_once 'customer_menu.php';
                     }else {
                         include_once 'admin_menu.php';
                     }?>

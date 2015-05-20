@@ -118,10 +118,10 @@
             margin: 0;
         }
         .info_content td {
-            border: 1px solid rgba(212, 234, 226, 0.63);
+            border: 1px solid rgba(178, 231, 212, 0.74);
         }
         .info_content tr {
-            border-bottom: 1px solid #e9e9e9;
+            /*border-bottom: 1px solid #e9e9e9;*/
         }
     </style>
     <a href="<?= site_url('visitor'); ?>">Back</a>
