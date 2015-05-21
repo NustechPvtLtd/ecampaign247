@@ -91,6 +91,8 @@
                     files.load();
                     files.fadeIn('slow');
                     files.attr('src','<?php echo base_url();?>' + 'elements/images/uploads/'+'<?= $this->ion_auth->get_user_id();?>' +'/'+ obj.message + '?rand=' + new Date().getTime());
+                    $('.img-circle').fadeOut('slow').load().fadeIn('slow');
+                    $('.img-circle').attr('src','<?php echo base_url();?>' + 'elements/images/uploads/'+'<?= $this->ion_auth->get_user_id();?>' +'/'+ obj.message + '?rand=' + new Date().getTime());
                     status.html('');
                 }
 

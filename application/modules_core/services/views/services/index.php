@@ -29,7 +29,7 @@
     <div class="col-lg-4 col-md-4">
         <div class="panel_new">
             <div class="login-wrapper">
-                <a href="<?php echo site_url('services');?>">
+                <a href="<?php echo site_url('social_media');?>">
                     <div id="user-info">
                         <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/social_media.jpg" alt="user-image">
                         <h4 class="headline">Social Media</h4>

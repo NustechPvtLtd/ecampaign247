@@ -982,7 +982,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, avatar, last_login')
+		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, avatar, social_account, last_login')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
 		    			  ->order_by('id', 'desc')
@@ -1737,6 +1737,9 @@ class Ion_auth_model extends CI_Model
 	{
 
 		$this->trigger_events('pre_set_session');
+        if($user->social_account){
+            $social_account = json_decode($user->social_account);
+        }
 
 		$session_data = array(
 		    'identity'             => $user->{$this->identity_column},
@@ -1744,7 +1747,8 @@ class Ion_auth_model extends CI_Model
 		    'email'                => $user->email,
 		    'user_id'              => $user->id, //everyone likes to overwrite id so we'll use user_id
 		    'old_last_login'       => $user->last_login,
-		    'avatar'               => $user->avatar
+		    'avatar'               => $user->avatar,
+		    'fb_token'             => ($social_account)?$social_account->facebook->fb_token:'',
 		);
 
 		$this->session->set_userdata($session_data);
@@ -1829,7 +1833,7 @@ class Ion_auth_model extends CI_Model
 
 		//get the user
 		$this->trigger_events('extra_where');
-		$query = $this->db->select($this->identity_column.', id, username, email, last_login')
+		$query = $this->db->select($this->identity_column.', id, username, email, avatar, social_account, last_login')
 		                  ->where($this->identity_column, get_cookie($this->config->item('identity_cookie_name', 'ion_auth')))
 		                  ->where('remember_code', get_cookie($this->config->item('remember_cookie_name', 'ion_auth')))
 		                  ->limit(1)

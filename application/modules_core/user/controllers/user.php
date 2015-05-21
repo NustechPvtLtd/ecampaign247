@@ -98,7 +98,8 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
 			// do we have a valid request?
 			if ($this->_valid_csrf_nonce() === FALSE )
 			{
-				show_error($this->lang->line('error_csrf'));
+//				show_error($this->lang->line('error_csrf'));
+                redirect('user/profile','location');
 			}
             
             //update the password if it was posted
