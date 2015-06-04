@@ -624,6 +624,9 @@ body .panel-default > .panel-heading {
     max-height: 150px;
     overflow-y: scroll;
 }
+.tld-select span{
+    display: -webkit-inline-box;
+}
 /* end site settings */
 
 

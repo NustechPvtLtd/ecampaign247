@@ -3256,7 +3256,24 @@ $(function(){
 		$('#editContentModal #contentToEdit').redactor('core.destroy');
 		
 	})
-		    
+	
+    $('#domainSubmittButton').click(function(){
+        if($("input:radio[name='domain']").is(':checked')) {
+            $.ajax({
+                    url: $('form#book-domain-form').attr('action'),
+                    type: 'post',
+                    data: $('form#book-domain-form').serialize()
+            }).done(function(ret){
+                $('.search-results-container').html(' ');
+                $('.search-results-container').html(ret);
+                $('#domain_result').show();
+                $('#domainSubmittButton').attr('disabled','disabled');
+            });
+        }else{
+            alert('Please select domain!');
+        }
+    });
+    
 })
 
 var publishActive = 0;

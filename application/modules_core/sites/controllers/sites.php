@@ -15,6 +15,7 @@ class Sites extends MY_Controller {
 		$this->load->model('sites/sitemodel');
 		$this->load->model('sites/usermodel');
 		$this->load->model('sites/pagemodel');
+		$this->load->model('domain/domainmodel');
 			
 		$this->data['pageTitle'] = $this->lang->line('sites_page_title');
 		
@@ -500,6 +501,8 @@ class Sites extends MY_Controller {
 			die( json_encode( $return ) );
 		
 		}
+        
+        $premiumDomain = $this->domainmodel->getDomain($_POST['siteID']);
 
         if(!$siteDetails['site']->published){//Check wheather subdomain is register or not
             $result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
@@ -516,7 +519,22 @@ class Sites extends MY_Controller {
                 die( json_encode( $return ) );
             }
         }
+        
+        if($premiumDomain){
+            $result = $this->CPanelAddons->add($premiumDomain, $path);
+            if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
+            ) {
+                $return = array();
 
+                $temp = array();
+                $temp['header'] = $this->lang->line('sites_publish_error2_heading');
+                $temp['content'] = "cPanel: " . $result['cpanelresult']['data'][0]['reason'];
+
+                $return['responseCode'] = 0;
+                $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
+                die( json_encode( $return ) );
+            }
+        }
 //		foreach( $_POST['xpages'] as $page=>$content ) {
 		$page = $_POST['item'];
 		$content = $_POST['pageContent'];
@@ -555,8 +573,8 @@ class Sites extends MY_Controller {
             if(!stristr($pageContent, '<script src="js'. base_url('elements'))){
                 $pageContent = str_replace('<script src="js','<script src="'. base_url('elements').'/js',$pageContent);
             }
-            if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
-                $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
+            if(!stristr($pageContent, '<img src="'. base_url('elements').'/images')){
+                $pageContent = str_replace('<img src="images','<img src="'. base_url('elements').'/images',$pageContent);
             }
 			write_file($absPath.'/'.$page.".html",$pageContent);
 //		}
@@ -785,8 +803,8 @@ class Sites extends MY_Controller {
             if(!stristr($pageContent, '<script src="'. base_url('elements'))){
                 $pageContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$pageContent);
             }
-            if(!stristr($pageContent, 'src="'. base_url('elements').'/images')){
-                $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
+            if(!stristr($pageContent, '<img src="'. base_url('elements').'/images')){
+                $pageContent = str_replace('<img src="images','<img src="'. base_url('elements').'/images',$pageContent);
             }
             if(!write_file('./temp/'.$userID.'/'.$page.".html", '<html>'.$pageContent.'</html>')){
                 die("Page not created!");

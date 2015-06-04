@@ -1778,7 +1778,7 @@ Component: timeline
 .btn.btn-default:hover,
 .btn.btn-default:active,
 .btn.btn-default.hover {
-  background-color: #f4f4f4!important;
+  /*background-color: #f4f4f4!important;*/
 }
 .btn.btn-default.btn-flat {
   border-bottom-color: #d9dadc;

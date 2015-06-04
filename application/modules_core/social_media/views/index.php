@@ -24,17 +24,33 @@
                 <img class="img-responsive" src="<?php echo base_url('assets')?>/img/facebook_button.png" alt="Connect with Facebook"/>
             </a>
         </div>
+        <?php else :?>
+        <div class="linksocial">
+            <a href="<?php echo site_url('social_media/disconnect_account/facebook')?>">
+                Click to disconnect Facebook
+            </a>
+        </div>
         <?php endif;?>
+        <?php if(!$this->session->userdata('tw_access_token') || !$this->session->userdata('tw_access_key')):?>
+            <div class="linksocial">
+                <a href="<?php echo site_url('social_media/register_twitter?register=TRUE')?>">
+                    <img class="img-responsive" src="<?php echo base_url('assets')?>/img/twitter_button.png" alt="Connect with Twitter"/>
+                </a>
+            </div>
+        <?php else :?>
         <div class="linksocial">
-            <a href="<?php echo site_url('social_media')?>">
-                <img class="img-responsive" src="<?php echo base_url('assets')?>/img/twitter_button.png" alt="Connect with Twitter"/>
+            <a href="<?php echo site_url('social_media/disconnect_account/twitter')?>">
+                Click to disconnect Twitter
             </a>
         </div>
-        <div class="linksocial">
-            <a href="<?php echo site_url('social_media')?>">
-                <img class="img-responsive" src="<?php echo base_url('assets')?>/img/linkedin_button.png" alt="Connect with LinkedIn"/>
-            </a>
-        </div>
+        <?php endif;?>
+        <?php if(!$this->session->userdata('li_access_token') || !$this->session->userdata('li_access_key')):?>
+<!--            <div class="linksocial">
+                <a href="<?php // echo site_url('social_media/register_linkedin?register=TRUE')?>">
+                    <img class="img-responsive" src="<?php // echo base_url('assets')?>/img/linkedin_button.png" alt="Connect with LinkedIn"/>
+                </a>
+            </div>-->
+        <?php endif;?>
     </div>
     <div class="col-sm-6 columns ">
         <a href="#" id="postCustomLink">Click here to post your custom content on Social Media</a>
@@ -51,10 +67,10 @@
                                 <input type="checkbox" name="socialMedia[]" id="socialMedia_1" value="twitter">
                                 <label for="socialMedia_1">Twitter</label>
                             </li>
-                            <li>
+<!--                            <li>
                                 <input type="checkbox" name="socialMedia[]" id="socialMedia_2" value="linkedin"> 
                                 <label for="socialMedia_2">LinkedIn</label>
-                            </li>
+                            </li>-->
                         </ul>                                                                                                           </span>  
                 </div>
                 <div class="form-group">

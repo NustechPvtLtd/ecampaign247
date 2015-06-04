@@ -1748,8 +1748,25 @@ class Ion_auth_model extends CI_Model
 		    'user_id'              => $user->id, //everyone likes to overwrite id so we'll use user_id
 		    'old_last_login'       => $user->last_login,
 		    'avatar'               => $user->avatar,
-		    'fb_token'             => ($social_account)?$social_account->facebook->fb_token:'',
 		);
+        if(isset($social_account->facebook)){
+            $session_data = array_merge($session_data, array(
+                'fb_token'             => $social_account->facebook->fb_token
+            ));
+        }
+        if(isset($social_account->twitter)){
+            $session_data = array_merge($session_data, array(
+                'tw_access_token'      => $social_account->twitter->access_token,
+                'tw_access_key'        => $social_account->twitter->access_key,
+            ));
+        }
+        if(isset($social_account->linkedin)){
+            $session_data = array_merge($session_data, array(
+                'li_access_token'      => $social_account->linkedin->access_token,
+                'li_access_key'        => $social_account->linkedin->access_key,
+                'li_access_verifier'   => $social_account->linkedin->access_verifier,
+            ));
+        }
 
 		$this->session->set_userdata($session_data);
 

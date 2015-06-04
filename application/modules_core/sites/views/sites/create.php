@@ -2243,7 +2243,7 @@
                 <div class="clearfix"></div>
           		<div class="modal-footer">
             		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <?php echo $this->lang->line('modal_cancelclose')?></button>
-            		<button type="button" class="btn btn-primary btn-embossed" id="domainSubmittButton"><span class="fui-check"></span> <?php echo $this->lang->line('domainSubmittButton')?></button>
+                    <button type="button" class="btn btn-primary btn-embossed" id="domainSubmittButton" disabled="disabled"><span class="fui-check"></span> <?php echo $this->lang->line('domainSubmittButton')?></button>
           		</div>
           		
         	</div><!-- /.modal-content -->

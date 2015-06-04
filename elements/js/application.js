@@ -258,7 +258,7 @@ String.prototype.repeat = function(num) {
             .append("<p>We will be in touch soon.</p>")
             .hide()
             .fadeIn(300, function() {
-              $('#message').append("<img id='checkmark' src='"+site_url + "/images/check.png' width=26 />");
+              $('#message').append("<img id='checkmark' src='"+site_url + "/images/icons/check.png' width=26 />");
             });
           },
           error:function(){
@@ -267,7 +267,7 @@ String.prototype.repeat = function(num) {
             .append("<p>Please try again.</p>")
             .hide()
             .fadeIn(300, function() {
-              $('#message').append("<img id='crossmark' src='"+site_url + "/images/abort.png' width=26 />");
+              $('#message').append("<img id='crossmark' src='"+site_url + "/images/icons/abort.png' width=26 />");
             });
           }
         });
@@ -277,7 +277,7 @@ String.prototype.repeat = function(num) {
     var ip = data.ip;
     $.post( counter_url, { ip:ip, page_id: page_id, page_url:page_url}, function( data )
     {
-        console.log(data);
+//        console.log(data);
     });
   });
 })(jQuery);

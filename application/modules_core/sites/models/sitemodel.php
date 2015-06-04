@@ -262,7 +262,7 @@ class Sitemodel extends CI_Model {
     public function update($siteID, $siteName, $siteData, $pagesData = '') {
     
        	//update the site details first
-    	
+
     	$data = array(
    			'sites_name' => $siteName,
    			'sites_lastupdate_on' => time()
@@ -278,7 +278,6 @@ class Sitemodel extends CI_Model {
     	$query = $this->db->from('pages')->where('sites_id', $siteID)->get();
     	    	
     	$pages = $query->result();
-    	$pageID = '';
         
     	foreach( $pages as $page ) {
     	
@@ -286,7 +285,6 @@ class Sitemodel extends CI_Model {
     		$this->db->where('pages_id', $page->pages_id);
     		$this->db->delete('frames');
             
-            $pageID = $page->pages_id;
     	}
     	
     	
@@ -309,7 +307,7 @@ class Sitemodel extends CI_Model {
     		
     		}
     		
-            $this->db->where('pages_id', $pageID);
+            $this->db->where('pages_id', $pagesData[$pageName]['pages_id']);
     		$this->db->update('pages', $data); 
     		
     		//page is done, now all the frames for this page
@@ -328,7 +326,7 @@ class Sitemodel extends CI_Model {
                         $frameContent = str_replace('src="'. base_url('elements').'/images','src="images',$frameContent);
                     }
     				$data = array(
-    					'pages_id' => $pageID,
+    					'pages_id' => $pagesData[$pageName]['pages_id'],
     					'sites_id' => $siteID,
     					'frames_content' => $frameContent,
     					'frames_height' => $frameData['frameHeight'],
