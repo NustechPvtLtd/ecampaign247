@@ -156,10 +156,10 @@ class CPanelAddons {
 				) );
 		$json = json_decode( $result, true );
 // error found?
-		if ( isset( $json['cpanelresult']['data'][0]['result'] ) && trim( $json['cpanelresult']['data'][0]['result'] ) == '0'
+		/*if ( isset( $json['cpanelresult']['data'][0]['result'] ) && trim( $json['cpanelresult']['data'][0]['result'] ) == '0'
 		) {
 			throw new Exception( "cPanel: " . $json['cpanelresult']['data'][0]['reason'] );
-		}
+		}*/
 		/**
 		 * Create FTP User
 		 * @link http://docs.cpanel.net/twiki/bin/view/ApiDocs/Api2/ApiFtp#Ftp::addftp

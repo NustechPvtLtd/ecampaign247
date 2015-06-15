@@ -242,7 +242,7 @@
     			theButton = $(this)
     		
     			$.ajax({
-    				url: '<?php echo site_url('assets/delImage')?>',
+    				url: '<?php echo site_url('sites/assets/delImage')?>',
     				data: {file: theURL},
     				type: 'post'
     			}).done(function(){

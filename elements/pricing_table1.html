@@ -13,6 +13,7 @@
     
     <link href="css/style.css" rel="stylesheet">
     <link href="css/style-pricing.css" rel="stylesheet">
+    <link href="css/paypal-button.css" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link href="css/font-awesome.css" rel="stylesheet">
@@ -58,8 +59,18 @@
     								<li>unlimited updates</li>
     							</ul>
     							</div><!-- /.editContent -->
-    							
-    							<a href="" class="btn btn-lg btn-embossed btn-block btn-primary"><span class="fa fa-credit-card"></span> Buy Now</a>
+                                                        
+                                                            <script 
+                                                        data-callback="http://webzero.in/index.php/payment/paypal" 
+                                                        data-tax="0" 
+                                                        data-shipping="0" 
+                                                        data-currency="USD" 
+                                                        data-amount="9" 
+                                                        data-quantity="1" 
+                                                        data-name="Starter" 
+                                                        data-button="buynow" src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=DDRTDQTNKZUL8" async="async"
+                                                    ></script>
+                                                        
     						
     						</div><!-- /.bottom -->
     					
@@ -91,7 +102,16 @@
     							</ul>
     							</div><!-- /.editContent -->
     							
-    							<a href="" class="btn btn-lg btn-embossed btn-block btn-primary"><span class="fa fa-credit-card"></span> Buy Now</a>
+                                                    <script 
+                                                        data-callback="http://webzero.in/index.php/payment/paypal" 
+                                                        data-tax="0" 
+                                                        data-shipping="0" 
+                                                        data-currency="USD" 
+                                                        data-amount="29" 
+                                                        data-quantity="1" 
+                                                        data-name="Intermediate" 
+                                                        data-button="buynow" src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=DDRTDQTNKZUL8" async="async"
+                                                    ></script>
     						
     						</div><!-- /.bottom -->
     					
@@ -123,7 +143,17 @@
     							</ul>
     							</div><!-- /.editContent -->
     							
-    							<a href="" class="btn btn-lg btn-embossed btn-block btn-primary"><span class="fa fa-credit-card"></span> Buy Now</a>
+                                                    <script 
+                                                        data-env="sandbox" 
+                                                        data-callback="http://webzero.in/index.php/payment/paypal" 
+                                                        data-tax="0" 
+                                                        data-shipping="0" 
+                                                        data-currency="USD" 
+                                                        data-amount="99" 
+                                                        data-quantity="1" 
+                                                        data-name="Advanced" 
+                                                        data-button="buynow" src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=DDRTDQTNKZUL8" async="async"
+                                                    ></script>
     						
     						</div><!-- /.bottom -->
     					
@@ -152,5 +182,6 @@
     <script src="js/jquery.tagsinput.js"></script>
     <script src="js/jquery.placeholder.js"></script>
     <script src="js/application.js"></script>
+    <script src="js/paypal-button.min.js"></script>
 </body>
 </html>

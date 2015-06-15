@@ -96,6 +96,24 @@ $lang['edit_user_validation_groups_label']           = 'Groups';
 $lang['edit_user_validation_password_label']         = 'Password';
 $lang['edit_user_validation_password_confirm_label'] = 'Password Confirmation';
 
+// Edit Address
+$lang['edit_blng_heading']          = 'Billing Address';
+$lang['edit_spng_heading']          = 'Shipping Address';
+$lang['edit_address_subheading']    = 'Same as billing address?';
+$lang['edit_blng_street_label']     = 'Billing Street';
+$lang['edit_blng_city_label']       = 'Billing City';
+$lang['edit_blng_state_label']      = 'Billing State';
+$lang['edit_blng_zipcode_label']    = 'Billing Zipcode';
+$lang['edit_blng_country_label']    = 'Billing Country';
+$lang['edit_blng_phone_label']      = 'Billing Phone';
+$lang['edit_spng_street_label']     = 'Shipping Street';
+$lang['edit_spng_city_label']       = 'Shipping City';
+$lang['edit_spng_state_label']      = 'Shipping State';
+$lang['edit_spng_zipcode_label']    = 'Shipping zipcode';
+$lang['edit_spng_country_label']    = 'Shipping Country';
+$lang['edit_spng_phone_label']      = 'Shipping Phone';
+$lang['edit_address_submit_btn']    = 'Save Address';
+
 // Create Group
 $lang['create_group_title']                  = 'Create Group';
 $lang['create_group_heading']                = 'Create Group';

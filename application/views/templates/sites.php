@@ -51,6 +51,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
+                <?php if($this->router->fetch_class()=='sites'):?>
                 <ul class="nav navbar-nav">
                     <?php if( isset($siteData) || ( isset($page) && $page == 'newPage' ) ):?>
 
@@ -106,6 +107,7 @@
 
                     <?php endif;?>
                 </ul>
+                <?php endif;?>
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
 

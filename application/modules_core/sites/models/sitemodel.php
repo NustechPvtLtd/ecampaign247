@@ -284,7 +284,7 @@ class Sitemodel extends CI_Model {
     		//delete all frames 
     		$this->db->where('pages_id', $page->pages_id);
     		$this->db->delete('frames');
-            
+            $pagesData[$page->pages_name]['pages_id'] = $page->pages_id; 
     	}
     	
     	
@@ -298,7 +298,7 @@ class Sitemodel extends CI_Model {
     			'pages_timestamp' => time()
     		);
     		
-    		if( isset($pagesData[$pageName]) ) {
+    		if( isset($pagesData[$pageName]['pages_title']) ) {
     		
     			$data['pages_title'] = $pagesData[$pageName]['pages_title'];
     			$data['pages_meta_keywords'] = $pagesData[$pageName]['pages_meta_keywords'];
@@ -306,7 +306,7 @@ class Sitemodel extends CI_Model {
     			$data['pages_header_includes'] = $pagesData[$pageName]['pages_header_includes'];
     		
     		}
-    		
+                
             $this->db->where('pages_id', $pagesData[$pageName]['pages_id']);
     		$this->db->update('pages', $data); 
     		

@@ -23,16 +23,44 @@ class Domain extends MY_Controller {
 		parent::__construct();
 		
 		$this->load->model('domain/domainmodel');
+        $this->load->model('sites/sitemodel');
 		$this->load->library('table');
         $this->load->helper('form');
-		$this->data['pageTitle'] = $this->lang->line('sites_page_title');
-		
+		$this->data['title'] =  ucfirst($this->router->fetch_class());
+		$this->data['pageTitle'] = ucfirst($this->router->fetch_class());
 		if(!$this->ion_auth->logged_in()) {
 			redirect('/login');
 		}
         $this->getContact();
 	}
     
+    public function index($site_id='')
+    {
+        $this->data['pageHeading'] = 'Premium Domain';
+        $this->data['pageMetaDescription'] = $this->router->fetch_class().'|'.$this->router->fetch_method();
+        if($site_id!=''){
+            $siteData = $this->sitemodel->getSite($site_id);
+            if( $siteData == false ) {
+
+                $this->session->set_flashdata('error', $this->lang->line('sites_site_error1'));
+
+                redirect('/domain/', 'refresh');
+
+            }
+            $this->data['css'] = array(
+                '<link href="'.base_url().'assets/sites/css/builder.css" rel="stylesheet">',
+                '<link href="'.base_url().'assets/sites/css/style.css" rel="stylesheet">'
+            );
+            $this->data['siteData'] = $siteData['site'];
+            $this->template->load('main', 'domain', 'sitedomain', $this->data);
+        }else{
+            $this->data['css'] = array(
+                '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
+            );
+            $this->data['sites'] = $this->sitemodel->all();
+            $this->template->load('sites', 'domain', 'sites', $this->data);
+        }
+    }
     public function checkDomainAvalability(){
         if(!empty($_POST['siteID']) && !empty($_POST['domainname']) && !empty($_POST['tlds'])){
             $tld = "";

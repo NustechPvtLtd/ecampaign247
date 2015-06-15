@@ -445,8 +445,19 @@ class Sites extends MY_Controller {
         $params = array('hostname'=>$this -> _hostName, 'username'=>$this -> _userName, 'password'=>$this -> _password);
         $this->load->library('CPanelAddons', $params,'CPanelAddons');
 //        $this->load->library('CPanelAddons');
-        $user = $this->ion_auth->user()->row();
-        $userID = $user->id;
+        if(!isset( $_POST['siteID'])) {
+		
+			$return = array();
+			
+			$temp = array();
+			$temp['header'] = $this->lang->line('sites_publish_error1_heading');
+			$temp['content'] = $this->lang->line('sites_publish_error1_message');
+			
+			$return['responseCode'] = 0;
+			$return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
+			
+			die( json_encode( $return ) );
+		}
 		
 		//some error prevention first
 		
@@ -466,6 +477,7 @@ class Sites extends MY_Controller {
 			
 			die( json_encode( $return ) );
 		}
+        $userID = $siteDetails['site']->users_id;
 		
         if($siteDetails['site']->domain_ok!=1 || !isset($siteDetails['site']->domain)){
             $return = array();
@@ -520,8 +532,8 @@ class Sites extends MY_Controller {
             }
         }
         
-        if($premiumDomain){
-            $result = $this->CPanelAddons->add($premiumDomain, $path);
+        if(isset($premiumDomain->domainname) && $premiumDomain->domain_publish!=1){
+            $result = $this->CPanelAddons->add($premiumDomain->domainname, $path);
             if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
             ) {
                 $return = array();
@@ -534,6 +546,7 @@ class Sites extends MY_Controller {
                 $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
                 die( json_encode( $return ) );
             }
+            $this->domainmodel->publishDomain($_POST['siteID']);
         }
 //		foreach( $_POST['xpages'] as $page=>$content ) {
 		$page = $_POST['item'];

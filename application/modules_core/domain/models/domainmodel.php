@@ -42,15 +42,24 @@ class Domainmodel extends CI_Model {
     
     public function getDomain($siteId)
     {
-        $query = $this->db->select('domainname')->from('premium_domain')->where('siteid', $siteId)->get();
+        $query = $this->db->from('premium_domain')->where('siteid', $siteId)->get();
         
         if($query->num_rows() > 0){
             $res = $query->result();
-            return $res[0]->domainname;
+            return $res[0];
         }else{
             return FALSE;
         }
         
+    }
+    
+    public function publishDomain($siteId)
+    {
+        $data = array(
+   			'domain_publish' => 1
+   		);
+        $this->db->where('siteid', $siteId);
+    	$this->db->update('premium_domain', $data);
     }
     
 }
