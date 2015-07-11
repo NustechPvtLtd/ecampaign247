@@ -15,7 +15,7 @@
                 <?php foreach ($visitors as $visitor):?>
                     <tr id="<?php echo htmlspecialchars($visitor['id'],ENT_QUOTES,'UTF-8');?>">
                         <td></td>
-                        <td><?php echo anchor($visitor['page_url'],htmlspecialchars($visitor['page_url'],ENT_QUOTES,'UTF-8'),array('target'=>'_blank'));?></td>
+                        <td><?php echo htmlspecialchars($visitor['page_url'],ENT_QUOTES,'UTF-8');?></td>
                         <td><?php echo htmlspecialchars($visitor['total_hit'],ENT_QUOTES,'UTF-8');?></td>
                         <td><?php echo htmlspecialchars($visitor['unique_hit'],ENT_QUOTES,'UTF-8');?></td>
                     </tr>

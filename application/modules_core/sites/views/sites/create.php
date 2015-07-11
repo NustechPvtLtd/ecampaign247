@@ -15,8 +15,8 @@
         		  	</button>
         		  	<span class="dropdown-arrow dropdown-arrow-inverse"></span>
         		  	<ul class="dropdown-menu dropdown-inverse">
-        		    	<li><a href="#siteSettings" id="siteSettingsButton" class="siteSettingsModalButton" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_sitesettings')?></a></li>
-        		    	<li><a href="#pageSettingsModal" id="pageSettingsButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_pagesettings')?></a></li>
+        		    	<li><a href="#siteSettings" id="siteSettingsButton" class="siteSettingsModalButton" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo 'URL Settings'/*$this->lang->line('actionbuttons_sitesettings')*/?></a></li>
+        		    	<li><a href="#pageSettingsModal" id="pageSettingsButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo 'SEO Settings'/*$this->lang->line('actionbuttons_pagesettings')*/?></a></li>
         		    	<li><a href="#premiumDomainModal" id="premiumDomainButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_premiumdomain')?></a></li>
         		  	</ul>
         		</div>
@@ -73,7 +73,7 @@
         					<?php $counter = 1; $c = 1;?>
         					
         					<?php foreach( $siteData['pages'] as $page => $frames ):?>
-        					<ul id="page<?php echo $counter;?>" class="ui-sortable" style="display: <?php if($counter==1):?>block<?php else:?>none<?php endif;?>;">
+        					<ul id="page<?php echo $counter;?>" class="ui-sortable" style="display: <?php if($counter==1):?>block<?php else:?>none<?php endif;?>;" data-pagename="<?=$page;?>" data-siteid="<?=$siteData['site']->sites_id;?>">
         						<?php foreach( $frames as $frame ):?>
         						<li class="element">
         							<iframe id="<?php echo "ui-id-".($c+10000);?>" frameborder="0" scrolling="0" src="<?php echo site_url('sites/getframe/'.$frame->frames_id)?>" data-height="<?php echo $frame->frames_height;?>" data-originalurl="<?php echo $frame->frames_original_url?>"></iframe>
@@ -139,6 +139,15 @@
        				<select id="internalLinksDropdown">
        					<option value="#"><?php echo $this->lang->line('choose_a_page')?></option>
        					<option value="index.html">index</option>
+                        <?php 
+                            if(isset($siteData['pages'])){
+                                foreach( $siteData['pages'] as $page => $frames ){
+                                    if($page!='index'){
+                                        echo '<option value="'.$page.'.html">'.$page.'</option>';
+                                    }
+                                }
+                            }
+                        ?>
        				</select>
        				
        				<p class="text-center or">
@@ -1843,7 +1852,7 @@
     	<!-- modals -->
     	
     	<!-- export HTML popup -->
-    	<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-hidden="true">
+<!--    	<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-hidden="true">
     	    	
     		<form action="<?php echo site_url('sites/export')?>" target="_blank" id="markupForm" method="post" class="form-horizontal">
     		
@@ -1862,21 +1871,21 @@
     	        		<div class="form-group">
     	        		    <label for="inputEmail3" class="col-sm-2 control-label"><?php echo $this->lang->line('modalexport_doctype')?></label>
     	        		    <div class="col-sm-10">
-    	        		    	<input type="text" class="form-control" name="doctype" id="doctype" placeholder="Doc type" value="<!--DOCTYPE html -->">
+    	        		    	<input type="text" class="form-control" name="doctype" id="doctype" placeholder="Doc type" value="DOCTYPE html ">
     	        		    </div>
     	        		</div>
     	        		
-    	      		</div><!-- /.modal-body -->
+    	      		</div> /.modal-body 
     	      		<div class="modal-footer">
     	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="exportCancel"><?php echo $this->lang->line('modal_cancelclose')?></button>
     	        		<button type="submit" type="button" class="btn btn-primary btn-embossed" id="exportSubmit"><?php echo $this->lang->line('modalexport_export_now')?></button>
     	      		</div>
-    	    	</div><!-- /.modal-content -->
-    	  	</div><!-- /.modal-dialog -->
+    	    	</div> /.modal-content 
+    	  	</div> /.modal-dialog 
     	  	
     	  	</form>
     	  	
-    	</div><!-- /.modal -->
+    	</div> /.modal -->
     	
     	
     	<!-- publish popup -->
@@ -1946,7 +1955,7 @@
     	      		</div><!-- /.modal-body -->
     	      		<div class="modal-footer">
     	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="publishCancel"><?php echo $this->lang->line('modal_cancelclose')?></button>
-    	        		<button type="button" type="button" class="btn btn-primary btn-embossed disabled" id="publishSubmit"><?php echo $this->lang->line('modalpublish_publish_now')?></button>
+    	        		<button type="button" class="btn btn-primary btn-embossed disabled" id="publishSubmit"><?php echo $this->lang->line('modalpublish_publish_now')?></button>
     	      		</div>
     	    	</div><!-- /.modal-content -->
     	  	</div><!-- /.modal-dialog -->
@@ -2086,7 +2095,7 @@
     	      		</div><!-- /.modal-body -->
     	      		<div class="modal-footer">
     	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><?php echo $this->lang->line('modal_cancelclose')?></button>
-    	        		<button type="button" type="button" class="btn btn-primary btn-embossed" id="deleteBlockConfirm"><?php echo $this->lang->line('modal_delete')?></button>
+    	        		<button type="button" class="btn btn-primary btn-embossed" id="deleteBlockConfirm"><?php echo $this->lang->line('modal_delete')?></button>
     	      		</div>
     	    	</div><!-- /.modal-content -->
     	  	</div><!-- /.modal-dialog -->
@@ -2111,7 +2120,7 @@
     	      		</div><!-- /.modal-body -->
     	      		<div class="modal-footer">
     	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><?php echo $this->lang->line('modal_cancelclose')?></button>
-    	        		<button type="button" type="button" class="btn btn-primary btn-embossed" id="resetBlockConfirm"><?php echo $this->lang->line('modalresetblock_button_reset')?></button>
+    	        		<button type="button" class="btn btn-primary btn-embossed" id="resetBlockConfirm"><?php echo $this->lang->line('modalresetblock_button_reset')?></button>
     	      		</div>
     	    	</div><!-- /.modal-content -->
     	  	</div><!-- /.modal-dialog -->
@@ -2131,7 +2140,7 @@
     	      		</div><!-- /.modal-body -->
     	      		<div class="modal-footer">
     	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="deletePageCancel"><?php echo $this->lang->line('modal_cancelclose')?></button>
-    	        		<button type="button" type="button" class="btn btn-primary btn-embossed" id="deletePageConfirm"><?php echo $this->lang->line('modaldeletepage_button_deletepage')?></button>
+    	        		<button type="button" class="btn btn-primary btn-embossed" id="deletePageConfirm"><?php echo $this->lang->line('modaldeletepage_button_deletepage')?></button>
     	      		</div>
     	    	</div><!-- /.modal-content -->
     	  	</div><!-- /.modal-dialog -->
@@ -2151,7 +2160,7 @@
     	      		</div><!-- /.modal-body -->
     	      		<div class="modal-footer">
     	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="deletePageCancel"><?php echo $this->lang->line('modal_cancelclose')?></button>
-    	        		<button type="button" type="button" class="btn btn-primary btn-embossed" id="deleteElementConfirm"><?php echo $this->lang->line('modaldeleteelement_button_deleteelement')?></button>
+    	        		<button type="button" class="btn btn-primary btn-embossed" id="deleteElementConfirm"><?php echo $this->lang->line('modaldeleteelement_button_deleteelement')?></button>
     	      		</div>
     	    	</div><!-- /.modal-content -->
     	  	</div><!-- /.modal-dialog -->
@@ -2170,7 +2179,7 @@
     
     <?php $this->load->view("shared/modal_sitesettings.php");?> 
     
-    <?php $this->load->view("shared/modal_account.php");?>
+    <?php // $this->load->view("shared/modal_account.php");?>
     
     <div class="modal fade pageSettingsModal" id="pageSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     	
@@ -2180,7 +2189,7 @@
         	
         		<div class="modal-header">
         			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->lang->line('modal_close')?></span></button>
-        			<h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <?php echo $this->lang->line('modal_pagesettings_header')?> <span class="text-primary pName">index.html</span></h4>
+        			<h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <?php echo 'SEO Settings' /*$this->lang->line('modal_pagesettings_header')*/?> <span class="text-primary pName">index.html</span></h4>
         		</div>
           		
           		<div class="modal-body">
@@ -2335,7 +2344,7 @@
 	      		</div><!-- /.modal-body -->
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><?php echo $this->lang->line('modal_cancelclose')?></button>
-	        		<button type="button" type="button" class="btn btn-primary btn-embossed" id="updateContentInFrameSubmit"><?php echo $this->lang->line('modal_editcontent_updatecontent')?></button>
+	        		<button type="button" class="btn btn-primary btn-embossed" id="updateContentInFrameSubmit"><?php echo $this->lang->line('modal_editcontent_updatecontent')?></button>
 	      		</div>
 	    	</div><!-- /.modal-content -->
 	  	</div><!-- /.modal-dialog -->
@@ -2367,7 +2376,7 @@
     	
     		makeSortable( $(this) );
     	
-    	})
+    	});
     	
     	$('#pageList li iframe').each(function(){
     	
@@ -2391,20 +2400,20 @@
     		resetButton = $('<button type="button" class="btn btn-warning resetBlock"><i class="fa fa-refresh"></i> reset</button>');
     		htmlButton = $('<button type="button" class="btn btn-inverse htmlBlock"><i class="fa fa-code"></i> source</button>');
     		
-    		$(this).closest('li').find('.zoomer-cover').append( delButton )
-    		$(this).closest('li').find('.zoomer-cover').append( $('<div style="clear:both; height:0px">') )
+    		$(this).closest('li').find('.zoomer-cover').append( delButton );
+    		$(this).closest('li').find('.zoomer-cover').append( $('<div style="clear:both; height:0px">') );
     		$(this).closest('li').find('.zoomer-cover').append( resetButton );
-    		$(this).closest('li').find('.zoomer-cover').append( $('<div style="clear:both; height:0px">') )
+    		$(this).closest('li').find('.zoomer-cover').append( $('<div style="clear:both; height:0px">') );
 			$(this).closest('li').find('.zoomer-cover').append( htmlButton ); 	
     		
-    	})
+    	});
     	
     	
     	allEmpty();
     	
     	<?php endif;?>
     	
-    })    
+    });    
     
     </script>
     <script>

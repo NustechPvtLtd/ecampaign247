@@ -121,7 +121,7 @@ $(function(){
     					
     					
     					//update site name in top menu
-    					$('#siteTitle').text( ret.siteName );
+    					//$('#siteTitle').text( ret.siteName );
     					
     				
     					$('#siteSettings .modal-alerts').append( ret.responseHTML );
@@ -151,10 +151,22 @@ $(function(){
     						$('#publishPage').tooltip('show')
     					
     					}
+                        
+                        if ($("input:radio[name='domain']").is(':checked')) {
+                            $.ajax({
+                                url: $('form#book-domain-form').attr('action'),
+                                type: 'post',
+                                data: $('form#book-domain-form').serialize()
+                            }).done(function(ret) {
+                                $('.search-results-container').html(' ');
+                                $('.search-results-container').html(ret);
+                                $('#domain_result').show();
+                            });
+                        }
     					
     					
     					//update the site name in the small window
-    					$('#site_'+ret.siteID+' .window .top b').text( ret.siteName )
+    					//$('#site_'+ret.siteID+' .window .top b').text( ret.siteName )
     				
     				})
     			

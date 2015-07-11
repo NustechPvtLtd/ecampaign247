@@ -177,11 +177,12 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
             'class' => 'form-control',
 		);
 		$this->data['phone'] = array(
-			'name'  => 'phone',
-			'id'    => 'phone',
-			'type'  => 'text',
-			'value' => $this->form_validation->set_value('phone', $user->phone),
-            'class' => 'form-control',
+			'name'          => 'phone',
+			'id'            => 'phone',
+			'type'          => 'text',
+			'value'         => $this->form_validation->set_value('phone', $user->phone),
+            'class'         => 'form-control',
+            'placeholder'   => '+91 00 00 000000'
 		);
 		$this->data['password'] = array(
 			'name' => 'password',
@@ -198,6 +199,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         $this->data['avatar'] = $user->avatar;
         $this->data['js'] = array(
             '<script type="text/javascript" src="'.base_url().'assets/js/ajaxupload.3.5.js"></script>',
+            '<script type="text/javascript" src="'.base_url().'assets/js/jquery.maskedinput.js"></script>',
             );
         $this->data['pageHeading'] = 'My Profile';
         $this->template->load('main', 'user', 'profile_personal', $this->data);

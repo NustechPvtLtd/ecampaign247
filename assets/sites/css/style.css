@@ -400,6 +400,8 @@ body .panel-default > .panel-heading {
 .window .viewport {
 	height: auto;
 	width: 100%;
+        max-height: 159px;
+        overflow-y: auto;
 }
 
 .window .viewport > img {
@@ -621,6 +623,14 @@ body .panel-default > .panel-heading {
     padding-left: 15px;
 }
 .tld-select {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #ccc -moz-use-text-color #ccc #ccc;
+    border-image: none;
+    border-style: dashed none dashed dashed;
+    border-width: 2px medium 2px 2px;
     max-height: 150px;
     overflow-y: scroll;
 }

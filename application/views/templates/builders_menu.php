@@ -24,10 +24,10 @@
       				<?php if( count( $siteData['pages'] ) == 0 ):?>
       				<li class="active">
       					<a href="#page1">index</a>
-      					<span class="pageButtons">
+<!--      					<span class="pageButtons">
       						<a href="" class="fileEdit"><span class="fui-new"></span></a>
       						<a class="btn btn-xs btn-primary btn-embossed fileSave" href="#"><span class="fui-check"></span></a>
-      					</span>
+      					</span>-->
       				</li>
       				<?php else:?>
       				
@@ -36,6 +36,7 @@
       				<?php foreach( $siteData['pages'] as $page => $frames ):?>
       				<li <?php if( $counter == 1 ):?>class="active"<?php endif;?>>
       					<a href="#page<?php echo $counter;?>"><?php echo $page;?></a>
+                        <?php if($page!='index'):?>
       					<span class="pageButtons">
       						<a href="" class="fileEdit"><span class="fui-new"></span></a>
       						<?php if( $counter > 1 ):?>
@@ -43,6 +44,7 @@
       						<?php endif;?>
       						<a class="btn btn-xs btn-primary btn-embossed fileSave" href="#"><span class="fui-check"></span></a>
       					</span>
+                        <?php endif;?>
       				</li>
       				<?php $counter++;?>
       				<?php endforeach;?>

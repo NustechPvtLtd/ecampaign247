@@ -21,10 +21,13 @@ class Social extends MY_Controller {
     
     public function index()
     {
-
         $this->load->model('sites/sitemodel');
         $this->data['pageHeading'] = 'Social Media';
         $sites = $this->sitemodel->all();
+        if(empty($sites)){
+            $this->session->set_flashdata('error', $this->lang->line('sites_site_error1'));
+            redirect('/sites/','refresh');
+        }
         $this->data['site_url'] = $sites[0]['siteData']->remote_url;
         
         $this->template->load('main', 'social', 'index', $this->data);
@@ -283,6 +286,8 @@ class Social extends MY_Controller {
                 }
             }
             redirect(site_url('social'));
+        }else{
+            redirect(site_url('social'),'refresh');
         }
     }
     

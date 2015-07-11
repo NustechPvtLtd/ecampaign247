@@ -95,7 +95,9 @@ class Pagemodel extends CI_Model {
     	
     		$this->db->where('pages_id', $pageData['pageID']);
     		$this->db->update('pages', $data);
-    	
+            $this->db->flush_cache();
+            $this->db->where('sites_id', $pageData['siteID']);
+            $this->db->update('sites', array('sites_name' =>$pageData['pageData_title']));
     	} else {
     	
     		//no pageID given, create a new page in the db

@@ -47,6 +47,12 @@ $route['create-user'] = 'login/create_user';
 $route['create-group'] = 'login/create_group';
 $route['logout'] = 'login/logout';
 $route['assets/images'] = "sites/assets/images";
-
+$route['account/plans'] = 'account/account/plans';
+$route['plans'] = 'account/plans';
+$route['plans/update/(:any)'] = 'account/plans/editPlans/$1';
+$route['plans/delete/(:any)'] = 'account/plans/deletePlans/$1';
+$route['plans/recommends/(:any)/(:any)'] = 'account/plans/recommends/$1/$2';
+$route['plans/status/(:any)/(:any)'] = 'account/plans/status/$1/$2';
+$route['plans/create'] = 'account/plans/editPlans';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

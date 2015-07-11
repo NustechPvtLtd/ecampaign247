@@ -87,7 +87,7 @@
                     <textarea id="desc" name="desc" placeholder="Description" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Post" name="yt1" class="btn big btn-submit bg-primary pull-right">
+                    <input type="submit" value="Post" name="yt1" class="btn big btn-submit bg-primary pull-right"  disabled>
                 </div>
             </form>
         </div>
@@ -97,6 +97,12 @@
 $('document').ready(function(){
     $('#postCustomLink').click(function(){
        $('.postCustomContentDiv').toggle(); 
+    });
+    var checkboxes = $("input[type='checkbox']"),
+    submitButt = $("input[type='submit']");
+
+    checkboxes.click(function() {
+        submitButt.attr("disabled", !checkboxes.is(":checked"));
     });
 });
 </script>

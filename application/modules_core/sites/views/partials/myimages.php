@@ -11,7 +11,7 @@
 		
 		<?php
 		
-			$dataUrl = str_replace($this->config->item('elements_dir')."/", "", $this->config->item('images_uploadDir'));
+			$dataUrl = base_url().$this->config->item('images_uploadDir');
 		
 		?>
 	

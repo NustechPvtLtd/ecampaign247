@@ -9,7 +9,7 @@
 		<div class="form-group">
 			<label for="name" class="col-sm-3 control-label"><?php echo $this->lang->line('modal_pagesettings_pagetitle')?>:</label>
 			<div class="col-sm-9">
-				<input type="text" class="form-control" id="pageData_title" name="pageData_title" placeholder="Page title" value="<?php if( isset($pagesData['index']) ){ echo $pagesData['index']->pages_title; }?>">
+				<input type="text" class="form-control" id="pageData_title" name="pageData_title" placeholder="Page title" value="<?php if( isset($pagesData['index']) ){ echo $siteData->sites_name; }?>">
 			</div>
 		</div>
 		

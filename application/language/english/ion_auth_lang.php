@@ -32,9 +32,9 @@ $lang['forgot_password_unsuccessful'] 	 	 = 'Unable to Reset Password';
 // Activation
 $lang['activate_successful'] 		  	     = 'Account Activated';
 $lang['activate_unsuccessful'] 		 	     = 'Unable to Activate Account';
-$lang['deactivate_successful'] 		  	     = 'Account De-Activated';
+$lang['deactivate_successful'] 		  	     = 'User\'s Account De-Activated';
 $lang['deactivate_unsuccessful'] 	  	     = 'Unable to De-Activate Account';
-$lang['activation_email_successful'] 	  	 = 'Activation Email Sent';
+$lang['activation_email_successful'] 	  	 = 'Activation Email Sent, please check your registered mail to activate this account';
 $lang['activation_email_unsuccessful']   	 = 'Unable to Send Activation Email';
 
 // Login / Logout

@@ -5,8 +5,8 @@
             <div class="login-wrapper">
                 <a href="<?php echo site_url('sites');?>">
                     <div id="user-info">
-                        <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/web_page.png" alt="Web Page">
-                        <h4 class="headline">Web Page</h4>
+                        <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/Landing_page.png" alt="Web Page">
+                        <h4 class="headline">Marketing Page</h4>
                     </div>
                 </a>
             </div>
@@ -29,10 +29,10 @@
     <div class="col-lg-4 col-md-4">
         <div class="panel_new">
             <div class="login-wrapper">
-                <a href="<?php echo site_url('social');?>">
+                <a href="<?php echo site_url('seo');?>">
                     <div id="user-info">
-                        <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/social_media.jpg" alt="user-image">
-                        <h4 class="headline">Social Media</h4>
+                        <img class="cover img-responsive" src="<?php echo base_url();?>assets/customer/img/SEO.png" alt="user-image">
+                        <h4 class="headline">Become Popular</h4>
                     </div>
                 </a>
             </div>

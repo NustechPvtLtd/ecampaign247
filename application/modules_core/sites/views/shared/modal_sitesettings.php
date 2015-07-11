@@ -6,7 +6,7 @@
       		
       		<div class="modal-header">
         		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->lang->line('modal_close')?></span></button>
-        		<h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <?php echo $this->lang->line('sitesettings_sitesettings')?></h4>
+        		<h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <?php echo 'URL Settings' /*$this->lang->line('sitesettings_sitesettings')*/?></h4>
       		</div>
       		      	
       		<div class="modal-body">

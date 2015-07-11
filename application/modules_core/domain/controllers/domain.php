@@ -31,14 +31,15 @@ class Domain extends MY_Controller {
 		if(!$this->ion_auth->logged_in()) {
 			redirect('/login');
 		}
-        $this->getContact();
 	}
     
-    public function index($site_id='')
+    public function index($site_id=FALSE)
     {
         $this->data['pageHeading'] = 'Premium Domain';
-        $this->data['pageMetaDescription'] = $this->router->fetch_class().'|'.$this->router->fetch_method();
-        if($site_id!=''){
+        $this->data['pageMetaDescription'] = $this->router->fetch_class();
+        $site_id = $this->sitemodel->getSiteId($this->ion_auth->get_user_id());
+
+        if($site_id){
             $siteData = $this->sitemodel->getSite($site_id);
             if( $siteData == false ) {
 
@@ -54,11 +55,12 @@ class Domain extends MY_Controller {
             $this->data['siteData'] = $siteData['site'];
             $this->template->load('main', 'domain', 'sitedomain', $this->data);
         }else{
-            $this->data['css'] = array(
+            redirect(site_url('sites'));
+            /*$this->data['css'] = array(
                 '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
             );
             $this->data['sites'] = $this->sitemodel->all();
-            $this->template->load('sites', 'domain', 'sites', $this->data);
+            $this->template->load('sites', 'domain', 'sites', $this->data);*/
         }
     }
     public function checkDomainAvalability(){
@@ -67,11 +69,12 @@ class Domain extends MY_Controller {
             foreach ($_POST['tlds'] as $key => $value) {
                 $tld.='&tlds=' . $value;
             }
+            $this->getContact();
             $url = "https://test.httpapi.com/api/domains/available.json?auth-userid={$this->auth_userid}&api-key={$this->api_key}&domain-name={$_POST['domainname']}{$tld}";
             $data = $this -> _domainCallAPI( 'GET', $url );
             $data = json_decode($data,TRUE);
             $priceArray = $this->getPrice();
-            if(is_array($data)){
+            if(is_array($data) && !isset($data['response'])){
                 $table = array();
                 foreach ($data as $key => $value) {
                     if($value['status']=='available'){
@@ -113,7 +116,7 @@ class Domain extends MY_Controller {
                 $this->table->set_heading('#','Name', 'Status', 'Price');
                 echo $this->table->generate($table);
             }  else {
-                echo $data;
+                echo $data['response'].' : '.$data['message'];
             }
         }
     }
@@ -121,6 +124,7 @@ class Domain extends MY_Controller {
     public function bookDomain($site_id)
     {
         if(!empty($_POST['domain'])){
+            $this->getContact();
             $url = "https://test.httpapi.com/api/domains/register.json?auth-userid={$this->auth_userid}&api-key={$this->api_key}&domain-name={$_POST['domain']}&years=1&ns={$this->ns1}&ns={$this->ns2}&customer-id={$this->customer_id}&reg-contact-id={$this->reg_contact_id}&admin-contact-id={$this->admin_contact_id}&tech-contact-id={$this->tech_contact_id}&billing-contact-id={$this->billing_contact_id}&invoice-option=PayInvoice";
             $data = $this -> _domainCallAPI( 'GET', $url );
 
@@ -138,11 +142,13 @@ class Domain extends MY_Controller {
         $url = "https://test.httpapi.com/api/contacts/default.json?auth-userid={$this->auth_userid}&api-key={$this->api_key}&customer-id={$this->customer_id}&type=Contact";
         $data = $this -> _domainCallAPI( 'GET', $url );
         $data = json_decode($data,TRUE);
-        foreach ($data as $value) {
-            $this->reg_contact_id = $value['registrant'];
-            $this->admin_contact_id = $value['admin'];
-            $this->tech_contact_id = $value['tech'];
-            $this->billing_contact_id = $value['billing'];
+        if(!isset($data['response'])){
+            foreach ($data as $value) {
+                $this->reg_contact_id = $value['registrant'];
+                $this->admin_contact_id = $value['admin'];
+                $this->tech_contact_id = $value['tech'];
+                $this->billing_contact_id = $value['billing'];
+            }
         }
     }
     
@@ -151,7 +157,12 @@ class Domain extends MY_Controller {
         $url = "https://test.httpapi.com/api/products/customer-price.json?auth-userid={$this->auth_userid}&api-key={$this->api_key}";
         $data = $this -> _domainCallAPI('GET', $url);
         $datajson = json_decode($data, TRUE);
-        return $datajson;
+        if(!isset($datajson['response'])){
+            return $datajson;
+        }  else {
+            return false;
+        }
+        
     }
     
     private function _domainCallAPI( $method, $url, $data = false )
@@ -180,6 +191,18 @@ class Domain extends MY_Controller {
 		curl_setopt( $curl, CURLOPT_USERPWD, "username:password" );
 		curl_setopt( $curl, CURLOPT_URL, $url );
 		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-		return curl_exec( $curl );
-	}
+//        curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 0);
+//        curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $output = curl_exec( $curl );
+		if(!$output){
+			$output = json_encode(array(
+				'response'=>'error',
+				'message'=>curl_error($curl)
+			));
+			 
+		}
+        
+		curl_close ( $curl );
+		return $output;
+    }
 }

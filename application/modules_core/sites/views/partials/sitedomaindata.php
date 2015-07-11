@@ -6,7 +6,7 @@
         width: 50px;
     }
 </style>		
-<div id="siteSettingsWrapper" class="siteSettingsWrapper">				
+<div class="siteSettingsWrapper">				
 
     <div class="optionPane">
 
@@ -17,7 +17,7 @@
                 <input type="hidden" value="check_availability" name="action">
                 <div class="dca-search">
                     <div class="col-sm-6">
-                        <input type="text" required="" placeholder="Enter Keywords or Domain Names" id="domainname" name="domainname" autocomplete="off" class="form-control">
+                        <input type="text" required="" placeholder="Enter Keywords or Domain Names" id="domainname" name="domainname" autocomplete="off" class="form-control" value="<?php echo $siteData->domainname; ?>" <?php echo ($siteData->domainname) ? 'readonly=""' : ''; ?>>
                     </div>
                     <button type="button" class="btn btn-primary btn-embossed col-sm-2" name="btn_check_availability" id="btn_check_availability">
                     Search

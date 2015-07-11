@@ -13,7 +13,6 @@ class visitor extends MY_Controller {
 		parent::__construct();
 		
 		$this->load->model('sites/sitemodel');
-		$this->load->model('sites/usermodel');
 		$this->load->model('sites/pagemodel');
 		$this->load->model('visitor/visitor_count_model');
 			
@@ -38,7 +37,10 @@ class visitor extends MY_Controller {
     {
         //grab us some sites
 		$sites = $this->sitemodel->all();
-        
+        if(empty($sites)){
+            $this->session->set_flashdata('error', $this->lang->line('sites_site_error1'));
+            redirect('/sites/','refresh');
+        }
         $this->data['css'] = array(
             '<link href="'. base_url().'assets/datatable/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet">',
             '<link href="'. base_url().'assets/datatable/css/dataTables.responsive.css" type="text/css" rel="stylesheet">',

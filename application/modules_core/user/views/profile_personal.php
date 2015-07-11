@@ -98,5 +98,9 @@
 
             }
         });
+        $.mask.definitions['9'] = '';
+        $.mask.definitions['d'] = '[0-9]';
+        $('#phone').mask("+91 dd dd dddddd");
+        
     });
 </script>

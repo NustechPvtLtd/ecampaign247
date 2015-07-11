@@ -1,0 +1,14 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+$lang['plan_header'] = 'Plans List';
+$lang['plan_name'] = 'Plans';
+$lang['plan_price'] = 'Price';
+$lang['plan_description'] = 'Description';
+$lang['plan_recommends'] = 'Recommendation';
+$lang['plan_recommends_yes'] = 'Yes';
+$lang['plan_recommends_no'] = 'No';
+$lang['plan_status'] = 'Status';
+$lang['plan_status_active'] = 'Active';
+$lang['plan_status_inactive'] = 'Inactive';
+$lang['plan_date_added'] = 'Date Added';
+$lang['plan_last_updated'] = 'Date Updated';
+$lang['plan_create'] = 'Add Plans';

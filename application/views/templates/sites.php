@@ -88,11 +88,11 @@
 
                             ?>
 
-                            <li><a href="<?php echo $_SERVER['HTTP_REFERER']?>" id="backButton"><span class="fui-arrow-left"></span> <?php echo $this->lang->line( $t )?></a></li>
+                            <li><a href="<?php echo site_url('services')?>" id="backButton"><span class="fui-arrow-left"></span> <?php echo 'Back to services';/*$this->lang->line( $t )*/?></a></li>
 
                         <?php else:?>
 
-                            <li><a href="<?php echo site_url('sites')?>" id="backButton"><span class="fui-arrow-left"></span> <?php echo $this->lang->line('nav_goback_sites')?></a></li>
+                            <li><a href="<?php echo site_url('services')?>" id="backButton"><span class="fui-arrow-left"></span> <?php echo 'Back to services';/*$this->lang->line('nav_goback_sites')*/?></a></li>
 
                         <?php endif;?>
 
@@ -118,7 +118,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
-                                    <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' );?>" class="img-circle"/>
+                                    <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' ). '?' . time();?>" class="img-circle"/>
                                     <p>
                                         <?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?>
                                     </p>
@@ -142,7 +142,7 @@
                 <section class="sidebar">
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' );?>" class="img-circle" />
+                            <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' ).'?' . time();?>" class="img-circle" />
                         </div>
                         <div class="pull-left info">
                             <p><?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?></p>

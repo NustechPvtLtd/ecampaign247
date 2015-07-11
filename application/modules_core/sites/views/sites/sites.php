@@ -116,9 +116,9 @@
     						
     							<a href="<?php echo site_url('sites/'.$site['siteData']->sites_id)?>" class="btn btn-primary btn-embossed btn-block"><span class="fui-new"></span> <?php echo $this->lang->line('sites_button_editthissite')?></a>
     							
-    							<a href="#" class="btn btn-info btn-embossed btn-block btn-half pull-left btn-sm siteSettingsModalButton" data-siteid="<?php echo $site['siteData']->sites_id?>"><span class="fui-gear"></span> <?php echo $this->lang->line('sites_button_settings')?></a>
+    							<a href="#" class="btn btn-info btn-embossed btn-block btn-sm siteSettingsModalButton" data-siteid="<?php echo $site['siteData']->sites_id?>"><span class="fui-gear"></span> WebPage URL<?php // echo $this->lang->line('sites_button_settings')?></a>
     							
-    							<a href="#deleteSiteModal" class="btn btn-danger btn-embossed btn-block btn-half pull-left deleteSiteButton btn-sm" data-siteid="<?php echo $site['siteData']->sites_id?>"><span class="fui-trash"></span> <?php echo $this->lang->line('sites_button_delete')?></a>
+    							<!--<a href="#deleteSiteModal" class="btn btn-danger btn-embossed btn-block btn-half pull-left deleteSiteButton btn-sm" data-siteid="<?php // echo $site['siteData']->sites_id?>"><span class="fui-trash"></span> <?php // echo $this->lang->line('sites_button_delete')?></a>-->
     						
     						</div>
     					
@@ -159,9 +159,7 @@
 	
 	<?php $this->load->view("shared/modal_sitesettings.php");?>
 	
-	<?php $this->load->view("shared/modal_account.php");?> 
-	
-	<?php $this->load->view("shared/modal_deletesite.php");?>
+	<?php // $this->load->view("shared/modal_deletesite.php");?>
 		
 	<!-- /modals -->
 
@@ -188,6 +186,6 @@
     <?php $this->load->view("shared/js_sitesettings.php");?>
     </script>
     <script>
-    <?php $this->load->view("shared/js_account.php");?>
+    <?php // $this->load->view("shared/js_account.php");?>
     </script>
 

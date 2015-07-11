@@ -38,12 +38,16 @@ class Sites extends MY_Controller {
 	{	
 	
 		//grab us some sites
-		$this->data['sites'] = $this->sitemodel->all();
-		
+		$sites = $this->sitemodel->all();
+        $sites_id = $this->sitemodel->getSiteId($this->ion_auth->get_user_id());
 		//get all users
 		$this->data['users'] = $this->usermodel->getAll();
-						
-		$this->data['page'] = "sites";
+        if(! $this->ion_auth->is_admin() && count( $sites ) <= 0){
+            redirect(site_url('sites/create'),'location');
+        }  else {
+            redirect(site_url('sites/'.$sites_id));
+        }				
+		/*$this->data['page'] = "sites";
 		$this->data['pageHeading'] = $this->lang->line('sites_header');
         $this->data['css'] = array(
 		    '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
@@ -51,8 +55,7 @@ class Sites extends MY_Controller {
 		$this->data['js'] = array(
 		    '<script type="text/javascript" src="'.base_url().'assets/sites/js/sites.js"></script>'
 		);
-        $this->template->load('sites', 'sites', 'sites/sites', $this->data);
-// 		$this->load->view('sites/sites', $this->data);
+        $this->template->load('sites', 'sites', 'sites/sites', $this->data);*/
 	}
 	
 	
@@ -194,10 +197,6 @@ class Sites extends MY_Controller {
 	*/
 	
 	public function site($siteID) {
-		
-		//die(phpinfo());
-		
-		
 		//if user is not an admin, we'll need to check of this site belongs to this user
 		
 		if( !$this->ion_auth->is_admin() ) {
@@ -270,7 +269,8 @@ class Sites extends MY_Controller {
                 '<script src="'.base_url().'assets/sites/js/redactor/bufferButtons.js"></script>',
                 '<script src="'.base_url().'assets/sites/js/src-min-noconflict/ace.js"></script>',
                 '<script src="'.site_url('sites/getelements').'"></script>',
-                '<script src="'.base_url().'assets/sites/js/builder.js"></script>' 
+                '<script src="'.base_url().'assets/js/jquery.blockUI.js"></script>', 
+                '<script src="'.base_url().'assets/sites/js/builder.js"></script>'
 			);
 			$this->template->load('sites', 'sites', 'sites/create', $this->data);
 			//$this->load->view('', $this->data);
@@ -278,7 +278,6 @@ class Sites extends MY_Controller {
 		}
 	
 	}
-	
 	
 	
 	/*
@@ -346,7 +345,7 @@ class Sites extends MY_Controller {
 	public function siteAjaxUpdate() {
 	
 		$this->form_validation->set_rules('siteID', 'Site ID', 'required');
-		$this->form_validation->set_rules('siteSettings_siteName', 'Site name', 'required');
+//		$this->form_validation->set_rules('siteSettings_siteName', 'Site name', 'required');
 		$this->form_validation->set_rules('siteSettings_domain', 'Domain', 'required');
 		
 		if ($this->form_validation->run() == FALSE) {
@@ -396,7 +395,7 @@ class Sites extends MY_Controller {
 			
 			$return['responseHTML2'] = $this->load->view('partials/sitedata', array('data'=>$siteData), true);
 			
-			$return['siteName'] = $siteData['site']->sites_name;
+//			$return['siteName'] = $siteData['site']->sites_name;
 			$return['siteID'] = $siteData['site']->sites_id;
 			
 			echo json_encode( $return );
@@ -556,7 +555,7 @@ class Sites extends MY_Controller {
 			
 			if( !empty($pageMeta->pages_title) ) {
 				//insert title, meta keywords and meta description
-				$meta = '<title>'.$siteDetails['site']->sites_name.' | '.$pageMeta->pages_title.'</title>'."\r\n";
+				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
 								
@@ -575,10 +574,14 @@ class Sites extends MY_Controller {
 				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 			}
             $pageContent = str_replace("<!-- site contact url div -->", '<div id="contact-url" data-content="'.site_url('login/site_contact/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
+            
             $pageContent = str_replace("<!-- site counter url div -->", '<div id="counter-url" data-content="'.site_url('login/visitor_counter/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
+            
             $pageContent = str_replace("<!-- site url div -->", '<div id="site-url" data-content="'. base_url('elements').'"></div>', $pageContent);
+            
             $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
-            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.$siteDetails['site']->remote_url.'/'. $pageMeta->pages_name.'.html"></div>', $pageContent);
+            
+            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.$siteDetails['site']->domain.'.webzero.in/'. $page.'.html"></div>', $pageContent);
             
             if(!stristr($pageContent, '<link href="'. base_url('elements'))){
                 $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
@@ -586,8 +589,8 @@ class Sites extends MY_Controller {
             if(!stristr($pageContent, '<script src="js'. base_url('elements'))){
                 $pageContent = str_replace('<script src="js','<script src="'. base_url('elements').'/js',$pageContent);
             }
-            if(!stristr($pageContent, '<img src="'. base_url('elements').'/images')){
-                $pageContent = str_replace('<img src="images','<img src="'. base_url('elements').'/images',$pageContent);
+            if(strstr($pageContent, 'src="images')){
+                $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
             }
 			write_file($absPath.'/'.$page.".html",$pageContent);
 //		}
@@ -793,9 +796,9 @@ class Sites extends MY_Controller {
 			//get page meta
 			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
 			
-			if( $pageMeta ) {
+            if( !empty($pageMeta->pages_title) ) {
 				//insert title, meta keywords and meta description
-				$meta = '<title>'.$pageMeta->pages_title.'</title>'."\r\n";
+				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
 								
@@ -808,16 +811,30 @@ class Sites extends MY_Controller {
 				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
 			
 			} else {
-				$pageContent = $content;
+                //insert title
+				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>';
+								
+				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 			}
+            
+            $pageContent = str_replace("<!-- site contact url div -->", '<div id="contact-url" data-content="'.site_url('login/site_contact/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
+            
+//            $pageContent = str_replace("<!-- site counter url div -->", '<div id="counter-url" data-content="'.site_url('login/visitor_counter/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
+            
+            $pageContent = str_replace("<!-- site url div -->", '<div id="site-url" data-content="'. base_url('elements').'"></div>', $pageContent);
+            
+            $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
+            
+//            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.$siteDetails['site']->domain.'.webzero.in/'. $page.'.html"></div>', $pageContent);
+            
             if(!stristr($pageContent, '<link href="'. base_url('elements'))){
                 $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
             }
             if(!stristr($pageContent, '<script src="'. base_url('elements'))){
                 $pageContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$pageContent);
             }
-            if(!stristr($pageContent, '<img src="'. base_url('elements').'/images')){
-                $pageContent = str_replace('<img src="images','<img src="'. base_url('elements').'/images',$pageContent);
+            if(strstr($pageContent, 'src="images')){
+                $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
             }
             if(!write_file('./temp/'.$userID.'/'.$page.".html", '<html>'.$pageContent.'</html>')){
                 die("Page not created!");
@@ -924,9 +941,7 @@ class Sites extends MY_Controller {
 		$pagesData = $this->pagemodel->getPageData($_POST['siteID']);
 		
 		if( $pagesData ) {
-		
 			$return['pagesData'] = $pagesData;
-		
 		}
 			
 		$temp = array();
@@ -935,9 +950,10 @@ class Sites extends MY_Controller {
 			
 		$return['responseCode'] = 1;
 		$return['responseHTML'] = $this->load->view('partials/success', array('data'=>$temp), true);
-			
+        $siteData = $this->sitemodel->getSite($_POST['siteID']);
+		$return['siteName'] = $siteData['site']->sites_name;
+        $return['siteID'] = $siteData['site']->sites_id;
 		die( json_encode( $return ) );
-	
 	}
  
     public function checkDomain()
@@ -952,6 +968,21 @@ class Sites extends MY_Controller {
                 $return['error'] = 1;
                 $return['errorMessage'] = $url.' is not available.';
                 die( json_encode( $return ) );
+            }
+        }
+    }
+    
+    /*
+     * Page Delete function to delete sites pages
+     * 
+     */
+    public function page_delete()
+    {
+        if(isset($_POST['site_id']) && $_POST['page_name']!=''){
+            if($this->sitemodel->delete_pages($_POST['site_id'],$_POST['page_name'])){
+                return TRUE;
+            }else{
+                return FALSE;
             }
         }
     }

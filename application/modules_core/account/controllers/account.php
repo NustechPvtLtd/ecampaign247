@@ -9,6 +9,7 @@ class Account extends MY_Controller {
         $this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
         $this->lang->load('auth');
         $this->load->model('addressmodel');
+        $this->load->model('account/plans_model');
         $this->data['title'] = ucfirst($this->router->fetch_class());
         $this->data['pageMetaDescription'] = $this->router->fetch_class().'|'.$this->router->fetch_method();
     }
@@ -126,7 +127,7 @@ class Account extends MY_Controller {
 			'id'    => 'blng_city',
 			'type'  => 'text',
 			'value' => (isset($address['blng_city']))?$this->form_validation->set_value('blng_city', $address['blng_city']):'',
-            'class' => 'form-control',
+            'class' => 'form-control city',
 		);
 		$this->data['blng_state'] = (isset($address['blng_zipcode']))?$address['blng_state']:'';
 		$this->data['blng_zipcode'] = array(
@@ -156,7 +157,7 @@ class Account extends MY_Controller {
 			'id'    => 'spng_city',
 			'type'  => 'text',
 			'value' => (isset($address['spng_city']))?$this->form_validation->set_value('spng_city', $address['spng_city']):'',
-            'class' => 'form-control',
+            'class' => 'form-control city',
 		);
 		$this->data['spng_state'] = (isset($address['spng_state']))?$address['spng_state']:'';
 		$this->data['spng_zipcode'] = array(
@@ -174,9 +175,11 @@ class Account extends MY_Controller {
 			'value' => (isset($address['spng_phone']))?$this->form_validation->set_value('spng_phone', $address['spng_phone']):'',
             'class' => 'form-control',
 		);
-
+        $this->data['js'] = array(
+            '<script type="text/javascript" src="'.base_url().'assets/js/jquery.maskedinput.js"></script>',
+                );
         $this->data['pageHeading'] = 'Address Details';
-        $this->template->load('main', 'account', 'address_details', $this->data);
+        $this->template->load('main', 'account', 'account/address_details', $this->data);
         
     }
     
@@ -187,7 +190,8 @@ class Account extends MY_Controller {
         $this->data['css'] = array(
 		    '<link href="'.base_url().'assets/css/plans.css" rel="stylesheet">'
 		);
-        $this->template->load('main', 'account', 'plans', $this->data);
+        $this->data['plans'] = $this->plans_model->get_plans();
+        $this->template->load('main', 'account', 'account/plans', $this->data);
     }
     public function get_state($country)
     {

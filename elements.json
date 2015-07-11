@@ -49,6 +49,9 @@ var _Elements = {"elements": {
     	{"url":"elements/pricing_table2.html","height":750, "thumbnail":"elements/images/thumbs/pricing_table2.png"},
     	{"url":"elements/pricing_table3.html","height":721, "thumbnail":"elements/images/thumbs/pricing_table3.png"}
     ],
+	"Ecommerce Tables":[
+    	{"url":"elements/ecommerce_table1.html","height":628, "thumbnail":"elements/images/thumbs/ecommerce_table1.png"}
+    ],
     "Contact":[
     	{"url":"elements/contact1.html","height":691, "thumbnail":"elements/images/thumbs/contact1.png"},
     	{"url":"elements/contact2.html","height":477, "thumbnail":"elements/images/thumbs/contact2.png"}

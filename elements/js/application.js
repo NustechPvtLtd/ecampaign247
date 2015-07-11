@@ -275,9 +275,11 @@ String.prototype.repeat = function(num) {
     });
   $.getJSON("http://jsonip.com?callback=?", function (data) {
     var ip = data.ip;
-    $.post( counter_url, { ip:ip, page_id: page_id, page_url:page_url}, function( data )
-    {
-//        console.log(data);
-    });
+    if(counter_url && page_url){
+        $.post( counter_url, { ip:ip, page_id: page_id, page_url:page_url}, function( data )
+        {
+            console.log(data);
+        });
+    }
   });
 })(jQuery);
