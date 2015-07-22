@@ -404,7 +404,7 @@
                             </div>
 
                             <div class="login_form">
-                                <div class="col-md-6">
+                                <div class="col-md-6 social_btn_group">
                                     <div class="form-group">
                                         <a class=
                                         "btn btn-primary facebook_btn"><i class="fa fa-facebook-f"></i>Facebook

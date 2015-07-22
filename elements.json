@@ -54,7 +54,8 @@ var _Elements = {"elements": {
     ],
     "Contact":[
     	{"url":"elements/contact1.html","height":691, "thumbnail":"elements/images/thumbs/contact1.png"},
-    	{"url":"elements/contact2.html","height":477, "thumbnail":"elements/images/thumbs/contact2.png"}
+    	{"url":"elements/contact2.html","height":477, "thumbnail":"elements/images/thumbs/contact2.png"},
+    	{"url":"elements/contact3.html","height":477, "thumbnail":"elements/images/thumbs/contact3.png"}
     ],
     "Footers":[
     	{"url":"elements/footer1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},

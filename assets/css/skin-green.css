@@ -157,11 +157,11 @@
 .box .box-header {
     border-bottom: 1px solid #3c8dbc;
 }
-footer {
+/*footer {
     padding: 2px 5px 2px 5px;
     background: #1BBC9B;
     color:#ffffff;
-}
+}*/
 .navbar-nav > .user-menu > .dropdown-menu {
    
     width: 230px;

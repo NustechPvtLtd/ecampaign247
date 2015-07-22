@@ -17,6 +17,23 @@
                 <?php echo form_input($plan_price);?>
             </div>
             <div class="clearfix"><!-- --></div>
+            <div class="form-group col-lg-6">
+                <?php echo lang('discount_type', 'discount_type');?>
+                <?php echo form_dropdown('discount_type', array('percentage'=>'Percentage(%)','ammount'=>'Fixed ammount'), $discount_type, 'class="form-control"');?>
+            </div>
+            <div class="form-group col-lg-6">
+                <?php echo lang('discount', 'discount');?>
+                <?php echo form_input($discount);?>
+            </div>
+            <div class="clearfix"><!-- --></div>
+            <div class="form-group col-lg-6">
+                <?php echo lang('expiration_type', 'expiration_type', 'required');?>
+                <?php echo form_dropdown('expiration_type', array('days'=>'Days','months'=>'Months','years'=>'Years'), $expiration_type, 'class="form-control"');?>
+            </div>
+            <div class="form-group col-lg-6">
+                <?php echo lang('expiration', 'expiration', 'required');?>
+                <?php echo form_input($expiration);?>
+            </div>
             <div class="form-group col-lg-12">
                 <?php echo lang('plan_description', 'plan_description');?>
                 <?php echo form_textarea($plan_description);?>
@@ -47,6 +64,11 @@
         return true;
     }
     $(document).ready(function(){
-       $('#plan_description').redactor(); 
+       $('#plan_description').redactor({
+           buttons:['html', 'formatting', 'bold', 'italic', 'deleted',
+'unorderedlist', 'orderedlist', 'outdent', 'indent',
+'image', 'link', 'alignment', 'horizontalrule'],
+           focus: true,
+       }); 
     });
 </script>

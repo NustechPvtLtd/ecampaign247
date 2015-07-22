@@ -11,7 +11,10 @@ class Seo extends MY_Controller {
 		
 		$this->load->model('sites/sitemodel');
 		$this->load->model('sites/pagemodel');
-			
+        
+        $this->load->library('facebook');
+        $this->load->library('twitteroauth');
+        
         $this->data['title'] =  ucfirst($this->router->fetch_class());
 		$this->data['pageTitle'] = ucfirst($this->router->fetch_class());
 		
@@ -40,7 +43,8 @@ class Seo extends MY_Controller {
 
             $this->data['css'] = array(
                 '<link href="'.base_url().'assets/sites/css/builder.css" rel="stylesheet">',
-                '<link href="'.base_url().'assets/sites/css/style.css" rel="stylesheet">'
+                '<link href="'.base_url().'assets/sites/css/style.css" rel="stylesheet">',
+                '<link href="'.base_url().'assets/home/css/style.css" rel="stylesheet">'
             );
             $this->template->load('main', 'seo', 'index', $this->data);
         }				

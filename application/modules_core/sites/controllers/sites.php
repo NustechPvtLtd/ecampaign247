@@ -38,24 +38,27 @@ class Sites extends MY_Controller {
 	{	
 	
 		//grab us some sites
-		$sites = $this->sitemodel->all();
+		$this->data['sites'] = $this->sitemodel->all();
         $sites_id = $this->sitemodel->getSiteId($this->ion_auth->get_user_id());
 		//get all users
 		$this->data['users'] = $this->usermodel->getAll();
-        if(! $this->ion_auth->is_admin() && count( $sites ) <= 0){
-            redirect(site_url('sites/create'),'location');
-        }  else {
-            redirect(site_url('sites/'.$sites_id));
-        }				
-		/*$this->data['page'] = "sites";
-		$this->data['pageHeading'] = $this->lang->line('sites_header');
-        $this->data['css'] = array(
-		    '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
-		);
-		$this->data['js'] = array(
-		    '<script type="text/javascript" src="'.base_url().'assets/sites/js/sites.js"></script>'
-		);
-        $this->template->load('sites', 'sites', 'sites/sites', $this->data);*/
+        if(! $this->ion_auth->is_admin() ){
+            if( count( $this->data['sites'] ) <= 0){
+                redirect(site_url('sites/create'),'location');
+            }  else {
+                redirect(site_url('sites/'.$sites_id));
+            }
+        }else{				
+            $this->data['page'] = "sites";
+            $this->data['pageHeading'] = $this->lang->line('sites_header');
+            $this->data['css'] = array(
+                '<link href="'.base_url().'assets/sites/less/flat-ui.css" rel="stylesheet">'
+            );
+            $this->data['js'] = array(
+                '<script type="text/javascript" src="'.base_url().'assets/sites/js/sites.js"></script>'
+            );
+            $this->template->load('sites', 'sites', 'sites/sites', $this->data);
+        }
 	}
 	
 	
@@ -92,7 +95,7 @@ class Sites extends MY_Controller {
 	
 		//do we have a site name?
 		
-		if( !isset($_POST['siteName']) || $_POST['siteName'] == '' ) {
+		/*if( !isset($_POST['siteName']) || $_POST['siteName'] == '' ) {
 					
 			$return = array();
 			
@@ -105,7 +108,7 @@ class Sites extends MY_Controller {
 			
 			die( json_encode($return) );
 		
-		}
+		}*/
 		
 		
 		//do we have some frames to save?
@@ -155,11 +158,11 @@ class Sites extends MY_Controller {
 			
 			if( isset($_POST['pagesData']) ) {
 			
-				$this->sitemodel->update($siteID, $_POST['siteName'], $_POST['pageData'], $_POST['pagesData']);
+				$this->sitemodel->update($siteID, $_POST['pageData'], $_POST['pagesData']);
 			
 			} else {
 			
-				$this->sitemodel->update($siteID, $_POST['siteName'], $_POST['pageData']);
+				$this->sitemodel->update($siteID, $_POST['pageData']);
 			
 			}
 			

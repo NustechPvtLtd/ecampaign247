@@ -191,8 +191,8 @@ class Domain extends MY_Controller {
 		curl_setopt( $curl, CURLOPT_USERPWD, "username:password" );
 		curl_setopt( $curl, CURLOPT_URL, $url );
 		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-//        curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 0);
-//        curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0);
         $output = curl_exec( $curl );
 		if(!$output){
 			$output = json_encode(array(

@@ -72,6 +72,7 @@
         var status = $('#notify-container');
         var files = $('.img-thumbnail');
         new AjaxUpload(btnUpload, {
+            contentType: "text/html",
             action: '<?php echo site_url('user/upload_avatar'); ?>',
             name: 'uploadfile',
             cache: false,

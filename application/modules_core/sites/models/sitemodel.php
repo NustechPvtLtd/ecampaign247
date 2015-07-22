@@ -199,13 +199,12 @@ class Sitemodel extends CI_Model {
 
      */
 
-    public function update($siteID, $siteName, $siteData, $pagesData = '')
+    public function update($siteID, $siteData, $pagesData = '')
     {
 
         //update the site details first
 
         $data = array(
-            'sites_name' => $siteName,
             'sites_lastupdate_on' => time()
         );
 

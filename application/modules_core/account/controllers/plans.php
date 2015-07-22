@@ -37,7 +37,19 @@ class Plans extends MY_Controller {
         $this->data['js'] = array(
             '<script type="text/javascript" src="'. base_url().'assets/datatable/js/jquery.dataTables.min.js"></script>',
             '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.bootstrap.js"></script>',
-            '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.responsive.js"></script>'
+            '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.responsive.js"></script>',
+            '<script type="text/javascript" src="'. base_url().'assets/js/readmore.min.js"></script>',
+            '<script>
+$(".plan_description").readmore({
+speed: 75,
+maxHeight: 0,
+collapsedHeight:50,
+moreLink: \'<a href="#">Read More</a>\',
+lessLink: \'<a href="#">Less</a>\',
+startOpen: false,
+
+});
+</script>'
         );
         $this->data['plans'] = $this->plans_model->get_plans();
 
@@ -54,29 +66,40 @@ class Plans extends MY_Controller {
         $this->form_validation->set_rules('plan_price', $this->lang->line('plan_price'), 'required|numeric');
         $this->form_validation->set_rules('plan_recommends', $this->lang->line('plan_recommends'), 'required');
         $this->form_validation->set_rules('plan_status', $this->lang->line('plan_status'), 'required');
+        $this->form_validation->set_rules('discount', $this->lang->line('discount'), 'numeric');
+        $this->form_validation->set_rules('expiration_type', $this->lang->line('expiration_type'), 'required');
+        $this->form_validation->set_rules('expiration', $this->lang->line('expiration'), 'required|numeric');
         
         if(isset($_POST) && !empty($_POST)){
             if ($this->form_validation->run() === TRUE){
                 if($plans){
                     $data = array(
-                               'plan_id'        => $plans->plan_id,
-                               'name'           => $this->input->post('plan_name'),
-                               'price'          => $this->input->post('plan_price'),
-                               'description'    => $this->input->post('plan_description'),
-                               'recommended'    => $this->input->post('plan_recommends'),
-                               'status'         => $this->input->post('plan_status'),
-                               'last_updated'   => date("Y-m-d H:i:s")
+                               'plan_id'            => $plans->plan_id,
+                               'name'               => $this->input->post('plan_name'),
+                               'price'              => $this->input->post('plan_price'),
+                               'description'        => $this->input->post('plan_description'),
+                               'recommended'        => $this->input->post('plan_recommends'),
+                               'status'             => $this->input->post('plan_status'),
+                               'discount'           => $this->input->post('discount'),
+                               'discount_type'      => $this->input->post('discount_type'),
+                               'expiration_type'    => $this->input->post('expiration_type'),
+                               'expiration'         => $this->input->post('expiration'),
+                               'last_updated'       => date("Y-m-d H:i:s")
                            );
                     $this->data['message'] =($this->plans_model->update_plan($data))?'Successfully Update Plan':'Something happen, please try again!';
                 }else{
                     $data = array(
-                               'name'           => $this->input->post('plan_name'),
-                               'price'          => $this->input->post('plan_price'),
-                               'description'    => $this->input->post('plan_description'),
-                               'recommended'    => $this->input->post('plan_recommends'),
-                               'status'         => $this->input->post('plan_status'),
-                               'date_added'     => date("Y-m-d H:i:s"),
-                               'last_updated'   => date("Y-m-d H:i:s")
+                               'name'               => $this->input->post('plan_name'),
+                               'price'              => $this->input->post('plan_price'),
+                               'description'        => $this->input->post('plan_description'),
+                               'recommended'        => $this->input->post('plan_recommends'),
+                               'status'             => $this->input->post('plan_status'),
+                               'discount'           => $this->input->post('discount'),
+                               'discount_type'      => $this->input->post('discount_type'),
+                               'expiration_type'    => $this->input->post('expiration_type'),
+                               'expiration'         => $this->input->post('expiration'),
+                               'date_added'         => date("Y-m-d H:i:s"),
+                               'last_updated'       => date("Y-m-d H:i:s")
                            );
                     $this->data['message'] =($this->plans_model->create_plan($data))?'Successfully Plan Created':'Something happen, please try again!';
                 }
@@ -103,13 +126,31 @@ class Plans extends MY_Controller {
 		$this->data['plan_price'] = array(
 			'name'      => 'plan_price',
 			'id'        => 'plan_price',
-			'type'      => 'number',
+			'type'      => 'text',
 			'value'     => (isset($plans->price))?$this->form_validation->set_value('plan_price',$plans->price):0.0000,
             'class'     => 'form-control',
             'onkeypress'   => 'return isNumberKey(event)',
 		);
 		$this->data['plan_recommends'] = (isset($plans->recommended))?$this->form_validation->set_value('plan_recommends',$plans->recommended):'';
 		$this->data['plan_status'] = (isset($plans->status))?$this->form_validation->set_value('plan_status',$plans->status):'';
+		$this->data['discount_type'] = (isset($plans->discount_type))?$this->form_validation->set_value('discount_type',$plans->discount_type):'';
+		$this->data['discount'] = array(
+			'name'  => 'discount',
+			'id'    => 'discount',
+			'type'  => 'text',
+			'value' => (isset($plans->discount))?$this->form_validation->set_value('discount',$plans->discount):'',
+            'class' => 'form-control',
+            'onkeypress'   => 'return isNumberKey(event)',
+		);
+		$this->data['expiration_type'] = (isset($plans->expiration_type))?$this->form_validation->set_value('expiration_type',$plans->expiration_type):'';
+		$this->data['expiration'] = array(
+			'name'  => 'expiration',
+			'id'    => 'expiration',
+			'type'  => 'number',
+			'value' => (isset($plans->expiration))?$this->form_validation->set_value('expiration',$plans->expiration):'',
+            'class' => 'form-control',
+            'onkeypress'   => 'return isNumberKey(event)',
+		);
         
 		$this->data['css'] = array(
             '<link href="'. base_url().'assets/redactor/redactor.css" type="text/css" rel="stylesheet">',

@@ -14,7 +14,13 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/ecampaign247';
+$config['ssl_active'] = false;
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) {
+    $config['ssl_active'] = true;
+}
+$protocol = ($config['ssl_active'] === true )?"https":"http";
+$config['base_url'] = $protocol.'://localhost/ecampaign247';
+//$config['base_url']	= 'http://localhost/ecampaign247';
 
 /*
 |--------------------------------------------------------------------------

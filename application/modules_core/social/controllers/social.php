@@ -86,7 +86,7 @@ class Social extends MY_Controller {
                   );
             }
             $this->ion_auth_model->update($userId,$data);
-            redirect(site_url('social'));
+            redirect(site_url('seo'));
         }
     }
     
@@ -154,7 +154,7 @@ class Social extends MY_Controller {
                 $this->ion_auth_model->update($userId,$data);
                 $this->session->set_userdata( 'tw_access_token', $tokenCredentials['oauth_token'] );
                 $this->session->set_userdata( 'tw_access_key', $tokenCredentials['oauth_token_secret'] );
-                redirect(site_url('social'));
+                redirect(site_url('seo'));
             }
         }
     }
@@ -243,6 +243,42 @@ class Social extends MY_Controller {
             redirect(site_url('social'));
         }
     }
+    
+    public function post_to_facebook()
+    {
+        $paramters = array (
+            'message' => $_POST['desc'],
+            'link' => isset( $_POST['link'] ) ? $_POST['link'] : site_url(),
+            'name' => isset( $_POST['title'] ) ? $_POST['title'] : 'Web Zero',
+//                        'picture' => $imgPath
+        );
+        $responce = (new Facebook())->publish($paramters);
+        echo json_encode($responce);
+    }
+    
+    public function post_to_twitter()
+    {
+        if ( isset( $_POST['title'] ) ) {
+            if ( isset( $_POST['desc'] ) ) {
+                $msg = isset( $_POST['link'] ) ? $_POST['title'] . ' ' . $_POST['desc'] . ' ' . $_POST['link'] : $_POST['title'] . ' ' . $_POST['desc'] . ' ' . site_url();
+            } else {
+                $msg = isset( $_POST['link'] ) ? $_POST['title'] . ' ' . $_POST['link'] : $_POST['title'] . ' ' . site_url();
+            }
+        } else {
+            $msg = isset( $_POST['link'] ) ? $_POST['link'] : site_url();
+        }
+
+        
+        $tw = TRUE;
+        $connection = new TwitterOAuth( $this->session->userdata( 'tw_access_token'), $this->session->userdata( 'tw_access_key'));
+        /*$connection->ssl_verifypeer = TRUE;
+        $connection->content_type = 'application/x-www-form-urlencoded';*/
+        $connection -> get( 'account/verify_credentials' );
+        $responce = $connection -> post( 'statuses/update', array ( 'status' => $msg/*, 'media[]' => $imgPath*/ ) );
+        echo json_encode($responce);
+        
+    }
+
     public function post_to_profile()
     {
         $return = array();
