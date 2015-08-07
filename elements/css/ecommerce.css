@@ -33,3 +33,11 @@
 {
     .carousel-inner > .item > img, .carousel-inner > .item > a > img{max-width:90%;}
 }
+a.morelink {
+	text-decoration:none;
+	outline: none;
+}
+.morecontent span {
+	display: none;
+
+}

@@ -1,13 +1,12 @@
 $(document).ready(function() {
-    $(".panel-title a", this).click(function() {
-
-        if ($('.glyphicon', this).hasClass('glyphicon-chevron-down')) {
-            $('.glyphicon', this).removeClass('glyphicon-chevron-down');
-            $('.glyphicon', this).addClass('glyphicon-chevron-up');
-        } else {
-            $('.glyphicon', this).addClass('glyphicon-chevron-down');
-        }
-
+    $(".redamore-content").readmore({
+        speed: 50,
+        maxHeight: 0,
+        collapsedHeight:150,
+        moreLink: '<a href="#">read more...</span></a>',
+        lessLink: '<a href="#">less</a>',
+        startOpen: false,
     });
+
 });
 

@@ -1,11 +1,10 @@
 .pricing1 {
-	text-align: center;
 	border: 2px solid #ddd;
 }
 
 .pricing1 .top {
 	border-bottom: 2px solid #ddd;
-	padding: 40px 0px;
+        text-align: center;
 }
 
 .pricing1 .top h2 {
@@ -29,7 +28,7 @@
 }
 
 .pricing1 .bottom {
-	padding: 40px;
+	padding: 20px;
 }
 
 .pricing1 .bottom ul {

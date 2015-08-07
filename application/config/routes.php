@@ -51,8 +51,9 @@ $route['account/plans'] = 'account/account/plans';
 $route['plans'] = 'account/plans';
 $route['plans/update/(:any)'] = 'account/plans/editPlans/$1';
 $route['plans/delete/(:any)'] = 'account/plans/deletePlans/$1';
-$route['plans/recommends/(:any)/(:any)'] = 'account/plans/recommends/$1/$2';
-$route['plans/status/(:any)/(:any)'] = 'account/plans/status/$1/$2';
 $route['plans/create'] = 'account/plans/editPlans';
+$route['plans/(:any)'] = 'account/plans/$1';
+//$route['plans/recommends/(:any)/(:any)'] = 'account/plans/recommends/$1/$2';
+//$route['plans/status/(:any)/(:any)'] = 'account/plans/status/$1/$2';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

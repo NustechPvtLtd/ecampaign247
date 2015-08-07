@@ -982,7 +982,8 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, avatar, social_account, last_login')
+		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, avatar, social_account, last_login, visitor_count, eccommerce, premium_domain, expiration_type, expiration, plan_id')
+                          ->join('price_plan', 'price_plan.plan_id = users.price_plan_id')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
 		    			  ->order_by('id', 'desc')
@@ -1742,12 +1743,18 @@ class Ion_auth_model extends CI_Model
         }
 
 		$session_data = array(
-		    'identity'             => $user->{$this->identity_column},
-		    'username'             => $user->username,
-		    'email'                => $user->email,
-		    'user_id'              => $user->id, //everyone likes to overwrite id so we'll use user_id
-		    'old_last_login'       => $user->last_login,
-		    'avatar'               => $user->avatar,
+		    'identity'          => $user->{$this->identity_column},
+		    'username'          => $user->username,
+		    'email'             => $user->email,
+		    'user_id'           => $user->id, //everyone likes to overwrite id so we'll use user_id
+		    'old_last_login'    => $user->last_login,
+		    'avatar'            => $user->avatar,
+		    'visitor_count'     => $user->visitor_count,
+		    'eccommerce'        => $user->eccommerce,
+		    'premium_domain'    => $user->premium_domain,
+		    'expiration_type'   => $user->expiration_type,
+		    'expiration'        => $user->expiration,
+		    'plan_id'           => $user->plan_id,
 		);
         if(isset($social_account->facebook)){
             $session_data = array_merge($session_data, array(

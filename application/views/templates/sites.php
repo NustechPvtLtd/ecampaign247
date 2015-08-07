@@ -224,6 +224,8 @@
                 <?php if( isset($pagesData) ):?>
                 var pagesData = <?php echo json_encode($pagesData);?>
                 <?php endif;?>
+               
+                var display_ecom =  <?php echo (userdata( 'eccommerce' )=='inactive')?'no':'yes';?>;
         </script>
         <!--[if lt IE 10]>
         <script>

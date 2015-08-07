@@ -158,6 +158,7 @@ $lang['detail_editor_tab_link'] = "Link";
 $lang['detail_editor_tab_image'] = "Image";
 $lang['detail_editor_tab_icons'] = "Icons";
 $lang['detail_editor_tab_video'] = "Video";
+$lang['detail_editor_tab_document'] = "Document";
 
 $lang['enter_youtube_id'] = "Youtube Video ID";
 $lang['enter_vimeo_id'] = "Vimeo Video ID";
@@ -172,6 +173,10 @@ $lang['upload_image'] = "Upload image";
 $lang['select_image'] = "Select image";
 $lang['change'] = "Change";
 $lang['remove'] = "Remove";
+
+$lang['enter_document_path'] = "Enter document path";
+$lang['upload_document'] = "Upload document";
+$lang['select_document'] = "Select document";
 
 $lang['choose_an_icon'] = "Choose an icon below";
 
@@ -239,6 +244,18 @@ $lang['modal_imagelibrary_button_upload'] = "Upload Image";
 $lang['modal_imagelibrary_ribbon_admin'] = "Admin";
 $lang['modal_imagelibrary_button_insert'] = "Insert Image";
 $lang['modal_imagelibrary_button_insertimage'] = "Insert Image";
+
+$lang['modal_documentlibrary_heading'] = "Document Library";
+$lang['modal_documentlibrary_loadertext'] = "Uploading Document...";
+$lang['modal_documentlibrary_tab_mydocument'] = "My Document";
+$lang['modal_documentlibrary_tab_uploaddocument'] = "Upload Document";
+$lang['modal_documentlibrary_message_nodocument'] = "You currently have no documents uploaded. To upload documents, please use the upload panel on your left.";
+$lang['modal_documentlibrary_button_selectdocument'] = "Select Document";
+$lang['modal_documentlibrary_button_change'] = "Change";
+$lang['modal_documentlibrary_button_remove'] = "Remove";
+$lang['modal_documentlibrary_button_upload'] = "Upload Document";
+$lang['modal_documentlibrary_button_insert'] = "Insert Document";
+$lang['modal_documentlibrary_button_insertdocument'] = "Insert Document";
 
 $lang['modal_pagesettings_header'] = "Page Settings for";
 $lang['modal_domain_header'] = "Premium Domain";

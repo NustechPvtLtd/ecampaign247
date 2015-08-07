@@ -1,7 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $lang['plan_header'] = 'Plans List';
-$lang['plan_name'] = 'Plans';
-$lang['plan_price'] = 'Price';
+$lang['plan_name'] = 'Plan Name';
+$lang['plan_price'] = 'Plan Price';
 $lang['plan_description'] = 'Description';
 $lang['plan_recommends'] = 'Recommendation';
 $lang['plan_recommends_yes'] = 'Yes';
@@ -17,3 +17,6 @@ $lang['discount'] = 'Discount';
 $lang['expiration_type'] = 'Expiration Type(Days/Months/Years)';
 $lang['expiration'] = 'Expiration';
 $lang['plan_promo_price'] = 'Promo Price';
+$lang['visitor_count'] = 'Visitor Count';
+$lang['eccommerce'] = 'Ecommerce';
+$lang['premium_domain'] = 'Premium Domain';

@@ -7,12 +7,7 @@
                         <img src="<?php echo base_url();?>assets/home/img/slide/slide_1.jpg">
 
                         <div class="carousel-caption">
-                            <h2 class="animated fadeInDown" contenteditable=
-                            "true">Build Website in a <span class=
-                            "colored_text">Minutes</span></h2><a class=
-                            "btn btn-lg btn-success theame_btn animated fadeInUp"
-                            data-target="#login_form" data-toggle="modal" href=
-                            "#">Get Started</a>
+                            <h2 class="animated fadeInDown" contenteditable="false">Build Website in a <span class="colored_text">Minutes</span></h2><a class="btn btn-lg btn-success theame_btn animated fadeInUp" data-target="#login_form" data-toggle="modal" href="#">Get Started</a>
                         </div>
                     </div>
 
@@ -336,7 +331,7 @@
                             <img height="auto" id="vd_img" src="<?php echo base_url();?>assets/home/img/vd_img.jpg"
                             width="100%"> <iframe class="embed-responsive-item"
                             src=
-                            "http://www.youtube.com/embed/i__1Z5a9Sak"></iframe>
+                            "https://www.youtube.com/embed/nwpRPKco_QQ"></iframe>
                         </div>
                     </div>
                 </div>

@@ -419,8 +419,11 @@ class Sites extends MY_Controller {
 	
 		$frame = $this->sitemodel->getSingleFrame($frameID);
         $frameContent = $frame->frames_content;
-        if(!stristr($frameContent, '<link href="'. base_url('elements'))){
+        if(!stristr($frameContent, '<link href="'. base_url('elements')) ){
             $frameContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$frameContent);
+        }
+        if(stristr($frameContent, '<link href="'. base_url('elements').'/https://') ){
+            $frameContent = str_replace('<link href="'. base_url('elements').'/https://','<link href="https://',$frameContent);
         }
         if(!stristr($frameContent, '<script src="js'. base_url('elements'))){
             $frameContent = str_replace('<script src="js','<script src="'. base_url('elements').'/js',$frameContent);
@@ -518,7 +521,7 @@ class Sites extends MY_Controller {
         
         $premiumDomain = $this->domainmodel->getDomain($_POST['siteID']);
 
-        if(!$siteDetails['site']->published){//Check wheather subdomain is register or not
+        /*if(!$siteDetails['site']->published){//Check wheather subdomain is register or not
             $result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
             if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
             ) {
@@ -532,7 +535,7 @@ class Sites extends MY_Controller {
                 $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
                 die( json_encode( $return ) );
             }
-        }
+        }*/
         
         if(isset($premiumDomain->domainname) && $premiumDomain->domain_publish!=1){
             $result = $this->CPanelAddons->add($premiumDomain->domainname, $path);
@@ -561,11 +564,13 @@ class Sites extends MY_Controller {
 				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
+				$header_includes = '<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=AIzaSyAflZCLIBCYXb76ox_FOymyJiM580qQkC4" type="text/javascript"></script>';
+				$header_includes .= $pageMeta->pages_header_includes;
 								
 				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 				
 				//insert header includes;
-				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);
+				$pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
 				
 				//remove frameCovers
 				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
@@ -573,8 +578,10 @@ class Sites extends MY_Controller {
 			} else {
                 //insert title
 				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>';
+				$header_includes = '<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=AIzaSyAflZCLIBCYXb76ox_FOymyJiM580qQkC4" type="text/javascript"></script>';
 								
 				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
+                $pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
 			}
             $pageContent = str_replace("<!-- site contact url div -->", '<div id="contact-url" data-content="'.site_url('login/site_contact/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
             
@@ -584,13 +591,22 @@ class Sites extends MY_Controller {
             
             $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
             
-            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.$siteDetails['site']->domain.'.webzero.in/'. $page.'.html"></div>', $pageContent);
+            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.base_url().$siteDetails['site']->domain.'/'. $page.'.html"></div>', $pageContent);
             
             if(!stristr($pageContent, '<link href="'. base_url('elements'))){
                 $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
             }
-            if(!stristr($pageContent, '<script src="js'. base_url('elements'))){
+            if(stristr($pageContent, '<link href="'. base_url('elements').'/https://') ){
+                $pageContent = str_replace('<link href="'. base_url('elements').'/https://','<link href="https://',$pageContent);
+            }
+            if(!stristr($pageContent, '<script src="'. base_url('elements').'/js')){
                 $pageContent = str_replace('<script src="js','<script src="'. base_url('elements').'/js',$pageContent);
+            }
+            if(stristr($pageContent, 'src="'. base_url('elements').'/https://') ){
+                $pageContent = str_replace('src="'. base_url('elements').'/https://','src="https://',$pageContent);
+            }
+            if(stristr($pageContent, '<script src="'. base_url('elements').'/http://') ){
+                $pageContent = str_replace('<script src="'. base_url('elements').'/http://','<script src="http://',$pageContent);
             }
             if(strstr($pageContent, 'src="images')){
                 $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
@@ -599,7 +615,7 @@ class Sites extends MY_Controller {
 //		}
         (isset($userID)&&$userID!='')?remove_directory('./temp/'.$userID):'';
         
-		$this->sitemodel->publish( $_POST['siteID'],$siteDetails['site']->domain.".webzero.in");
+		$this->sitemodel->publish( $_POST['siteID'], base_url().$siteDetails['site']->domain);
 		//all went well
 		$return = array();
 				
@@ -804,11 +820,13 @@ class Sites extends MY_Controller {
 				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>'."\r\n";
 				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
 				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
+				$header_includes = '<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=AIzaSyAflZCLIBCYXb76ox_FOymyJiM580qQkC4" type="text/javascript"></script>';
+				$header_includes .= $pageMeta->pages_header_includes;
 								
 				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
 				
 				//insert header includes;
-				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);
+				$pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
 				
 				//remove frameCovers
 				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
@@ -816,8 +834,11 @@ class Sites extends MY_Controller {
 			} else {
                 //insert title
 				$meta = '<title>'.$siteDetails['site']->sites_name.'</title>';
+				$header_includes = '<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=AIzaSyAflZCLIBCYXb76ox_FOymyJiM580qQkC4" type="text/javascript"></script>';
 								
 				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
+                
+                $pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
 			}
             
             $pageContent = str_replace("<!-- site contact url div -->", '<div id="contact-url" data-content="'.site_url('login/site_contact/'.$this->encrypt->encode($_POST['siteID'])).'"></div>', $pageContent);
@@ -833,8 +854,17 @@ class Sites extends MY_Controller {
             if(!stristr($pageContent, '<link href="'. base_url('elements'))){
                 $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
             }
+            if(stristr($pageContent, '<link href="'. base_url('elements').'/https://') ){
+                $pageContent = str_replace('<link href="'. base_url('elements').'/https://','<link href="https://',$pageContent);
+            }
             if(!stristr($pageContent, '<script src="'. base_url('elements'))){
                 $pageContent = str_replace('<script src="','<script src="'. base_url('elements').'/',$pageContent);
+            }
+            if(stristr($pageContent, 'src="'. base_url('elements').'/https://') ){
+                $pageContent = str_replace('src="'. base_url('elements').'/https://','src="https://',$pageContent);
+            }
+            if(stristr($pageContent, '<script src="'. base_url('elements').'/http://') ){
+                $pageContent = str_replace('<script src="'. base_url('elements').'/http://','<script src="http://',$pageContent);
             }
             if(strstr($pageContent, 'src="images')){
                 $pageContent = str_replace('src="images','src="'. base_url('elements').'/images',$pageContent);
@@ -962,7 +992,7 @@ class Sites extends MY_Controller {
     public function checkDomain()
     {
         if (isset($_POST['domain']) && $_POST['domain']!='') {
-            $url = 'http://'.$_POST['domain'].'.'.$_SERVER['HTTP_HOST'];
+            $url = 'http://'.$_SERVER['HTTP_HOST'].'/'.$_POST['domain'];
             if($this->sitemodel->checkDomainAvailability($_POST['domain'])){
                 $return['error'] = 0;
                 $return['errorMessage'] = $url.' is available.';

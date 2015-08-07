@@ -13,6 +13,7 @@
         </div>
     </div>
     
+    <?php if(userdata( 'visitor_count' )!='inactive'):?>
     <div class="col-lg-4 col-md-4">
         <div class="panel_new">
             <div class="login-wrapper">
@@ -25,6 +26,7 @@
             </div>
         </div>
     </div>
+    <?php endif;?>
     
     <div class="col-lg-4 col-md-4">
         <div class="panel_new">
@@ -52,6 +54,7 @@
         </div>
     </div>
     
+    <?php if(userdata( 'premium_domain' )!='inactive'):?>
     <div class="col-lg-4 col-md-4">
         <div class="panel_new">
             <div class="login-wrapper">
@@ -64,7 +67,8 @@
             </div>
         </div>
     </div>
-
+    <?php endif;?>
+    
     <div class="col-lg-4 col-md-4">
         <div class="panel_new">
             <div class="login-wrapper">

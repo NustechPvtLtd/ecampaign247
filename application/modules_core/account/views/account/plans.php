@@ -35,21 +35,19 @@
                                         <tbody>
                                             <tr class="the-price">
                                                 <td>
-                                                    <h1>
-                                                        <?php 
-                                                        if(abs($plan->discount)){
-                                                            if($plan->discount_type=='percentage'){
-                                                                $promo_price = $plan->price - ($plan->price*$plan->discount/100);
-                                                            }else{
-                                                                $promo_price = $plan->price - $plan->discount;
-                                                            }
-                                                            echo '<del><i class="fa fa-inr"></i>'.abs($plan->price).'</del> <i class="fa fa-inr"></i>'.abs($promo_price);
+                                                    <?php 
+                                                    if(abs($plan->discount)){
+                                                        echo '<i class="fa fa-inr"></i>  ';
+                                                        if($plan->discount_type=='percentage'){
+                                                            $promo_price = $plan->price - ($plan->price*$plan->discount/100);
                                                         }else{
-                                                            echo '<i class="fa fa-inr"></i>'.abs($plan->price);
+                                                            $promo_price = $plan->price - $plan->discount;
                                                         }
-                                                        ?><span class="subscript"></span>
-                                                    </h1>
-                                                    <small></small>
+                                                        echo abs($promo_price) .' <del style="color:#C50000;border: 1px solid #F37878;background-color: rgba(248, 155, 155, 0.67);padding: 5px;}"><i class="fa fa-inr"></i>  '.abs($plan->price).'</del>';
+                                                    }else{
+                                                        echo abs($plan->price);
+                                                    }
+                                                    ?>
                                                 </td>
                                             </tr>
                                             <tr class="active">
@@ -64,6 +62,21 @@
                                             </tr>
                                             <tr class="active">
                                                 <td>
+                                                    <?php echo lang('visitor_count').': '. ucfirst($plan->visitor_count);?>
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    <?php echo lang('eccommerce').': '. ucfirst($plan->eccommerce);?>
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    <?php echo lang('premium_domain').': '. ucfirst($plan->premium_domain);?>
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
                                                     Validity: <?php echo $plan->expiration.' '.$plan->expiration_type;?>
                                                 </td>
                                             </tr>
@@ -71,7 +84,7 @@
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a role="button" class="btn btn-success" href="javascript:void(0)" style="cursor: default;"><?php echo (abs($plan->price)==0)?'Active Plane':'Upgrade';?></a>
+                                    <a role="button" class="btn btn-success" href="javascript:void(0)" style="cursor: default;"><?php echo (userdata( 'plan_id' )===$plan->plan_id)?'Active Plane':'Upgrade';?></a>
                                 </div>
                             </div>
                         </div>

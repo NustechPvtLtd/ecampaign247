@@ -13,10 +13,10 @@
         <div class="optionPane">
             <h6>Free Website</h6>
             <div class="form-group">
-                <label class="col-sm-3">Sub Domain</label>
+                <label class="col-sm-3">Set Access URL</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="siteSettings_domain" name="siteSettings_domain" placeholder="<?php echo $this->lang->line('sitedata_label_domain_placeholder') ?>" value="<?php echo $data['site']->domain; ?>" <?php echo ($data['site']->domain) ? 'readonly=""' : ''; ?>>
-                    <span id="publicURL"><?php echo ($data['site']->domain) ? 'Your web site url: http://' . $data['site']->domain . '.' . $_SERVER['HTTP_HOST'] : ''; ?></span>
+                    <span id="publicURL"><?php echo ($data['site']->domain) ? 'Your web site url: http://' . $_SERVER['HTTP_HOST'] . '/'.$data['site']->domain : ''; ?></span>
                 </div>
             </div>
         </div><!-- ./optionPane -->

@@ -1,11 +1,5 @@
 <?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of plans
  *
@@ -23,6 +17,37 @@ class Plans extends MY_Controller {
         $this->load->model('account/plans_model');
         $this->data['title'] = ucfirst($this->router->fetch_class());
         $this->data['pageMetaDescription'] = $this->router->fetch_class().'|'.$this->router->fetch_method();
+    }
+    
+    function _remap($method,$args)
+    {
+
+       switch ($method)
+       {
+            case 'status':
+             $this->change_status($method,$args);
+            break;
+            case 'visitor_count':
+             $this->change_status($method,$args);
+            break;
+            case 'eccommerce':
+             $this->change_status($method,$args);
+            break;
+            case 'premium_domain':
+             $this->change_status($method,$args);
+            break;
+            case 'recommended':
+             $this->change_status($method,$args);
+            break;
+            default:
+                if(empty($args)){
+                    $this->$method();
+                }else{
+                    $this->$method($args[0]);
+                }
+               
+            break;
+        }
     }
     
     public function index()
@@ -84,6 +109,9 @@ startOpen: false,
                                'discount_type'      => $this->input->post('discount_type'),
                                'expiration_type'    => $this->input->post('expiration_type'),
                                'expiration'         => $this->input->post('expiration'),
+                               'visitor_count'      => $this->input->post('visitor_count'),
+                               'eccommerce'         => $this->input->post('eccommerce'),
+                               'premium_domain'     => $this->input->post('premium_domain'),
                                'last_updated'       => date("Y-m-d H:i:s")
                            );
                     $this->data['message'] =($this->plans_model->update_plan($data))?'Successfully Update Plan':'Something happen, please try again!';
@@ -98,6 +126,9 @@ startOpen: false,
                                'discount_type'      => $this->input->post('discount_type'),
                                'expiration_type'    => $this->input->post('expiration_type'),
                                'expiration'         => $this->input->post('expiration'),
+                               'visitor_count'      => $this->input->post('visitor_count'),
+                               'eccommerce'         => $this->input->post('eccommerce'),
+                               'premium_domain'     => $this->input->post('premium_domain'),
                                'date_added'         => date("Y-m-d H:i:s"),
                                'last_updated'       => date("Y-m-d H:i:s")
                            );
@@ -132,7 +163,10 @@ startOpen: false,
             'onkeypress'   => 'return isNumberKey(event)',
 		);
 		$this->data['plan_recommends'] = (isset($plans->recommended))?$this->form_validation->set_value('plan_recommends',$plans->recommended):'';
-		$this->data['plan_status'] = (isset($plans->status))?$this->form_validation->set_value('plan_status',$plans->status):'';
+		$this->data['plan_status'] = (isset($plans->status))?$this->form_validation->set_value('plan_status',$plans->status):'inactive';
+		$this->data['visitor_count'] = (isset($plans->visitor_count))?$this->form_validation->set_value('visitor_count',$plans->visitor_count):$this->form_validation->set_value('visitor_count','inactive');
+		$this->data['eccommerce'] = (isset($plans->eccommerce))?$this->form_validation->set_value('eccommerce',$plans->eccommerce):$this->form_validation->set_value('eccommerce','inactive');
+		$this->data['premium_domain'] = (isset($plans->premium_domain))?$this->form_validation->set_value('premium_domain',$plans->premium_domain):$this->form_validation->set_value('premium_domain','inactive');
 		$this->data['discount_type'] = (isset($plans->discount_type))?$this->form_validation->set_value('discount_type',$plans->discount_type):'';
 		$this->data['discount'] = array(
 			'name'  => 'discount',
@@ -147,7 +181,7 @@ startOpen: false,
 			'name'  => 'expiration',
 			'id'    => 'expiration',
 			'type'  => 'number',
-			'value' => (isset($plans->expiration))?$this->form_validation->set_value('expiration',$plans->expiration):'',
+			'value' => (isset($plans->expiration))?$this->form_validation->set_value('expiration',$plans->expiration):$this->form_validation->set_value('expiration',0),
             'class' => 'form-control',
             'onkeypress'   => 'return isNumberKey(event)',
 		);
@@ -171,40 +205,15 @@ startOpen: false,
         redirect(site_url('/plans'), 'refresh');
     }
     
-    public function recommends($plan_id,$recommendation)
+    public function change_status($attributes,$arg)
     {
-        if($recommendation=='no'){
-            $data = array(
-                       'plan_id'        => $plan_id,
-                       'recommended'    => 'yes',
-                       'last_updated'   => date("Y-m-d H:i:s")
-                   );
-        }else{
-            $data = array(
-                       'plan_id'        => $plan_id,
-                       'recommended'    => 'no',
-                       'last_updated'   => date("Y-m-d H:i:s")
-                   );
-        }
-        $this->data['message'] =($this->plans_model->update_plan($data))?'Recommendation of plan has been changed':'Something happen, please try again!';
-        redirect(site_url('/plans'), 'refresh');
-    }
-    
-    public function status($plan_id,$status)
-    {
-        if($status=='active'){
-            $data = array(
-                       'plan_id'        => $plan_id,
-                       'status'         => 'inactive',
-                       'last_updated'   => date("Y-m-d H:i:s")
-                   );
-        }else{
-           $data = array(
-                       'plan_id'        => $plan_id,
-                       'status'         => 'active',
-                       'last_updated'   => date("Y-m-d H:i:s")
-                   ); 
-        }
+
+        $data = array(
+                'plan_id'        => $arg[0],
+                $attributes      => $arg[1],
+                'last_updated'   => date("Y-m-d H:i:s")
+            );
+
         $this->data['message'] =($this->plans_model->update_plan($data))?'Successfully Update Plan':'Something happen, please try again!';
         redirect(site_url('/plans'), 'refresh');
     }

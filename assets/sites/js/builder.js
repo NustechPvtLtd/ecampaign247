@@ -11,23 +11,23 @@ var pageContainer = "#page";
 
 var editableItems = new Array();
 
-editableItems['.frameCover'] = [];
+editableItems['.frameCover'] = ['margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['span.fa'] = ['color', 'font-size'];
 editableItems['.bg.bg1'] = ['background-color'];
 editableItems['nav a, a.edit'] = ['color', 'font-weight', 'text-transform'];
-editableItems['h1'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['h2'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['h3'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['h4'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['h5'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['p'] = ['color', 'font-size', 'background-color', 'font-family'];
-editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color', 'border'];
-editableItems['img'] = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width'];
+editableItems['h1'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['h2'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['h3'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['h4'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['h5'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['p'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color', 'border', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['img'] = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['hr.dashed'] = ['border-color', 'border-width'];
 editableItems['.divider > span'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['hr.shadowDown'] = ['margin-top', 'margin-bottom'];
 editableItems['.footer a'] = ['color'];
-editableItems['.item'] = ['color', 'font-size', 'background-color', 'font-family'];
+editableItems['.item'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['.bg.bg1, .bg.bg2, .header10, .header11'] = ['background-image', 'background-color'];
 
 var editableItemOptions = new Array();
@@ -642,6 +642,7 @@ function styleClick(el) {
     $('a#img_Link').parent().hide();
     $('a#icon_Link').parent().hide();
     $('a#video_Link').parent().hide();
+    $('a#document_Link').parent().hide();
 
 
     //is the element an ancor tag?
@@ -774,7 +775,7 @@ function styleClick(el) {
 
 
     }
-
+    
     if ($(el).attr('data-type') == 'video') {
 
         $('a#video_Link').parent().show();
@@ -794,8 +795,6 @@ function styleClick(el) {
 
         } else {//youtube
 
-            //temp = $(el).prev().attr('src').split('/');
-
             var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
             var match = $(el).prev().attr('src').match(regExp);
 
@@ -804,10 +803,25 @@ function styleClick(el) {
 
         }
 
+    }
+    
+    
+    if ($(el).attr('data-type') == 'document') {
 
+        $('a#document_Link').parent().show();
 
-        //alert( $(el).prev().attr('src') )
+        $('a#document_Link').click();
 
+        //inject current document
+
+        temp = $(el).prev().attr('src').split('/');
+
+//        var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+//        var match = $(el).prev().attr('src').match(regExp);
+//
+//        $('#document_Tab input#documentURL').val(match[1]);
+
+        alert( $(el).prev().attr('src') );
 
     }
 
@@ -1554,8 +1568,44 @@ $(function() {
     for (var key in _Elements.elements) {
 
         niceKey = key.toLowerCase().replace(" ", "_");
+        
+        //$('<li class="" ><span aria-hidden="true" class="glyphicon glyphicon-minus"></span><a href="" id="'+niceKey+'">'+key+'</a></li>').appendTo('#menu #main ul#elements');
+        if (niceKey == "headers") {
 
-        $('<li><a href="" id="' + niceKey + '">' + key + '</a></li>').appendTo('#menu #main ul#elements');
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-header"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "content_sections") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-list-alt "></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "dividers") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-minus"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "portfolios") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-briefcase"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "team") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-user"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "pricing_tables") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-th-list"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "ecommerce_tables" && display_ecom=='yes') {
+
+            $('<li class="ecommerce_tables" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-th-list"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "contact") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-home"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
+        else if (niceKey == "footers") {
+
+            $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-import"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
+        }
 
         for (x = 0; x < _Elements.elements[key].length; x++) {
 
@@ -1880,7 +1930,7 @@ $(function() {
     $('button#updateContentInFrameSubmit').click(function() {
 
         //alert( elToUpdate.text() )
-
+        console.log(elToUpdate.html());
         elToUpdate.html($('#editContentModal #contentToEdit').redactor('code.get')).css({'outline': '', 'cursor': ''})
 
         $('#editContentModal textarea').each(function() {
@@ -3080,8 +3130,8 @@ $(function() {
             } else {//success
 
                 $('#pageSettingsModal .modal-alerts').append($(ret.responseHTML))
-                $('#siteTitle').text( ret.siteName );
-                $('#site_'+ret.siteID+' .window .top b').text( ret.siteName )
+                $('#siteTitle').text(ret.siteName);
+                $('#site_' + ret.siteID + ' .window .top b').text(ret.siteName)
                 //self destruct success alert
                 setTimeout(function() {
                     $('#pageSettingsModal .modal-alerts > *').fadeOut(500, function() {

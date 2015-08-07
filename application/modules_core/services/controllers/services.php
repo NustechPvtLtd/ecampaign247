@@ -14,7 +14,7 @@ class Services extends MY_Controller {
     function index()
     {
         $data['title'] = 'Home';
-        $data['pageMetaDescription'] = 'ecampaign247.com';
+        $data['pageMetaDescription'] = 'webzero.in';
         $data['pageHeading'] = 'Services';
         $data['css'] = array(
             '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/customer/css/style.css"/>'

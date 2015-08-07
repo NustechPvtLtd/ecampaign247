@@ -112,6 +112,7 @@
      		  	<li style="display: none;"><a href="#image_Tab" id="img_Link"><span class="fui-image"></span> <?php echo $this->lang->line('detail_editor_tab_image')?></a></li>
      		  	<li style="display: none;"><a href="#icon_Tab" id="icon_Link"><span class="fa fa-flag"></span> <?php echo $this->lang->line('detail_editor_tab_icons')?></a></li>
      		  	<li style="display: none;"><a href="#video_Tab" id="video_Link"><span class="fa fa-youtube-play"></span> <?php echo $this->lang->line('detail_editor_tab_video')?></a></li>
+     		  	<li style="display: none;"><a href="#document_Tab" id="document_Link"><span class="fa fa-document"></span> <?php echo $this->lang->line('detail_editor_tab_document')?></a></li>
      		</ul><!-- /tabs -->
         	
         	<div class="tab-content">
@@ -178,6 +179,21 @@
        				</p>
        				
        				<a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> Use Image Library</a>
+       				
+     			</div><!-- /.tab-pane -->
+                
+     			<!-- /tabs -->
+     			<div class="tab-pane documentFileTab" id="document_Tab">
+       				
+       				<label><?php echo $this->lang->line('enter_document_path')?>:</label>
+       				
+       				<input type="text" class="form-control" id="documentURL" placeholder="Enter an document URL" value="">
+       				
+       				<p class="text-center or">
+       					<span><?php echo $this->lang->line('OR')?></span>
+       				</p>
+       				
+       				<a href="#documentModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> Use Document Library</a>
        				
      			</div><!-- /.tab-pane -->
      			
@@ -2081,6 +2097,89 @@
     	  	</div><!-- /.modal-dialog -->
     	  	    	  	
     	</div><!-- /.modal -->
+        
+    	<div class="modal fade documentModal" id="documentModal" tabindex="-1" role="dialog" aria-hidden="true">
+    	    	    		    		    		
+    		<div class="modal-dialog">
+    	    	<div class="modal-content">
+    	      		<div class="modal-header">
+    	        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->lang->line('modal_close')?></span></button>
+    	        		<h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> <?php echo $this->lang->line('modal_documentlibrary_heading')?></h4>
+    	      		</div>
+    	      		<div class="modal-body">
+    	      		
+    	      			<div class="loader" style="display: none;">
+    	      				<img src="<?php echo base_url();?>assets/sites/images/loading.gif" alt="Loading...">
+    	      				<?php echo $this->lang->line('modal_documentlibrary_loadertext')?>
+    	      			</div>
+    	      			    	      		
+    	      			<div class="modal-alerts">
+    	      				
+    	      			</div>
+    	      			    	      				      		
+    	      			<div class="modal-body-content">
+    	      				
+    	      				<ul class="nav nav-tabs nav-append-content">
+    	      					<li class="active"><a href="#myDocumentTab"><?php echo $this->lang->line('modal_documentlibrary_tab_mydocument')?></a></li>
+    	      					<li id="uploadTabLI"><a href="#uploadTab"><?php echo $this->lang->line('modal_documentlibrary_tab_uploaddocument')?></a></li>
+    	      				</ul> <!-- /tabs -->
+    	      				
+    	      				<div class="tab-content">
+    	      				
+    	      					<div class="tab-pane active" id="myDocumentTab">
+    	      						
+    	      						<?php if( isset($userImages) ):?>
+    	      						
+    	      							<?php $this->load->view("partials/myimages.php", array('userImages' => $userImages));?>
+    	      							    	      							
+    	      						<?php else:?>
+    	      							
+    	      							<!-- Alert Info -->
+    	      							<div class="alert alert-info">
+    	      								<button type="button" class="close fui-cross" data-dismiss="alert"></button>
+    	      								<?php echo $this->lang->line('modal_documentlibrary_message_nodocument');?>
+    	      							</div>
+    	      							
+    	      						<?php endif;?>
+    	      							   					
+    	      					</div><!-- /.tab-pane -->
+    	      					
+    	      					<div class="tab-pane" id="uploadTab">
+    	      						
+<!--    	      						<form id="documentUploadForm" action="<?php echo site_url('sites/assets/imageUploadAjax/'.$siteData['site']->sites_id);?>">
+    	      						
+    	      							<div class="fileinput fileinput-new" data-provides="fileinput">
+    	      								<div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
+    	      						  		<div>
+    	      						    		<span class="btn btn-primary btn-embossed btn-file">
+    	      						      			<span class="fileinput-new"><span class="fui-image"></span>&nbsp;&nbsp;<?php echo $this->lang->line('modal_imagelibrary_button_selectimage')?></span>
+    	      						      			<span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;<?php echo $this->lang->line('modal_imagelibrary_button_change')?></span>
+    	      						      			<input type="file" name="imageFile" id="imageFile">
+    	      						    		</span>
+    	      						    		<a href="#" class="btn btn-primary btn-embossed fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>&nbsp;&nbsp;<?php echo $this->lang->line('modal_imagelibrary_button_remove')?></a>
+    	      						  		</div>
+    	      							</div>
+    	      						
+    	      						</form>-->
+    	      						
+    	      						<hr>
+    	      						
+    	      						<button type="button" class="btn btn-primary btn-embossed btn-wide upload btn-block disabled" id="uploadImageButton"><span class="fui-upload"></span> <?php echo $this->lang->line('modal_documentlibrary_button_upload')?></button>
+    	      					
+    	      					</div><!-- /.tab-pane -->
+    	      						
+    	      				</div> <!-- /tab-content -->
+    	      				
+    	      			</div>
+    	        		    	        		
+    	      		</div><!-- /.modal-body -->
+    	      		<div class="modal-footer">
+    	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><?php echo $this->lang->line('modal_cancelclose')?></button>
+    	      		</div>
+    	    	</div><!-- /.modal-content -->
+    	  	</div><!-- /.modal-dialog -->
+    	  	    	  	
+    	</div><!-- /.modal -->
     	
     	
     	<!-- delete single block popup -->
@@ -2377,9 +2476,21 @@
     		makeSortable( $(this) );
     	
     	});
+    	setHeight();
+
+    	allEmpty();
     	
-    	$('#pageList li iframe').each(function(){
+    	<?php endif;?>
     	
+    });    
+    function setHeight(){
+            $('#pageList li iframe').each(function(){
+//            var iFrameID = document.getElementById($(this).attr('id'));
+//            if(iFrameID) {
+//                  // here you can make the height, I delete it first, then I make it again
+//                  iFrameID.height = "";
+//                  iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+//            } 
     		theHeight = $(this).attr('data-height')*0.8;
     		
     		//add height to frames array
@@ -2407,14 +2518,7 @@
 			$(this).closest('li').find('.zoomer-cover').append( htmlButton ); 	
     		
     	});
-    	
-    	
-    	allEmpty();
-    	
-    	<?php endif;?>
-    	
-    });    
-    
+    }
     </script>
     <script>
     <?php $this->load->view("shared/js_sitesettings.php");?>

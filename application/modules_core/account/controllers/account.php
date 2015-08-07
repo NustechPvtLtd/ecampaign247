@@ -8,6 +8,7 @@ class Account extends MY_Controller {
         parent::__construct();
         $this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
         $this->lang->load('auth');
+        $this->lang->load('plans');
         $this->load->model('addressmodel');
         $this->load->model('account/plans_model');
         $this->data['title'] = ucfirst($this->router->fetch_class());

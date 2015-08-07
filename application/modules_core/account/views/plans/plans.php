@@ -17,6 +17,9 @@
                     <th><?php echo lang('expiration');?></th>
                     <th><?php echo lang('plan_recommends');?></th>
                     <th><?php echo lang('plan_status');?></th>
+                    <th><?php echo lang('visitor_count');?></th>
+                    <th><?php echo lang('eccommerce');?></th>
+                    <th><?php echo lang('premium_domain');?></th>
                     <th><?php echo lang('plan_date_added');?></th>
                     <th></th>
                 </tr>
@@ -31,6 +34,9 @@
                     <th><?php echo lang('expiration');?></th>
                     <th><?php echo lang('plan_recommends');?></th>
                     <th><?php echo lang('plan_status');?></th>
+                    <th><?php echo lang('visitor_count');?></th>
+                    <th><?php echo lang('eccommerce');?></th>
+                    <th><?php echo lang('premium_domain');?></th>
                     <th><?php echo lang('plan_date_added');?></th>
                     <th></th>
                 </tr>
@@ -53,8 +59,11 @@
                         ?></td>
                         <td><?php echo ($plan->discount_type=='percentage')? htmlspecialchars(($plan->discount)?$plan->discount.'%':'',ENT_QUOTES,'UTF-8'): '<i class="fa fa-inr"></i>'.htmlspecialchars($plan->discount,ENT_QUOTES,'UTF-8');?></td>
                         <td><?php echo htmlspecialchars($plan->expiration.' '.$plan->expiration_type,ENT_QUOTES,'UTF-8')?></td>
-                        <td><?php echo anchor("plans/recommends/".$plan->plan_id.'/'.$plan->recommended, ($plan->recommended=='yes')?  lang('plan_recommends_yes') : lang('plan_recommends_no')) ;?></td>
-                        <td><?php echo anchor("plans/status/".$plan->plan_id.'/'.$plan->status, ($plan->status=='active')?  lang('plan_status_active') : lang('plan_status_inactive')) ;?></td>
+                        <td><?php echo anchor("plans/recommended/".$plan->plan_id.'/'.(($plan->recommended=='yes')?'no':'yes'), ucfirst($plan->recommended)) ;?></td>
+                        <td><?php echo anchor("plans/status/".$plan->plan_id.'/'.(($plan->status=='active')?'inactive':'active'), ucfirst($plan->status)) ;?></td>
+                        <td><?php echo anchor("plans/visitor_count/".$plan->plan_id.'/'.(($plan->visitor_count=='active')?'inactive':'active'), ucfirst($plan->visitor_count)) ;?></td>
+                        <td><?php echo anchor("plans/eccommerce/".$plan->plan_id.'/'.(($plan->eccommerce=='active')?'inactive':'active'), ucfirst($plan->eccommerce)) ;?></td>
+                        <td><?php echo anchor("plans/premium_domain/".$plan->plan_id.'/'.(($plan->premium_domain=='active')?'inactive':'active'), ucfirst($plan->premium_domain)) ;?></td>
                         <td><?php echo date("F jS, Y",strtotime($plan->date_added));?></td>
                         <td><?php echo anchor('plans/update/'.$plan->plan_id,'<span class="glyphicon glyphicon-pencil"></span>');?><?php echo anchor('plans/delete/'.$plan->plan_id, '<span class="glyphicon glyphicon-remove"></span>')?></td>
                     </tr>
