@@ -15,7 +15,7 @@ class Login extends MX_Controller {
 		$this->lang->load('auth');
         $this->data['title'] = $this->router->fetch_method();
         $this->data['pageMetaDescription'] = $this->router->fetch_class().'-'.$this->router->fetch_method();
-
+        $this->load->model('account/plans_model');
 	}
 	
 	function index()
@@ -100,11 +100,14 @@ class Login extends MX_Controller {
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			//list the users
-			$this->data['users'] = $this->ion_auth->users()->result();
+			$this->data['users'] = $this->ion_auth->users(array('individuals','comp-admin'))->result();
+            
 			foreach ($this->data['users'] as $k => $user)
 			{
 				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+				$this->data['users'][$k]->plans = $this->plans_model->get_plans_by_id($user->price_plan_id);
 			}
+
 			$this->data['title'] = 'Users';
 			$this->data['pageMetaDescription'] = 'webzero.in';
 			$this->data['pageHeading'] = lang('index_heading');

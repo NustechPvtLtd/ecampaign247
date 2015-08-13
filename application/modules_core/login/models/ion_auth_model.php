@@ -868,7 +868,7 @@ class Ion_auth_model extends CI_Model
 	 * @return bool
 	 * @author Mathew
 	 **/
-	public function register($username, $password, $email, $additional_data = array(), $groups = array())
+	public function register($username, $password, $email, $additional_data = array(), $groups = array(), $plans=array())
 	{
 		$this->trigger_events('pre_register');
 
@@ -889,6 +889,11 @@ class Ion_auth_model extends CI_Model
 			$this->set_error('account_creation_missing_default_group');
 			return FALSE;
 		}
+		elseif ( !$this->config->item('default_plan', 'ion_auth') && empty($plans) )
+		{
+			$this->set_error('account_creation_missing_default_plan');
+			return FALSE;
+		}
 
 		//check if the default set in config exists in database
 		$query = $this->db->get_where($this->tables['groups'],array('name' => $this->config->item('default_group', 'ion_auth')),1)->row();
@@ -900,7 +905,7 @@ class Ion_auth_model extends CI_Model
 
 		//capture default group details
 		$default_group = $query;
-
+        
 		// If username is taken, use username1 or username2, etc.
 		if ($this->identity_column != 'username')
 		{
@@ -921,12 +926,13 @@ class Ion_auth_model extends CI_Model
 
 		// Users table.
 		$data = array(
-		    'username'   => $username,
-		    'password'   => $password,
-		    'email'      => $email,
-		    'ip_address' => $ip_address,
-		    'created_on' => time(),
-		    'active'     => ($manual_activation === false ? 1 : 0)
+		    'username'      => $username,
+		    'password'      => $password,
+		    'email'         => $email,
+		    'ip_address'    => $ip_address,
+		    'created_on'    => time(),
+		    'price_plan_id' => $this->config->item('default_plan', 'ion_auth'),
+		    'active'        => ($manual_activation === false ? 1 : 0)
 		);
 
 		if ($this->store_salt)
@@ -958,7 +964,7 @@ class Ion_auth_model extends CI_Model
 				$this->add_to_group($group, $id);
 			}
 		}
-
+        
 		$this->trigger_events('post_register');
 
 		return (isset($id)) ? $id : FALSE;
@@ -983,7 +989,7 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('extra_where');
 
 		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, avatar, social_account, last_login, visitor_count, eccommerce, premium_domain, expiration_type, expiration, plan_id')
-                          ->join('price_plan', 'price_plan.plan_id = users.price_plan_id')
+                          ->join('price_plan', 'price_plan.plan_id = users.price_plan_id','left')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
 		    			  ->order_by('id', 'desc')
@@ -2228,7 +2234,7 @@ class Ion_auth_model extends CI_Model
 			return $this->errors;
 		}
 	}
-
+    
 	protected function _filter_data($table, $data)
 	{
 		$filtered_data = array();

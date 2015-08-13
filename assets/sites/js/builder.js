@@ -1568,7 +1568,7 @@ $(function() {
     for (var key in _Elements.elements) {
 
         niceKey = key.toLowerCase().replace(" ", "_");
-        
+        console.log(display_ecom);
         //$('<li class="" ><span aria-hidden="true" class="glyphicon glyphicon-minus"></span><a href="" id="'+niceKey+'">'+key+'</a></li>').appendTo('#menu #main ul#elements');
         if (niceKey == "headers") {
 

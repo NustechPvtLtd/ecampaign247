@@ -21,6 +21,7 @@
             </div>
         </div><!-- ./optionPane -->
     </form>
+    <?php if(userdata( 'premium_domain' )!='inactive'):?>
     <div class="optionPane">
         <h6>Purchased Domain</h6>                
         <div class="product-purchased" id="domain-name">
@@ -1032,7 +1033,7 @@
             </div>
         </div>
     </div><!-- ./optionPane -->
-
+    <?php endif;?>
 </div><!-- /.siteSettingsWrapper -->
 <script>
     $(document).ready(function() {

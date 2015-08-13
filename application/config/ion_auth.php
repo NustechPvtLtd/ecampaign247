@@ -84,7 +84,8 @@ $config['salt_prefix']    = version_compare(PHP_VERSION, '5.3.7', '<') ? '$2a$' 
  */
 $config['site_title']                 = "Web Zero";       // Site Title, example.com
 $config['admin_email']                = "info@webzero.in"; // Admin Email, admin@example.com
-$config['default_group']              = 'comp-admin';           // Default group, use name
+$config['default_group']              = 'individuals';           // Default group, use name
+$config['default_plan']               = 1;           // Default plan, use id
 $config['admin_group']                = 'admin';             // Default administrators group, use name
 $config['identity']                   = 'email';             // A database column which is used to login with
 $config['min_password_length']        = 6;                   // Minimum Required Length of Password

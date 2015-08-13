@@ -8,10 +8,17 @@
 class Plans extends MY_Controller {
     
     public $data = array();
+    public $_salt;
+    public $_url;
+    public $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+
+    
+    
     function __construct()
     {
         parent::__construct();
         $this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
+        $this->load->library('PayUMoney');
         $this->lang->load('auth');
         $this->lang->load('plans');
         $this->load->model('account/plans_model');
@@ -38,6 +45,18 @@ class Plans extends MY_Controller {
             break;
             case 'recommended':
              $this->change_status($method,$args);
+            break;
+            case 'success':
+             $this->payment_success($args);
+            break;
+            case 'failure':
+             $this->payment_failure($args);
+            break;
+            case 'cancel':
+             $this->payment_cancel($args);
+            break;
+            case 'upgrade':
+             $this->upgrade_account($args);
             break;
             default:
                 if(empty($args)){
@@ -216,5 +235,154 @@ startOpen: false,
 
         $this->data['message'] =($this->plans_model->update_plan($data))?'Successfully Update Plan':'Something happen, please try again!';
         redirect(site_url('/plans'), 'refresh');
+    }
+    
+    public function payment_success()
+    {
+        $user = $this->ion_auth_model->user()->result();
+        $status=$_POST["status"];
+        $firstname=$_POST["firstname"];
+        $amount=$_POST["amount"];
+        $txnid=$_POST["txnid"];
+        $posted_hash=$_POST["hash"];
+        $key=$_POST["key"];
+        $productinfo=$_POST["productinfo"];
+        $email=$_POST["email"];
+        $salt=$this->config->item('SALT', 'payu_money');
+
+        If (isset($_POST["additionalCharges"])) {
+               $additionalCharges=$_POST["additionalCharges"];
+                $retHashSeq = $additionalCharges.'|'.$salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+
+                          }
+            else {	  
+
+                $retHashSeq = $salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+
+                 }
+                 $hash = hash("sha512", $retHashSeq);
+
+               if ($hash != $posted_hash) {
+                   $this->data['error'] = "Invalid Transaction. Please try again";
+                   }
+               else {
+                   
+                  $this->data['status'] = $status;
+                  $this->data['txnid'] = $txnid;
+                  $this->data['amount'] = $amount;
+                  $plan_id = userdata('upgrade_plan_id');
+                  $data['price_plan_id'] = $plan_id;
+                  $user = $this->ion_auth_model->update($user[0]->id,$data);
+              }
+              
+        $this->template->load('guest', 'account', 'plans/success', $this->data);
+    }
+    
+    public function payment_failure()
+    {
+        $status=$_POST["status"];
+        $firstname=$_POST["firstname"];
+        $amount=$_POST["amount"];
+        $txnid=$_POST["txnid"];
+
+        $posted_hash=$_POST["hash"];
+        $key=$_POST["key"];
+        $productinfo=$_POST["productinfo"];
+        $email=$_POST["email"];
+        $salt=$this->config->item('SALT', 'payu_money');
+
+        If (isset($_POST["additionalCharges"])) {
+               $additionalCharges=$_POST["additionalCharges"];
+                $retHashSeq = $additionalCharges.'|'.$salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+
+                          }
+            else {	  
+
+                $retHashSeq = $salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+
+                 }
+                 $hash = hash("sha512", $retHashSeq);
+
+               if ($hash != $posted_hash) {
+                   $this->data['error'] = "Invalid Transaction. Please try again";
+                   }
+               else {
+                   
+                 $this->data['status'] = $status;
+                  $this->data['txnid'] = $txnid;
+
+                 } 
+    }
+    
+    public function payment_cancel()
+    {
+        var_dump($_REQUEST);
+    }
+    
+    public function upgrade_account()
+    {
+        $this->data['pageHeading'] = 'Payment Description';
+        $this->data['message'] ='';
+        $this->load->config('payu_money', TRUE);
+        $user = $this->ion_auth_model->user()->result();
+        if(!$user[0]->phone || !$user[0]->first_name ){
+            userdata('complete_profile', TRUE);
+            redirect('account/plans','location');
+        }
+        if(empty($_POST['plan_price'])){
+            redirect('account/plans','location');
+        }
+        $this->_salt = $this->config->item('SALT', 'payu_money');
+        $this->_url = $this->config->item('PAYU_BASE_URL', 'payu_money');
+        $this->data['key'] = $this->config->item('MERCHANT_KEY', 'payu_money');
+        $this->data['surl'] = $this->config->item('PAYU_SUCCESS_URL', 'payu_money');
+        $this->data['furl'] = $this->config->item('PAYU_FAILURE_URL', 'payu_money');
+        $this->data['curl'] = $this->config->item('PAYU_CANCEL_URL', 'payu_money');
+        $this->data['service_provider'] = 'payu_paisa';
+        $this->data['txnid'] = $this->_genrate_txnid();
+        $this->data['amount'] = floatval($_POST['plan_price']);
+        $this->data['firstname'] = $user[0]->first_name;
+        $this->data['lastname'] = $user[0]->last_name;
+        $this->data['email'] = $user[0]->email;
+        $this->data['phone'] = $user[0]->phone;
+        
+        $json_data = json_encode(array(
+                "paymentParts"=>array(
+                    "name" => $_POST['plan_name'],
+                    "description" => "Plan upgradation",
+                    "value" => $_POST['plan_price'],
+                    "isRequired" => "true",
+                    "settlementEvent" => "EmailConfirmation"
+                ),
+                "paymentIdentifiers"=>array(
+                    "field" => "plan_id",
+                    "value" => $_POST['plan_id']
+                )
+            ));
+        userdata('upgrade_plan_id', $_POST['plan_id']);
+        $this->data['productinfo'] = "Plan upgraded to ".$_POST['plan_name'];
+        $this->data['hash'] = $this->_genrate_hash($this->data);
+        $this->data['action'] = $this->_url . '_payment';
+
+        $this->template->load('main', 'account', 'plans/upgrade', $this->data);
+
+    }
+
+    private function _genrate_hash($posted){
+
+        $hashVarsSeq = explode('|', $this->hashSequence);
+        $hash_string = '';
+        foreach($hashVarsSeq as $hash_var) {
+            $hash_string .= isset($posted[$hash_var]) ? $posted[$hash_var] : '';
+            $hash_string .= '|';
+        }
+        $hash_string .= $this->_salt;
+
+        return strtolower(hash('sha512', $hash_string));
+ 
+    }
+    
+    private function _genrate_txnid(){
+        return substr(hash('sha256', mt_rand() . microtime()), 0, 20);
     }
 }

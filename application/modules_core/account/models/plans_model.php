@@ -20,7 +20,7 @@ class Plans_model extends CI_Model
     function get_plans_by_id($plan_id){
         $this->db->select();
         $this->db->where('plan_id', $plan_id);
-        $this->db->where('deleted', 0);
+//        $this->db->where('deleted', 0);
         $query = $this->db->get('price_plan');
         if($query->result()){
             $return = $query->result();

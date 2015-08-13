@@ -10,6 +10,7 @@
             <div class="box box-primary no-top-border">
                 <div class="box-body">
                     <div class="clearfix"><!-- --></div>
+                    <?php if(!$this->ion_auth->is_admin()):?>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_fname_label', 'first_name', 'required');?>
                         <?php echo form_input($first_name);?>
@@ -19,14 +20,23 @@
                         <?php echo form_input($last_name);?>
                     </div>
                     <div class="clearfix"><!-- --></div>
+                    <?php endif;?>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_email_label', 'email', 'required');?>
                         <?php echo form_input($email);?>
                     </div>
+                    <?php if(!$this->ion_auth->is_admin()):?>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_phone_label', 'phone', 'required');?>
                         <?php echo form_input($phone);?>
                     </div>
+                    <?php endif;?>
+                    <?php if($this->ion_auth->is_admin()):?>
+                    <div class="form-group col-lg-6">
+                        <?php echo lang('edit_user_price_plan_label', 'price_plan_id', 'required');?>
+                        <?php echo form_dropdown('price_plan_id', $plans, $price_plan_id, ' class="form-control"');?>
+                    </div>
+                    <?php endif;?>
                     <div class="clearfix"><!-- --></div>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_password_label', 'password');?>
@@ -36,6 +46,7 @@
                         <?php echo lang('edit_user_password_confirm_label', 'password_confirm');?>
                         <?php echo form_input($password_confirm);?>
                     </div>
+                    <?php if(!$this->ion_auth->is_admin()):?>
                     <div class="clearfix"><!-- --></div>
                     <div class="form-group col-lg-12">
                         <?php echo lang('edit_user_company_label', 'company');?>
@@ -46,12 +57,15 @@
                     <hr>
                     <div class="form-group col-lg-6">
                         <div class="col-lg-2">
-                            <img class="img-thumbnail" src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.$avatar;?>">
+                            <img class="img-thumbnail" src="<?php echo base_url('elements');?>/images/uploads/<?= $avatar;?>">
                         </div>
                         <div class="col-lg-10">
                             <button type="button" class="btn btn-primary" id="uploadImageButton"><?= ($avatar)?'Change Avatar':'Upload Avatar'?></button>
                         </div>
                     </div>
+                    <?php endif;?>
+                    <?php if($this->ion_auth->is_admin()):?>
+                    <?php endif;?>
                     <div class="clearfix"><!-- --></div>
                     <div class="clearfix"><!-- --></div>
                     <?php echo form_hidden($csrf); ?>
@@ -73,7 +87,7 @@
         var files = $('.img-thumbnail');
         new AjaxUpload(btnUpload, {
             contentType: "text/html",
-            action: '<?php echo site_url('user/upload_avatar'); ?>',
+            action: '<?php echo site_url('user/upload_avatar/'); ?>',
             name: 'uploadfile',
             cache: false,
             onSubmit: function(file, ext) {

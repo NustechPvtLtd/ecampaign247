@@ -4,9 +4,9 @@ class Sites extends MY_Controller {
 
     public $data = array();
     public $pages = array();
-    private $_hostName = 'webzero.in';
+    private $_hostName = 'www.webzero.in';
 	private $_userName = 'webzero';
-	private $_password = 'koregaonpark123';
+	private $_password = 'kharadi123!@#';
     
 	function __construct()
 	{

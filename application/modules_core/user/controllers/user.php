@@ -83,14 +83,27 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         echo json_encode($return);
     }
     
-    public function profile()
+    public function profile($id = NULL)
     {
-        $user = $this->ion_auth->user()->row();
+        $this->load->model('account/plans_model');
+        if($id){
+           $user = $this->ion_auth->user($id)->row();
+        }else{
+           $user = $this->ion_auth->user()->row(); 
+        }
+
         //validation rule
-        $this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'required');
-        $this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required');
-        $this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'required');
-        $this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'));
+       if(!$this->ion_auth->is_admin()){
+            $this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'required');
+            $this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required');
+       }
+       if($this->ion_auth->is_admin()){
+            $this->form_validation->set_rules('price_plan_id', $this->lang->line('edit_user_validation_price_plan_label'), 'required');
+       }
+        if(!$this->ion_auth->is_admin()){
+            $this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'));
+            $this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'required');
+        }
         $this->form_validation->set_rules('email', $this->lang->line('edit_user_validation_email_label'), 'required');
         $this->data['message'] ='';
 		if (isset($_POST) && !empty($_POST))
@@ -111,17 +124,24 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
             
             if ($this->form_validation->run() === TRUE)
 			{
-				$data = array(
-					'first_name' => $this->input->post('first_name'),
-					'last_name'  => $this->input->post('last_name'),
-					'company'    => $this->input->post('company'),
-					'phone'      => $this->input->post('phone'),
-				);
+                if(!$this->ion_auth->is_admin()){
+                    $data = array(
+                        'first_name' => $this->input->post('first_name'),
+                        'last_name'  => $this->input->post('last_name'),
+                        'company'    => $this->input->post('company'),
+                        'phone'      => $this->input->post('phone'),
+                    );
+                }
 
 				//update the password if it was posted
 				if ($this->input->post('password'))
 				{
 					$data['password'] = $this->input->post('password');
+				}
+                
+				if ($this->input->post('price_plan_id'))
+				{
+					$data['price_plan_id'] = $this->input->post('price_plan_id');
 				}
 
                 //check to see if we are updating the user
@@ -129,6 +149,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
 			    {
 			    	//redirect them back to the admin page if admin, or to the base url if non admin
 				    $this->data['message'] =  $this->ion_auth->messages() ;
+                    ($this->ion_auth->is_admin())?redirect('/','location'):userdata('complete_profile',FALSE);
 			    }
 			    else
 			    {
@@ -196,7 +217,16 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
 			'type' => 'password',
             'class' => 'form-control',
 		);
-        $this->data['avatar'] = $user->avatar;
+        $this->data['price_plan_id'] = (isset($user->price_plan_id))?$this->form_validation->set_value('price_plan_id',$user->price_plan_id):'';
+        foreach ($this->plans_model->get_plans() as $plan) {
+            $plans[$plan->plan_id] = $plan->name;
+        }
+        $this->data['plans'] = $plans;
+//        echo '<pre>';
+//        print_r($this->data['plans']);
+//        echo '</pre>';
+//        die(0);
+        $this->data['avatar'] = (($id)?$id:$user->id).'/'.$user->avatar;
         $this->data['js'] = array(
             '<script type="text/javascript" src="'.base_url().'assets/js/ajaxupload.3.5.js"></script>',
             '<script type="text/javascript" src="'.base_url().'assets/js/jquery.maskedinput.js"></script>',

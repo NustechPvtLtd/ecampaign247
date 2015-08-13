@@ -17,7 +17,9 @@
         		  	<ul class="dropdown-menu dropdown-inverse">
         		    	<li><a href="#siteSettings" id="siteSettingsButton" class="siteSettingsModalButton" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo 'URL Settings'/*$this->lang->line('actionbuttons_sitesettings')*/?></a></li>
         		    	<li><a href="#pageSettingsModal" id="pageSettingsButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo 'SEO Settings'/*$this->lang->line('actionbuttons_pagesettings')*/?></a></li>
+                        <?php if(userdata( 'premium_domain' )!='inactive'):?>
         		    	<li><a href="#premiumDomainModal" id="premiumDomainButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_premiumdomain')?></a></li>
+                        <?php endif;?>
         		  	</ul>
         		</div>
         	            		
@@ -2519,10 +2521,9 @@
     		
     	});
     }
+    var display_ecom = '<?php echo (userdata( 'eccommerce' )=='inactive')?'no':'yes';?>';
     </script>
     <script>
     <?php $this->load->view("shared/js_sitesettings.php");?>
     </script>
-    <script>
-    <?php $this->load->view("shared/js_account.php");?>
-    </script>
+

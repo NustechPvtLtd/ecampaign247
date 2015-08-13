@@ -37,6 +37,9 @@ $lang['index_lname_th']          = 'Last Name';
 $lang['index_email_th']          = 'Email';
 $lang['index_groups_th']         = 'Groups';
 $lang['index_status_th']         = 'Status';
+$lang['index_last_login_th']     = 'Last Login';
+$lang['index_created_on_th']     = 'Created On';
+$lang['index_active_plan_th']    = 'Active Plan';
 $lang['index_action_th']         = 'Action';
 $lang['index_active_link']       = 'Active';
 $lang['index_inactive_link']     = 'Inactive';
@@ -95,6 +98,8 @@ $lang['edit_user_validation_company_label']          = 'Company Name';
 $lang['edit_user_validation_groups_label']           = 'Groups';
 $lang['edit_user_validation_password_label']         = 'Password';
 $lang['edit_user_validation_password_confirm_label'] = 'Password Confirmation';
+$lang['edit_user_validation_price_plan_label']       = 'User Plan';
+$lang['edit_user_price_plan_label']                  = 'User Plan';
 
 // Edit Address
 $lang['edit_blng_heading']          = 'Billing Address';

@@ -11,7 +11,10 @@
             <th><?php echo lang('index_lname_th');?></th>
             <th><?php echo lang('index_email_th');?></th>
             <th><?php echo lang('index_groups_th');?></th>
+            <th><?php echo lang('index_active_plan_th');?></th>
             <th><?php echo lang('index_status_th');?></th>
+            <th><?php echo lang('index_created_on_th');?></th>
+            <th><?php echo lang('index_last_login_th');?></th>
             <th><?php echo lang('index_action_th');?></th>
         </tr>
     </thead>
@@ -22,7 +25,10 @@
             <th><?php echo lang('index_lname_th');?></th>
             <th><?php echo lang('index_email_th');?></th>
             <th><?php echo lang('index_groups_th');?></th>
+            <th><?php echo lang('index_active_plan_th');?></th>
             <th><?php echo lang('index_status_th');?></th>
+            <th><?php echo lang('index_created_on_th');?></th>
+            <th><?php echo lang('index_last_login_th');?></th>
             <th><?php echo lang('index_action_th');?></th>
         </tr>
     </tfoot>
@@ -35,11 +41,16 @@
                 <td><?php echo htmlspecialchars($user->email,ENT_QUOTES,'UTF-8');?></td>
                 <td>
                     <?php foreach ($user->groups as $group):?>
-                        <?php echo anchor("login/edit_group/".$group->id, htmlspecialchars($group->name,ENT_QUOTES,'UTF-8')) ;?>&nbsp;&nbsp;&nbsp;
+                        <?php echo anchor("login/edit_group/".$group->id, htmlspecialchars($group->description,ENT_QUOTES,'UTF-8')) ;?>&nbsp;&nbsp;&nbsp;
                     <?php endforeach?>
                 </td>
+                <td>
+                    <?php echo htmlspecialchars(ucfirst($user->plans->name),ENT_QUOTES,'UTF-8') ;?>
+                </td>
                 <td><?php echo ($user->active) ? anchor("login/deactivate/".$user->id, lang('index_active_link')) : anchor("login/activate/". $user->id, lang('index_inactive_link'));?></td>
-                <td><?php echo anchor("login/edit_user/".$user->id, 'Edit') ;?></td>
+                <td><?php echo htmlspecialchars(date("M jS, Y, g:i a", $user->created_on),ENT_QUOTES,'UTF-8');?></td>
+                <td><?php echo htmlspecialchars(($user->last_login)?date("M jS, Y, g:i a", $user->last_login):'--',ENT_QUOTES,'UTF-8');?></td>
+                <td><?php echo anchor("user/profile/".$user->id, 'Edit') ;?></td>
             </tr>
         <?php endforeach;?>
     </tbody>
