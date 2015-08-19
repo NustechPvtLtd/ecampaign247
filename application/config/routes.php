@@ -47,6 +47,7 @@ $route['create-user'] = 'login/create_user';
 $route['create-group'] = 'login/create_group';
 $route['logout'] = 'login/logout';
 $route['assets/images'] = "sites/assets/images";
+$route['account/upgrades'] = "account/account/account_upgrade_list";
 $route['account/plans'] = 'account/account/plans';
 $route['plans'] = 'account/plans';
 $route['plans/update/(:any)'] = 'account/plans/editPlans/$1';

@@ -91,13 +91,13 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         }else{
            $user = $this->ion_auth->user()->row(); 
         }
-
+        $this->data['user_id'] = $this->ion_auth->get_user_id();
         //validation rule
        if(!$this->ion_auth->is_admin()){
             $this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'required');
             $this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required');
        }
-       if($this->ion_auth->is_admin()){
+       if($this->ion_auth->is_admin() && $this->data['user_id']!=$user->id){
             $this->form_validation->set_rules('price_plan_id', $this->lang->line('edit_user_validation_price_plan_label'), 'required');
        }
         if(!$this->ion_auth->is_admin()){
@@ -124,7 +124,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
             
             if ($this->form_validation->run() === TRUE)
 			{
-                if(!$this->ion_auth->is_admin()){
+                if(!$this->ion_auth->is_admin() || $this->data['user_id']==$user->id){
                     $data = array(
                         'first_name' => $this->input->post('first_name'),
                         'last_name'  => $this->input->post('last_name'),
@@ -142,6 +142,11 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
 				if ($this->input->post('price_plan_id'))
 				{
 					$data['price_plan_id'] = $this->input->post('price_plan_id');
+				}
+                
+				if ($this->input->post('notes'))
+				{
+					$data['notes'] = $this->input->post('notes');
 				}
 
                 //check to see if we are updating the user
@@ -195,6 +200,13 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
 			'id'    => 'company',
 			'type'  => 'text',
 			'value' => $this->form_validation->set_value('company', $user->company),
+            'class' => 'form-control',
+		);
+		$this->data['notes'] = array(
+			'name'  => 'notes',
+			'id'    => 'notes',
+			'value' => $this->form_validation->set_value('notes'),
+			'type'  => 'text',
             'class' => 'form-control',
 		);
 		$this->data['phone'] = array(

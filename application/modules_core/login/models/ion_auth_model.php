@@ -1607,7 +1607,20 @@ class Ion_auth_model extends CI_Model
 
 			return FALSE;
 		}
-
+        
+        if(isset($data['price_plan_id'])){
+            $account_upgrade = array(
+                'user_id' => $user->id,
+                'upgrade_by' => 'admin',
+                'notes' => isset($data['notes'])?$data['notes']:'',
+                'upgrade_from' => $user->price_plan_id,
+                'upgrade_to' => $data['price_plan_id'],
+                'date' => time()
+            );
+ 
+            $this->db->insert('account_upgrade', $account_upgrade);
+        }
+        
 		// Filter the data passed
 		$data = $this->_filter_data($this->tables['users'], $data);
 
@@ -1629,7 +1642,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 		$this->db->update($this->tables['users'], $data, array('id' => $user->id));
-
+        
 		if ($this->db->trans_status() === FALSE)
 		{
 			$this->db->trans_rollback();
@@ -2256,4 +2269,12 @@ class Ion_auth_model extends CI_Model
 		//just return the string IP address now for better compatibility
 		return $ip_address;
 	}
+    
+    public function get_user_name($id)
+    {
+        $this->db->select('CONCAT(first_name, \' \', '.', last_name) AS name', FALSE);
+        $this->db->where('id',$id);
+        $query = $this->db->get('users')->result();
+        return $query[0]->name;
+    }
 }

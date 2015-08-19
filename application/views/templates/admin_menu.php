@@ -2,6 +2,7 @@
 <ul class="treeview-menu">
 <li><a href="<?php echo site_url('/');?>" style="margin-left: 10px;"><i class="fa fa-angle-double-right glyphicon glyphicon-user"></i>User</a></li>
 <li><a href="<?php echo site_url('group');?>" style="margin-left: 10px;"><i class="fa fa-angle-double-right glyphicon-group"></i>Group</a></li>
+<li><a href="<?php echo site_url('account/upgrades');?>" style="margin-left: 10px;"><i class="fa fa-angle-double-right glyphicon-group"></i>Accounts</a></li>
 </ul>
 </li>
 <li><a href="<?php echo site_url('sites');?>"><i class="glyphicon glyphicon-file"></i> <span>Web Sites</span></a></li>

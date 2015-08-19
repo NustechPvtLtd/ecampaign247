@@ -17,6 +17,15 @@ class Plans_model extends CI_Model
         }
     }
     
+    public function get_plan_name($id)
+    {
+        $this->db->select('name');
+        $this->db->where('plan_id', $id);
+        $query = $this->db->get('price_plan')->result();
+
+        return $query[0]->name;
+    }
+    
     function get_plans_by_id($plan_id){
         $this->db->select();
         $this->db->where('plan_id', $plan_id);

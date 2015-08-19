@@ -4,7 +4,7 @@ class Services extends MY_Controller {
     function __construct()
     {
         parent::__construct();
-        $group = array('comp-admin', 'end-user');
+        $group = array('comp-admin', 'individuals');
         if (!$this->ion_auth->in_group($group)){
             $this->session->set_flashdata('message', 'You must be a Company Admin OR a End User to view this page');
             redirect('/');

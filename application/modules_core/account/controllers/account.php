@@ -11,6 +11,7 @@ class Account extends MY_Controller {
         $this->lang->load('plans');
         $this->load->model('addressmodel');
         $this->load->model('account/plans_model');
+        $this->load->model('account/account_upgrade_model');
         $this->data['title'] = ucfirst($this->router->fetch_class());
         $this->data['pageMetaDescription'] = $this->router->fetch_class().'|'.$this->router->fetch_method();
     }
@@ -199,6 +200,40 @@ class Account extends MY_Controller {
         $result = $this->addressmodel->get_state_by_country($country);
         return $this->output->set_content_type('application/json')
                     ->set_output(json_encode($result));
+    }
+    
+    public function account_upgrade_list()
+    {
+        if(!$this->ion_auth->is_admin()){
+            redirect('/','refresh');
+        }
+        $this->data['pageHeading'] = 'Accounts Upgrade';
+        $this->data['message'] = '';
+        $this->data['css'] = array(
+            '<link href="' . base_url() . 'assets/datatable/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet">',
+            '<link href="' . base_url() . 'assets/datatable/css/dataTables.responsive.css" type="text/css" rel="stylesheet">',
+            '<style>td.child{text-align:left !important}</style>'
+        );
+        $this->data['js'] = array(
+            '<script type="text/javascript" src="' . base_url() . 'assets/datatable/js/jquery.dataTables.min.js"></script>',
+            '<script type="text/javascript" src="' . base_url() . 'assets/datatable/js/dataTables.bootstrap.js"></script>',
+            '<script type="text/javascript" src="' . base_url() . 'assets/datatable/js/dataTables.responsive.js"></script>',
+            '<script type="text/javascript" src="' . base_url() . 'assets/js/readmore.min.js"></script>',
+            '<script>
+$(".plan_description").readmore({
+speed: 75,
+maxHeight: 0,
+collapsedHeight:50,
+moreLink: \'<a href="#">Read More</a>\',
+lessLink: \'<a href="#">Less</a>\',
+startOpen: false,
+
+});
+</script>'
+        );
+        $this->data['upgrade_list'] = $this->account_upgrade_model->get_upgrade_details();
+//        var_dump($this->data['upgrade_list']);
+        $this->template->load('main', 'account', 'account/upgradelist', $this->data);
     }
     
 }

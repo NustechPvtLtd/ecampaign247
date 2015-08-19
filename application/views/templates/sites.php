@@ -42,7 +42,7 @@
 <body class="skin-green">
     <header class="header">
             <a href="<?php echo site_url();?>" class="logo icon">
-                <img src="<?php echo base_url();?>assets/img/logo.png" alt="Customer area" />            
+                <img  class="img-responsive" src="<?php echo base_url();?>assets/img/logo.png" alt="Customer area" />            
 			</a>
             <nav class="navbar navbar-static-top" role="navigation">
                 <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -118,7 +118,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
-                                    <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' ). '?' . time();?>" class="img-circle"/>
+                                    <img src="<?php echo (isset(userdata('avatar')))? base_url('elements').'/images/uploads/'.$this->ion_auth->get_user_id().'/'.userdata( 'avatar' ).'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>" class="img-circle"/>
                                     <p>
                                         <?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?>
                                     </p>
@@ -142,7 +142,7 @@
                 <section class="sidebar">
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="<?php echo base_url('elements');?>/images/uploads/<?= $this->ion_auth->get_user_id().'/'.userdata( 'avatar' ).'?' . time();?>" class="img-circle" />
+                            <img src="<?php echo (isset(userdata('avatar')))? base_url('elements').'/images/uploads/'.$this->ion_auth->get_user_id().'/'.userdata( 'avatar' ).'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>" class="img-circle" />
                         </div>
                         <div class="pull-left info">
                             <p><?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?></p>
@@ -156,7 +156,7 @@
                     		?>
                     		<ul class="sidebar-menu">
                     		<?php 
-	                    		if ($this->ion_auth->in_group(array('end-user'))){
+	                    		if ($this->ion_auth->in_group(array('individuals'))){
 	                    			include_once 'user_menu.php';
 	                    		} elseif ($this->ion_auth->in_group(array('comp-admin'))){
 	                    			include_once 'user_menu.php';

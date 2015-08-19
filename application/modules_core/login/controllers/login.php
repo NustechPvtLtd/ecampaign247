@@ -44,7 +44,7 @@ class Login extends MX_Controller {
 					//if the login is successful
 					//redirect them back to the home page
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
-					if ($this->ion_auth->in_group(array('comp-admin', 'end-user')))
+					if ($this->ion_auth->in_group(array('comp-admin', 'individuals')))
 					{
 					    redirect('services', 'refresh');
 					}
@@ -86,7 +86,7 @@ class Login extends MX_Controller {
 		}
 		elseif (!$this->ion_auth->is_admin()) //remove this elseif if you want to enable this for non-admins
 		{
-            if ($this->ion_auth->in_group(array('comp-admin', 'end-user')))
+            if ($this->ion_auth->in_group(array('comp-admin', 'individuals')))
             {
                 redirect('services', 'refresh');
             }

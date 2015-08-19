@@ -10,7 +10,7 @@
             <div class="box box-primary no-top-border">
                 <div class="box-body">
                     <div class="clearfix"><!-- --></div>
-                    <?php if(!$this->ion_auth->is_admin()):?>
+                    <?php if(!$this->ion_auth->is_admin() || $user_id==$user->id):?>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_fname_label', 'first_name', 'required');?>
                         <?php echo form_input($first_name);?>
@@ -25,13 +25,13 @@
                         <?php echo lang('edit_user_email_label', 'email', 'required');?>
                         <?php echo form_input($email);?>
                     </div>
-                    <?php if(!$this->ion_auth->is_admin()):?>
+                    <?php if(!$this->ion_auth->is_admin() || $user_id==$user->id):?>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_phone_label', 'phone', 'required');?>
                         <?php echo form_input($phone);?>
                     </div>
                     <?php endif;?>
-                    <?php if($this->ion_auth->is_admin()):?>
+                    <?php if($this->ion_auth->is_admin() && $user_id!=$user->id):?>
                     <div class="form-group col-lg-6">
                         <?php echo lang('edit_user_price_plan_label', 'price_plan_id', 'required');?>
                         <?php echo form_dropdown('price_plan_id', $plans, $price_plan_id, ' class="form-control"');?>
@@ -46,13 +46,21 @@
                         <?php echo lang('edit_user_password_confirm_label', 'password_confirm');?>
                         <?php echo form_input($password_confirm);?>
                     </div>
-                    <?php if(!$this->ion_auth->is_admin()):?>
+                    <?php if(!$this->ion_auth->is_admin() || $user_id==$user->id):?>
                     <div class="clearfix"><!-- --></div>
                     <div class="form-group col-lg-12">
                         <?php echo lang('edit_user_company_label', 'company');?>
                         <?php echo form_input($company);?>
                     </div>
-
+                    <?php endif;?>
+                    <?php if($this->ion_auth->is_admin() && $user_id!=$user->id):?>
+                    <div class="clearfix"><!-- --></div>
+                    <div class="form-group col-lg-12">
+                        <label for="notes">Notes:(For User plan)</label>
+                        <?php echo form_input($notes);?>
+                    </div>
+                    <?php endif;?>
+                    <?php if(!$this->ion_auth->is_admin() || $user_id==$user->id):?>
                     <div class="clearfix"><!-- --></div>
                     <hr>
                     <div class="form-group col-lg-6">
@@ -64,8 +72,7 @@
                         </div>
                     </div>
                     <?php endif;?>
-                    <?php if($this->ion_auth->is_admin()):?>
-                    <?php endif;?>
+
                     <div class="clearfix"><!-- --></div>
                     <div class="clearfix"><!-- --></div>
                     <?php echo form_hidden($csrf); ?>
@@ -81,6 +88,7 @@
     </div>
 </section>
 <script>
+    <?php if(!$this->ion_auth->is_admin()):?>
     $(function(){
         var btnUpload = $('#uploadImageButton');
         var status = $('#notify-container');
@@ -118,4 +126,5 @@
         $('#phone').mask("+91 dd dd dddddd");
         
     });
+    <?php endif;?>
 </script>

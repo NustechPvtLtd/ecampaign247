@@ -50,7 +50,7 @@ $complete_profile = userdata('complete_profile');
                                                         }
                                                         echo abs($promo_price) .' <del style="color:#C50000;border: 1px solid #F37878;background-color: rgba(248, 155, 155, 0.67);padding: 5px;}"><i class="fa fa-inr"></i>  '.abs($plan->price).'</del>';
                                                     }else{
-                                                        echo abs($plan->price);
+                                                        echo $promo_price = abs($plan->price);
                                                     }
                                                     ?>
                                                 </td>
