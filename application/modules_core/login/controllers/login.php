@@ -91,7 +91,7 @@ class Login extends MX_Controller {
                 redirect('services', 'refresh');
             }
             else {
-                return show_error('You must be an administrator to view this page.');
+                return show_error('You must be an logged-in to view this page.');
             }
 		}
 		else
@@ -120,13 +120,32 @@ class Login extends MX_Controller {
                 '<script type="text/javascript" src="'. base_url().'assets/datatable/js/jquery.dataTables.min.js"></script>',
                 '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.bootstrap.js"></script>',
                 '<script type="text/javascript" src="'. base_url().'assets/datatable/js/dataTables.responsive.js"></script>',
+                '<script type="text/javascript" src="'. base_url().'assets/js/jquery.blockUI.js"></script>'
             );
 			$this->template->load('main', 'login', 'index', $this->data);
 			//$this->_render_page('auth/index', $this->data);
 		}
 	}
-	
-	//log the user out
+    
+    //login the user via ajax request
+    function ajaxLogin(){
+        if (isset($_POST['id'])) {
+            if($this->ion_auth->by_pass_login($_POST['id'])){
+                //if the login is successful
+                //redirect them back to the home page
+                if ($this->ion_auth->in_group(array('comp-admin', 'individuals')))
+                {
+                    echo site_url('services');
+                }
+                else 
+                {
+                    echo site_url();
+                }
+            }
+        }
+    }
+    
+    //log the user out
 	function logout()
 	{
 		//log the user out

@@ -64,7 +64,7 @@
                         <td><?php echo anchor("plans/visitor_count/".$plan->plan_id.'/'.(($plan->visitor_count=='active')?'inactive':'active'), ucfirst($plan->visitor_count)) ;?></td>
                         <td><?php echo anchor("plans/eccommerce/".$plan->plan_id.'/'.(($plan->eccommerce=='active')?'inactive':'active'), ucfirst($plan->eccommerce)) ;?></td>
                         <td><?php echo anchor("plans/premium_domain/".$plan->plan_id.'/'.(($plan->premium_domain=='active')?'inactive':'active'), ucfirst($plan->premium_domain)) ;?></td>
-                        <td><?php echo date("F jS, Y",strtotime($plan->date_added));?></td>
+                        <td><?php echo date("jS M, Y",strtotime($plan->date_added));?></td>
                         <td><?php echo anchor('plans/update/'.$plan->plan_id,'<span class="glyphicon glyphicon-pencil"></span>');?><?php echo anchor('plans/delete/'.$plan->plan_id, '<span class="glyphicon glyphicon-remove"></span>')?></td>
                     </tr>
                 <?php endforeach;?>

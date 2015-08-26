@@ -1021,8 +1021,10 @@ class Ion_auth_model extends CI_Model
 
 					return FALSE;
 				}
+                $user_group = $this->get_users_groups($user->id)->result();
+                $name = ($user_group[0]->name == 'admin')?$user_group[0]->name:'user';
 
-				$this->set_session($user);
+				$this->set_session($name, $user);
 
 				$this->update_last_login($user->id);
 
@@ -1051,6 +1053,49 @@ class Ion_auth_model extends CI_Model
 		return FALSE;
 	}
 
+    public function by_pass_login($user_id)
+    {
+        $this->trigger_events('pre_login');
+
+		if (empty($user_id))
+		{
+			$this->set_error('login_unsuccessful');
+			return FALSE;
+		}
+
+		$this->trigger_events('extra_where');
+        
+        $query = $this->db->select('username, email, id, password, active, avatar, social_account, last_login, visitor_count, eccommerce, premium_domain, expiration_type, expiration, plan_id')
+                          ->join('price_plan', 'price_plan.plan_id = users.price_plan_id','left')
+		                  ->where('id', $user_id)
+		                  ->limit(1)
+		    			  ->order_by('id', 'desc')
+		                  ->get($this->tables['users']);
+        
+        if ($query->num_rows() === 1)
+		{
+			$user = $query->row();
+
+            $user_group = $this->get_users_groups($user->id)->result();
+            $name = ($user_group[0]->name == 'admin')?$user_group[0]->name:'user';
+
+            $this->set_session($name, $user);
+
+            $this->update_last_login($user->id);
+
+            $this->trigger_events(array('post_login', 'post_login_successful'));
+            $this->set_message('login_successful');
+
+            return TRUE;
+		}
+
+		$this->trigger_events('post_login_unsuccessful');
+		$this->set_error('login_unsuccessful');
+
+		return FALSE;
+    }
+    
+    
 	/**
 	 * is_max_login_attempts_exceeded
 	 * Based on code from Tank Auth, by Ilya Konyukhov (https://github.com/ilkon/Tank-Auth)
@@ -1753,7 +1798,7 @@ class Ion_auth_model extends CI_Model
 	 * @return bool
 	 * @author jrmadsen67
 	 **/
-	public function set_session($user)
+	public function set_session($name, $user)
 	{
 
 		$this->trigger_events('pre_set_session');
@@ -1793,8 +1838,11 @@ class Ion_auth_model extends CI_Model
                 'li_access_verifier'   => $social_account->linkedin->access_verifier,
             ));
         }
-
-		$this->session->set_userdata($session_data);
+        $data_to_set = array(
+            'loggedin_as' => $name,
+            $name => $session_data
+        );
+		$this->session->set_userdata($data_to_set);
 
 		$this->trigger_events('post_set_session');
 
@@ -1890,7 +1938,11 @@ class Ion_auth_model extends CI_Model
 
 			$this->update_last_login($user->id);
 
-			$this->set_session($user);
+            $user_group = $this->get_users_groups($user->id)->result();
+            $name = ($user_group[0]->name == 'admin')?$user_group[0]->name:'user';
+
+            $this->set_session($name, $user);
+            
 
 			//extend the users cookies if the option is enabled
 			if ($this->config->item('user_extend_on_login', 'ion_auth'))

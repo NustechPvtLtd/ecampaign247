@@ -68,7 +68,7 @@
                                         <a href="<?php echo site_url('user/profile')?>" class="btn btn-default btn-flat"><?php echo 'My Profile';?></a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="<?php echo site_url('login/logout');?>" class="btn btn-default btn-flat"><?php echo 'Logout';?></a>
+                                        <a href="<?php echo site_url('logout');?>" class="btn btn-default btn-flat"><?php echo 'Logout';?></a>
                                     </div>
                                 </li>
                             </ul>

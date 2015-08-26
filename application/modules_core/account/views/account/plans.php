@@ -1,6 +1,6 @@
 <?php
 $promo_price='';
-$complete_profile = userdata('complete_profile');
+(isset($this->session->userdata['complete_profile']))?$complete_profile = $this->session->userdata['complete_profile']:'';
 
 ?>
 <section class="content">
@@ -92,6 +92,8 @@ $complete_profile = userdata('complete_profile');
                                             <input name="plan_name" value="<?php echo $plan->name;?>" type="hidden" />
                                             <input name="plan_id" value="<?php echo $plan->plan_id;?>" type="hidden" />
                                             <input name="plan_price" value="<?php echo ($promo_price)?abs($promo_price) : abs($plan->price);?>" type="hidden" />
+                                            <input name="plan_discount" value="<?php echo ($plan->discount_type=='percentage') ? abs($plan->price*$plan->discount/100) : abs($plan->discount);?>" type="hidden" />
+                                            <input name="plan_ammount" value="<?php echo abs($plan->price);?>" type="hidden" />
                                         </form>
                                     </div>
                                 </div>

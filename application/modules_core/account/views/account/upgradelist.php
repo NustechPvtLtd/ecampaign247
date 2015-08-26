@@ -36,7 +36,7 @@
                     <td><?php echo htmlspecialchars(ucfirst($list->notes),ENT_QUOTES,'UTF-8');?></td>
                     <td><?php echo htmlspecialchars($this->plans_model->get_plan_name($list->upgrade_from),ENT_QUOTES,'UTF-8');?></td>
                     <td><?php echo htmlspecialchars($this->plans_model->get_plan_name($list->upgrade_to),ENT_QUOTES,'UTF-8');?></td>
-                    <td><?php echo date("M jS, Y",$list->date);?></td>
+                    <td><?php echo date("jS M, Y",$list->date);?></td>
                 </tr>
                 <?php endforeach;?>
                 <?php endif;?>

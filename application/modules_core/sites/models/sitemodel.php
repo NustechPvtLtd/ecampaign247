@@ -241,12 +241,14 @@ class Sitemodel extends CI_Model {
                 'domain' => $siteData['siteSettings_domain'],
                 'domain_ok' => $domainOk,
             );
-        }
-
-        $this->db->where('sites_id', $siteData['siteID']);
-        if ($this->db->update('sites', $data)) {
-            return true;
-        } else {
+            
+            $this->db->where('sites_id', $siteData['siteID']);
+            if ($this->db->update('sites', $data)) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
             return false;
         }
     }

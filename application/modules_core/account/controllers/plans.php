@@ -23,6 +23,8 @@ class Plans extends MY_Controller {
         $this->lang->load('plans');
         $this->load->model('account/plans_model');
         $this->load->model('account/account_upgrade_model');
+        $this->load->model('account/plans_orders_model');
+        $this->load->model('account/plans_transaction_model');
         $this->data['title'] = ucfirst($this->router->fetch_class());
         $this->data['pageMetaDescription'] = $this->router->fetch_class() . '|' . $this->router->fetch_method();
     }
@@ -239,6 +241,9 @@ startOpen: false,
 
     public function payment_success()
     {
+        if(empty($_POST)){
+            redirect(site_url('account/plans'), 'refresh');
+        }
         $user = $this->ion_auth_model->user()->result();
         $status = $_POST["status"];
         $firstname = $_POST["firstname"];
@@ -250,7 +255,7 @@ startOpen: false,
         $email = $_POST["email"];
         $salt = $this->config->item('SALT', 'payu_money');
         $this->data['name'] = $user[0]->first_name . ' ' . $user[0]->last_name;
-        $plan_id = userdata('upgrade_plan_id');
+        $plan_id = $this->session->userdata['upgrade_plan_id'];
         
         If (isset($_POST["additionalCharges"])) {
             $additionalCharges = $_POST["additionalCharges"];
@@ -259,7 +264,15 @@ startOpen: false,
             $retHashSeq = $salt . '|' . $status . '|||||||||||' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
         }
         $hash = hash("sha512", $retHashSeq);
-
+        $order_id = $this->session->userdata['upgrade_plan_order_id'];
+        
+        $plan_transaction_data = array(
+            'order_id' => $order_id,
+            'payment_gateway_name' => 'PayU Money',
+            'payment_gateway_transaction_id' => $txnid,
+            'payment_gateway_response' => $status,
+            'date_added' => date("Y-m-d H:i:s")
+        );
         if ($hash != $posted_hash) {
             $account_upgrade = array(
                 'user_id' => $user[0]->id,
@@ -269,13 +282,14 @@ startOpen: false,
                 'upgrade_to' => $plan_id,
                 'date' => time()
             );
+            $plan_transaction_data['status'] = 'invalid';
             $this->data['error'] = "Invalid Transaction. Please try again";
         } else {
 
             $this->data['status'] = $status;
             $this->data['txnid'] = $txnid;
             $this->data['amount'] = $amount;
-            
+            $plan_transaction_data['status'] = 'success';
             $account_upgrade = array(
                 'user_id' => $user[0]->id,
                 'upgrade_by' => 'self',
@@ -287,7 +301,9 @@ startOpen: false,
             $data['price_plan_id'] = $plan_id;
             $user = $this->ion_auth_model->update($user[0]->id, $data);
         }
+
         $this->account_upgrade_model->account_upgrade($account_upgrade);
+        $this->plans_transaction_model->create_plan_transaction($plan_transaction_data);
         $this->template->load('main', 'account', 'plans/success', $this->data);
     }
 
@@ -304,7 +320,7 @@ startOpen: false,
         $email = $_POST["email"];
         $salt = $this->config->item('SALT', 'payu_money');
         $this->data['name'] = $user[0]->first_name . ' ' . $user[0]->last_name;
-        $plan_id = userdata('upgrade_plan_id');
+        $plan_id = $this->session->userdata['upgrade_plan_id'];
 
         If (isset($_POST["additionalCharges"])) {
             $additionalCharges = $_POST["additionalCharges"];
@@ -314,11 +330,18 @@ startOpen: false,
             $retHashSeq = $salt . '|' . $status . '|||||||||||' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
         }
         $hash = hash("sha512", $retHashSeq);
-
+        $plan_transaction_data = array(
+            'order_id' => $this->session->userdata['upgrade_plan_order_id'],
+            'payment_gateway_name' => 'PayU Money',
+            'payment_gateway_transaction_id' => $txnid,
+            'payment_gateway_response' => $status,
+            'date_added' => date("Y-m-d H:i:s")
+        );
         if ($hash != $posted_hash) {
+            $plan_transaction_data['status'] = 'invalid';
             $this->data['error'] = "Invalid Transaction. Please try again";
         } else {
-
+            $plan_transaction_data['status'] = 'failed';
             $this->data['status'] = $status;
             $this->data['txnid'] = $txnid;
             $this->data['amount'] = $amount;
@@ -332,6 +355,7 @@ startOpen: false,
             'date' => time()
         );
         $this->account_upgrade_model->account_upgrade($account_upgrade);
+        $this->plans_transaction_model->create_plan_transaction($plan_transaction_data);
         $this->template->load('main', 'account', 'plans/failure', $this->data);
     }
 
@@ -380,7 +404,20 @@ startOpen: false,
                 "value" => $_POST['plan_id']
             )
         ));
+        $plan_order_data = array(
+            'customer_id' => $user[0]->id,
+            'plan_id' => $_POST['plan_id'],
+            'subtotal' => $_POST['plan_ammount'],
+            'discount' => $_POST['plan_discount'],
+            'total' => $_POST['plan_price'],
+            'status' => 'pending',
+            'date_added' => date("Y-m-d H:i:s"),
+            'last_updated' => date("Y-m-d H:i:s")
+        );
         userdata('upgrade_plan_id', $_POST['plan_id']);
+        $order_id = $this->plans_orders_model->create_plan_orders($plan_order_data);
+        userdata('upgrade_plan_order_id', $order_id);
+
         $this->data['productinfo'] = "Plan upgraded to " . $_POST['plan_name'];
         $this->data['hash'] = $this->_genrate_hash($this->data);
         $this->data['action'] = $this->_url . '_payment';
