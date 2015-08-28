@@ -17,9 +17,7 @@
         		  	<ul class="dropdown-menu dropdown-inverse">
         		    	<li><a href="#siteSettings" id="siteSettingsButton" class="siteSettingsModalButton" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo 'URL Settings'/*$this->lang->line('actionbuttons_sitesettings')*/?></a></li>
         		    	<li><a href="#pageSettingsModal" id="pageSettingsButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo 'SEO Settings'/*$this->lang->line('actionbuttons_pagesettings')*/?></a></li>
-                        <?php if(userdata( 'premium_domain' )!='inactive'):?>
-        		    	<li><a href="#premiumDomainModal" id="premiumDomainButton" data-toggle="modal" data-siteid="<?php echo $siteData['site']->sites_id;?>"><?php echo $this->lang->line('actionbuttons_premiumdomain')?></a></li>
-                        <?php endif;?>
+
         		  	</ul>
         		</div>
         	            		
@@ -1868,44 +1866,7 @@
         </div>
     
     	<!-- modals -->
-    	
-    	<!-- export HTML popup -->
-<!--    	<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-hidden="true">
-    	    	
-    		<form action="<?php echo site_url('sites/export')?>" target="_blank" id="markupForm" method="post" class="form-horizontal">
-    		
-    		<input type="hidden" name="siteID" value="<?php echo $siteData['site']->sites_id;?>">
-    		
-    		<input type="hidden" name="markup" value="" id="markupField">
-    		
-    		<div class="modal-dialog">
-    	    	<div class="modal-content">
-    	      		<div class="modal-header">
-    	        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->lang->line('modal_close')?></span></button>
-    	        		<h4 class="modal-title" id="myModalLabel"><span class="fui-export"></span> <?php echo $this->lang->line('modalexport_export_your_markup')?></h4>
-    	      		</div>
-    	      		<div class="modal-body">
-    	        		
-    	        		<div class="form-group">
-    	        		    <label for="inputEmail3" class="col-sm-2 control-label"><?php echo $this->lang->line('modalexport_doctype')?></label>
-    	        		    <div class="col-sm-10">
-    	        		    	<input type="text" class="form-control" name="doctype" id="doctype" placeholder="Doc type" value="DOCTYPE html ">
-    	        		    </div>
-    	        		</div>
-    	        		
-    	      		</div> /.modal-body 
-    	      		<div class="modal-footer">
-    	        		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="exportCancel"><?php echo $this->lang->line('modal_cancelclose')?></button>
-    	        		<button type="submit" type="button" class="btn btn-primary btn-embossed" id="exportSubmit"><?php echo $this->lang->line('modalexport_export_now')?></button>
-    	      		</div>
-    	    	</div> /.modal-content 
-    	  	</div> /.modal-dialog 
-    	  	
-    	  	</form>
-    	  	
-    	</div> /.modal -->
-    	
-    	
+
     	<!-- publish popup -->
     	<div class="modal fade publishModal" id="publishModal" tabindex="-1" role="dialog" aria-hidden="true">
     	    	
@@ -2324,44 +2285,6 @@
       	</div><!-- /.modal-dialog -->
       		  	
     </div><!-- /.modal -->
-    
-    <div class="modal fade premiumDomainModal" id="premiumDomainModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    	
-    	<div class="modal-dialog modal-lg">
-            	
-        	<div class="modal-content">
-        	
-        		<div class="modal-header">
-        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->lang->line('modal_close')?></span></button>
-        			<h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <?php echo $this->lang->line('modal_domain_header')?></h4>
-        		</div>
-          		
-          		<div class="modal-body">
-          		
-          			<div class="loader" style="display: none;">
-          				<img src="<?php echo base_url();?>assets/sites/images/loading.gif" alt="Loading...">
-          				<?php echo $this->lang->line('modal_domain_loadertext')?>
-          			</div>
-          			
-          			<div class="modal-alerts"></div>
-          		
-          			<?php 
-                        echo $this->load->view('partials/sitedomaindata.php', array('siteData'=>$siteData['site']));
-          			?>
-          			          	
-          		</div><!-- /.modal-body -->
-                <div class="clearfix"></div>
-          		<div class="modal-footer">
-            		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <?php echo $this->lang->line('modal_cancelclose')?></button>
-                    <button type="button" class="btn btn-primary btn-embossed" id="domainSubmittButton" disabled="disabled"><span class="fui-check"></span> <?php echo $this->lang->line('domainSubmittButton')?></button>
-          		</div>
-          		
-        	</div><!-- /.modal-content -->
-        	
-      	</div><!-- /.modal-dialog -->
-      		  	
-    </div><!-- /.modal -->
-    
     
     <div class="modal fade errorModal" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     	

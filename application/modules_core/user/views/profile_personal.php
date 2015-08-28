@@ -75,7 +75,7 @@
 
                     <div class="clearfix"><!-- --></div>
                     <div class="clearfix"><!-- --></div>
-                    <?php echo form_hidden($csrf); ?>
+                    <?php // echo form_hidden($csrf); ?>
                 </div>
                 <div class="box-footer">
                     <div class="pull-right">

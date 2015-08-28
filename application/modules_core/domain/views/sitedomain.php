@@ -1029,56 +1029,80 @@
 </div><!-- /.siteSettingsWrapper -->
 
 <script>
-    $( "#tld" ).hide();
-    $( ".show-all-tlds" ).click(function() {
-        var lable = $(this).text();
-        if(lable=='more'){
-            $(this).text('less');
-        }else{
-            $(this).text('more');
-        }
-        $( "#tld" ).toggle();
-    });
-    $('#btn_check_availability').click(function(){
-        var checked = false;
-        $('.tld-container input[type=checkbox]').each(function(){
-            if($(this).is(":checked")){
-                checked = true;
+    $(document).ready(function(){
+        jQuery.validator.addMethod("regx", function(value, element, regexpr) {          
+            return regexpr.test(value);
+        }, "Please enter a valid domain name.");
+        
+        $( "#tld" ).hide();
+        $( ".show-all-tlds" ).click(function() {
+            var lable = $(this).text();
+            if(lable=='more'){
+                $(this).text('less');
+            }else{
+                $(this).text('more');
             }
-        });
-        if(!checked){
-            $('.tld-container-primary input[type=checkbox]').each(function(){
-                $( this ).prop( "checked", true );
-            });
-        }
-        $.ajax({
-            url: "<?php echo site_url('domain/checkDomainAvalability')?>",
-            type: 'post',
-            data: $('#select-product').serialize(),
-            success:function(ret){
-                $('.search-results-container').html(ret);
-                $('#domain_result').show();
-                $('#domainSubmittButton').removeAttr('disabled');
-            }
-        }).done(function(){
-
+            $( "#tld" ).toggle();
         });
         
-        $('#domainSubmittButton').click(function(){
-            if($("input:radio[name='domain']").is(':checked')) {
-                $.ajax({
-                        url: $('form#book-domain-form').attr('action'),
-                        type: 'post',
-                        data: $('form#book-domain-form').serialize()
-                }).done(function(ret){
-                    $('.search-results-container').html(' ');
-                    $('.search-results-container').html(ret);
-                    $('#domain_result').show();
-                    $('#domainSubmittButton').attr('disabled','disabled');
-                });
-            }else{
-                alert('Please select domain!');
+        $('#select-product').validate({
+            rules: {
+                domainname:{
+                    required: true,
+                    minlength: 3,
+                    regx: /^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$/  
+                }
+            },
+            messages: {
+                domainname: {
+                    required: "Please enter domain name to search!",
+                    minlength: "At least {0} characters required!",
+                    regx:"Only alphanumeric and hyphons(-) are allowed. Hyphons should not be on first or end place!"
+                }
             }
+        });
+        
+        $('#btn_check_availability').on('click', function(){
+            var checked = false;
+            if($("#select-product").valid()){
+                $('.tld-container input[type=checkbox]').each(function(){
+                    if($(this).is(":checked")){
+                        checked = true;
+                    }
+                });
+                if(!checked){
+                    $('.tld-container-primary input[type=checkbox]').each(function(){
+                        $( this ).prop( "checked", true );
+                    });
+                }
+
+                $.ajax({
+                    url: "<?php echo site_url('domain/checkDomainAvalability')?>",
+                    type: 'post',
+                    data: $('#select-product').serialize(),
+                    success:function(ret){
+                        $('.search-results-container').html(ret);
+                        $('#domain_result').show();
+                        $('#domainSubmittButton').removeAttr('disabled');
+                    }
+                });
+            }
+            $('#domainSubmittButton').click(function(){
+                if($("input:radio[name='domain']").is(':checked')) {
+                    $.ajax({
+                            url: $('form#book-domain-form').attr('action'),
+                            type: 'post',
+                            data: $('form#book-domain-form').serialize()
+                    }).done(function(ret){
+                        $('.search-results-container').html(' ');
+                        $('.search-results-container').html(ret);
+                        $('#domain_result').show();
+                        $('#domainSubmittButton').attr('disabled','disabled');
+                    });
+                }else{
+                    alert('Please select domain!');
+                }
+            });
         });
     });
 </script>

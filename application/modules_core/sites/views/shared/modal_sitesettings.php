@@ -1,3 +1,4 @@
+<link href="<?php echo base_url('assets/sites/css/bootstrap-switch.min.css'); ?>" rel="stylesheet">
 <div class="modal fade siteSettingsModal" id="siteSettings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	
 	<div class="modal-dialog modal-lg">
@@ -19,12 +20,11 @@
       			<div class="modal-alerts"></div>
       				      		
       			<div class="modal-body-content"></div>
-        	
+
       		</div><!-- /.modal-body -->
       		
       		<div class="modal-footer">
         		<button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <?php echo $this->lang->line('modal_cancelclose')?></button>
-        		<button type="button" class="btn btn-primary btn-embossed" id="saveSiteSettingsButton"><span class="fui-check"></span> <?php echo $this->lang->line('sitesettings_button_savesettings')?></button>
       		</div>
       		
     	</div><!-- /.modal-content -->

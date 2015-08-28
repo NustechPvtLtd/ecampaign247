@@ -35,7 +35,7 @@
                             <span class="inline-block col-1"><input type="checkbox" value="guru" id="guru" name="tlds[]" ><label class="inline-block" for="guru">guru</label></span>
                             <span class="inline-block col-1"><input type="checkbox" value="xyz" id="xyz" name="tlds[]" ><label class="inline-block" for="xyz">xyz</label></span>
                             <span class="inline-block col-1"><a class="show-all-tlds inline-block " href="#">more</a></span>
-                        </div>
+                </div>
                     <div class="tld-select" id="tld" style="display: block;clear:both;">
 
                         <span class="inline-block col-sm-2">
@@ -1010,7 +1010,7 @@
 
                 </div>
             </form>
-            <div id="domain_result" class="results-wrapper" style="display: none">
+            <div id="sitedomain_result" class="results-wrapper" style="display: none">
                 <h6>Search Results <span id="plan_error" class="error hide">Please select a domain name</span></h6>
                 
                 <form method="POST" name="buy_domain" id="book-domain-form" novalidate="novalidate" action="<?php echo site_url('domain/bookDomain/'.$siteData->sites_id);?>">
@@ -1052,7 +1052,7 @@
             data: $('#select-product').serialize(),
             success:function(ret){
                 $('.search-results-container').html(ret);
-                $('#domain_result').show();
+                $('#sitedomain_result').show();
                 $('#domainSubmittButton').removeAttr('disabled');
             }
         }).done(function(){

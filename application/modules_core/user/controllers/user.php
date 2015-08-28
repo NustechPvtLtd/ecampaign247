@@ -108,12 +108,13 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         $this->data['message'] ='';
 		if (isset($_POST) && !empty($_POST))
 		{
+            
 			// do we have a valid request?
-			if ($this->_valid_csrf_nonce() === FALSE )
-			{
+//			if ($this->_valid_csrf_nonce() === FALSE )
+//			{
 //				show_error($this->lang->line('error_csrf'));
-                redirect('user/profile','location');
-			}
+////                redirect('user/profile','location');
+//			}
             
             //update the password if it was posted
 			if ($this->input->post('password'))
@@ -169,7 +170,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         }
         
         //display the edit user form
-		$this->data['csrf'] = $this->_get_csrf_nonce();
+//		$this->data['csrf'] = $this->_get_csrf_nonce();
 
 		//pass the user to the view
 		$this->data['user'] = $user;
@@ -234,10 +235,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
             $plans[$plan->plan_id] = $plan->name;
         }
         $this->data['plans'] = $plans;
-//        echo '<pre>';
-//        print_r($this->data['plans']);
-//        echo '</pre>';
-//        die(0);
+
         $this->data['avatar'] = (($id)?$id:$user->id).'/'.$user->avatar;
         $this->data['js'] = array(
             '<script type="text/javascript" src="'.base_url().'assets/js/ajaxupload.3.5.js"></script>',

@@ -16,6 +16,7 @@ class Sites extends MY_Controller {
 		$this->load->model('sites/usermodel');
 		$this->load->model('sites/pagemodel');
 		$this->load->model('domain/domainmodel');
+		$this->load->model('domain/users_domains_model');
 			
 		$this->data['pageTitle'] = $this->lang->line('sites_page_title');
 		
@@ -214,7 +215,7 @@ class Sites extends MY_Controller {
 		
 			
 		$siteData = $this->sitemodel->getSite($siteID);
-	
+        
 		if( $siteData == false ) {
 			
 			//site could not be loaded, redirect to /sites, with error message
@@ -273,7 +274,10 @@ class Sites extends MY_Controller {
                 '<script src="'.base_url().'assets/sites/js/src-min-noconflict/ace.js"></script>',
                 '<script src="'.site_url('sites/getelements').'"></script>',
                 '<script src="'.base_url().'assets/js/jquery.blockUI.js"></script>', 
-                '<script src="'.base_url().'assets/sites/js/builder.js"></script>'
+                '<script src="'.base_url().'assets/sites/js/builder.js"></script>',
+                '<script type="text/javascript" src="'. base_url('assets/sites/js/bootstrap-switch.min.js').'"></script>',
+                '<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>',
+                '<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>'
 			);
 			$this->template->load('sites', 'sites', 'sites/create', $this->data);
 			//$this->load->view('', $this->data);
@@ -366,8 +370,8 @@ class Sites extends MY_Controller {
 			echo json_encode( $return );
 		
 		} else {//all good with the data, let's update
-		
-			$domainOk = $this->sitemodel->updateSiteData( $_POST );
+            $user_id = userdata('user_id');
+			$domainOk = $this->users_domains_model->create( $_POST['siteID'], $user_id, $_POST['siteSettings_domain'], 'freeUrl');
 			
 			//all did went well
 			$return = array();
@@ -438,9 +442,7 @@ class Sites extends MY_Controller {
 	
 	
 	/*
-	
 		publishes a site 
-	
 	*/
 	
 	public function publish() {
@@ -449,6 +451,7 @@ class Sites extends MY_Controller {
         $this->load->helper('directory');
         $params = array('hostname'=>$this -> _hostName, 'username'=>$this -> _userName, 'password'=>$this -> _password);
         $this->load->library('CPanelAddons', $params,'CPanelAddons');
+        $remote_url = '';
 //        $this->load->library('CPanelAddons');
         if(!isset( $_POST['siteID'])) {
 		
@@ -519,7 +522,6 @@ class Sites extends MY_Controller {
 		
 		}
         
-        $premiumDomain = $this->domainmodel->getDomain($_POST['siteID']);
 
         /*if(!$siteDetails['site']->published){//Check wheather subdomain is register or not
             $result = $this->CPanelAddons->addSub($siteDetails['site']->domain, $path, "webzero.in");
@@ -537,8 +539,8 @@ class Sites extends MY_Controller {
             }
         }*/
         
-        if(isset($premiumDomain->domainname) && $premiumDomain->domain_publish!=1){
-            $result = $this->CPanelAddons->add($premiumDomain->domainname, $path);
+        if(isset($siteDetails['site']->url_option) && $siteDetails['site']->url_option!='freeUrl' && $siteDetails['site']->domain_publish==0){
+            $result = $this->CPanelAddons->add($siteDetails['site']->domain, $path);
             if ( isset( $result['cpanelresult']['data'][0]['result'] ) && trim( $result['cpanelresult']['data'][0]['result'] ) == '0'
             ) {
                 $return = array();
@@ -550,8 +552,14 @@ class Sites extends MY_Controller {
                 $return['responseCode'] = 0;
                 $return['responseHTML'] = $this->load->view('partials/error', array('data'=>$temp), true);
                 die( json_encode( $return ) );
+            } else {
+                $this->users_domains_model->domain_publish($_POST['siteID']);
             }
-            $this->domainmodel->publishDomain($_POST['siteID']);
+        }
+        if($siteDetails['site']->url_option == 'freeUrl'){
+            $remote_url = 'http://'.$_SERVER['HTTP_HOST'].'/'.$siteDetails['site']->domain; 
+        } else {
+            $remote_url = 'http://'.$siteDetails['site']->domain; 
         }
 //		foreach( $_POST['xpages'] as $page=>$content ) {
 		$page = $_POST['item'];
@@ -591,7 +599,7 @@ class Sites extends MY_Controller {
             
             $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
             
-            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.base_url().$siteDetails['site']->domain.'/'. $page.'.html"></div>', $pageContent);
+            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="'.$remote_url.'/'. $page.'.html"></div>', $pageContent);
             
             if(!stristr($pageContent, '<link href="'. base_url('elements'))){
                 $pageContent = str_replace('<link href="','<link href="'. base_url('elements').'/',$pageContent);
@@ -616,6 +624,11 @@ class Sites extends MY_Controller {
         (isset($userID)&&$userID!='')?remove_directory('./temp/'.$userID):'';
         
 		$this->sitemodel->publish( $_POST['siteID'], base_url().$siteDetails['site']->domain);
+        
+        if($siteDetails['site']->url_option == 'freeUrl'){
+            $this->users_domains_model->domain_publish($_POST['siteID']);
+        }
+        
 		//all went well
 		$return = array();
 				
@@ -623,163 +636,10 @@ class Sites extends MY_Controller {
 		
 		die( json_encode($return) );
 		
-	
 	}
-	
-	
-	
-	/*
-		
-		exports a site
-	
-	*/
-	
-	public function export() {
-        
-        $user = $this->ion_auth->user()->row();
-        $userID = $user->id;
-        
-	
-		$zip = new ZipArchive();
-		
-		$zip->open("./tmp/".$this->config->item('export_fileName'), ZipArchive::CREATE);
-		
-		
-		//add folder structure
-		
-		//prep path to assets array
-		
-		$temp = explode("|", $this->config->item('export_pathToAssets'));
-		
-		foreach( $temp as $thePath ) {
-		
-			// Create recursive directory iterator
-			$files = new RecursiveIteratorIterator(
-		    	new RecursiveDirectoryIterator( $thePath ),
-		    	RecursiveIteratorIterator::LEAVES_ONLY
-			);
-		
-			foreach ($files as $name => $file) {
-			
-				if( $file->getFilename() != '.' && $file->getFilename() != '..' ) {
-		
-		    		// Get real path for current file
-		    		$filePath = $file->getRealPath();
-		    
-		    		$temp = explode("/", $name);
-		    
-		    		array_shift( $temp );
-		    
-		    		$newName = implode("/", $temp);
-                    
-                    if( $thePath == 'elements/images' ) {
-                 
-                        //check if this is a user file
-                        
-                        if ( strpos($file,'/uploads') !== false ) {
-                            
-                            if( strpos($file,'/uploads/'.$userID.'/') !== false ) {
-                             
-                                // Add current file to archive
-		    		            $zip->addFile($filePath, $newName);
-                                
-                                //echo $filePath."<br>";
-                                
-                            }
-                        
-                        } else {
-                         
-                            // Add current file to archive
-		    		        $zip->addFile($filePath, $newName);
-                            
-                            //echo $filePath."<br>";
-                            
-                        }
-                    
-                    } else {
-		
-		    		    // Add current file to archive
-		    		    $zip->addFile($filePath, $newName);
-                        
-                        //echo $filePath."<br>";
-                        
-                    }
-		    	
-		    	}
-		    
-			}
-		
-		}
-        
-        //die('');
-		
-		
-		
-		foreach( $_POST['pages'] as $page=>$content ) {
-		
-			//get page meta
-			$pageMeta = $this->pagemodel->getSinglePage($_POST['siteID'], $page);
-			
-			if( $pageMeta ) {
-			
-				//insert title, meta keywords and meta description
-				
-				$meta = '<title>'.$pageMeta->pages_title.'</title>'."\r\n";
-				$meta .= '<meta name="description" content="'.$pageMeta->pages_meta_description.'">'."\r\n";
-				$meta .= '<meta name="keywords" content="'.$pageMeta->pages_meta_keywords.'">';
-								
-				$pageContent = str_replace('<!--pageMeta-->', $meta, $content);
-				
-				//insert header includes;
-				
-				$pageContent = str_replace("<!--headerIncludes-->", $pageMeta->pages_header_includes, $pageContent);
-				
-				
-				//remove frameCovers
-				
-				$pageContent = str_replace('<div class="frameCover" data-type="video"></div>', "", $pageContent);
-			
-			} else {
-			
-				$pageContent = $content;
-			
-			}
-		
-			$zip->addFromString($page.".html", $_POST['doctype']."\n".stripslashes($pageContent));
-			
-			//echo $content;
-		
-		}
-		
-		//$zip->addFromString("testfilephp.txt" . time(), "#1 This is a test string added as testfilephp.txt.\n");
-		//$zip->addFromString("testfilephp2.txt" . time(), "#2 This is a test string added as testfilephp2.txt.\n");
-		
-		$zip->close();
-		
-		
-		$yourfile = $this->config->item('export_fileName');
-		
-		$file_name = basename($yourfile);
-		
-		header("Content-Type: application/zip");
-		header("Content-Transfer-Encoding: Binary");
-		header("Content-Disposition: attachment; filename=$file_name");
-		header("Content-Length: " . filesize("./tmp/".$yourfile));
-		
-		readfile("./tmp/".$yourfile);
-		
-		unlink('./tmp/'.$yourfile);
-		
-		exit;
-	
-	}
-	
-	
 
     /*
-		
 		preview a site
-	
 	*/
 	
 	public function preview($pageName='') {
@@ -847,7 +707,7 @@ class Sites extends MY_Controller {
             
             $pageContent = str_replace("<!-- site url div -->", '<div id="site-url" data-content="'. base_url('elements').'"></div>', $pageContent);
             
-            $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
+//            $pageContent = str_replace("<!-- page id div -->", '<div id="page-id" data-content="'. $pageMeta->pages_id.'"></div>', $pageContent);
             
 //            $pageContent = str_replace("<!-- page url div -->", '<div id="page-url" data-content="http://'.$siteDetails['site']->domain.'.webzero.in/'. $page.'.html"></div>', $pageContent);
             

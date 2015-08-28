@@ -73,6 +73,9 @@ class Plans extends MY_Controller {
 
     public function index()
     {
+        if(!$this->ion_auth->is_admin()){
+            redirect('account/plans', 'location');
+        }
         $this->data['pageHeading'] = 'Plans';
         $this->data['message'] = '';
         $this->data['css'] = array(
@@ -391,19 +394,6 @@ startOpen: false,
         $this->data['email'] = $user[0]->email;
         $this->data['phone'] = $user[0]->phone;
 
-        $json_data = json_encode(array(
-            "paymentParts" => array(
-                "name" => $_POST['plan_name'],
-                "description" => "Plan upgradation",
-                "value" => $_POST['plan_price'],
-                "isRequired" => "true",
-                "settlementEvent" => "EmailConfirmation"
-            ),
-            "paymentIdentifiers" => array(
-                "field" => "plan_id",
-                "value" => $_POST['plan_id']
-            )
-        ));
         $plan_order_data = array(
             'customer_id' => $user[0]->id,
             'plan_id' => $_POST['plan_id'],

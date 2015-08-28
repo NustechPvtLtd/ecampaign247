@@ -53,13 +53,5 @@ class Domainmodel extends CI_Model {
         
     }
     
-    public function publishDomain($siteId)
-    {
-        $data = array(
-   			'domain_publish' => 1
-   		);
-        $this->db->where('siteid', $siteId);
-    	$this->db->update('premium_domain', $data);
-    }
     
 }

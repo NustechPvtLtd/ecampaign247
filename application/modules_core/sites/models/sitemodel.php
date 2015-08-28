@@ -229,29 +229,29 @@ class Sitemodel extends CI_Model {
 
      */
 
-    public function updateSiteData($siteData)
-    {
-        $domainOk = 0;
-        $siteDetails = $this->db->select('domain')->from('sites')->where('sites_id', $siteData['siteID'])->get();
-        $result = $siteDetails->result();
-        if (empty($result[0]->domain) && ($siteData['siteSettings_domain'] != '') && $this->checkDomainAvailability($siteData['siteSettings_domain'])) {
-            $domainOk = 1;
-            $data = array(
-//                'sites_name' => $siteData['siteSettings_siteName'],
-                'domain' => $siteData['siteSettings_domain'],
-                'domain_ok' => $domainOk,
-            );
-            
-            $this->db->where('sites_id', $siteData['siteID']);
-            if ($this->db->update('sites', $data)) {
-                return true;
-            } else {
-                return false;
-            }
-        }else{
-            return false;
-        }
-    }
+//    public function updateSiteData($siteData)
+//    {
+//        $domainOk = 0;
+//        $siteDetails = $this->db->select('domain')->from('sites')->where('sites_id', $siteData['siteID'])->get();
+//        $result = $siteDetails->result();
+//        if (empty($result[0]->domain) && ($siteData['siteSettings_domain'] != '') && $this->checkDomainAvailability($siteData['siteSettings_domain'])) {
+//            $domainOk = 1;
+//            $data = array(
+////                'sites_name' => $siteData['siteSettings_siteName'],
+//                'domain' => $siteData['siteSettings_domain'],
+//                'domain_ok' => $domainOk,
+//            );
+//            
+//            $this->db->where('sites_id', $siteData['siteID']);
+//            if ($this->db->update('sites', $data)) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        }else{
+//            return false;
+//        }
+//    }
 
     /*
 
@@ -265,6 +265,7 @@ class Sitemodel extends CI_Model {
         $this->db->from('sites');
         $this->db->where('sites_id', $siteID);
         $this->db->join('premium_domain', 'sites.sites_id = premium_domain.siteid', 'left');
+        $this->db->join('users_domains', 'sites.sites_id = users_domains.site_id', 'left');
         $query = $this->db->get();
 
         if ($query->num_rows() == 0) {
@@ -428,8 +429,7 @@ class Sitemodel extends CI_Model {
     {
 
         $data = array(
-            'published' => 1,
-            'remote_url' => $remote_url,
+            'published' => 1
         );
 
         $this->db->where('sites_id', $siteID);
@@ -606,7 +606,7 @@ class Sitemodel extends CI_Model {
 
     public function checkDomainAvailability($domain)
     {
-        $query = $this->db->from('sites')->where('domain', $domain)->get();
+        $query = $this->db->from('users_domains')->where('domain', $domain)->get();
         if ($query->num_rows() > 0) {
             return FALSE;
         } else {
