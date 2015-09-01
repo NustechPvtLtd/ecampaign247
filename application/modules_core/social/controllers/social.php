@@ -35,10 +35,11 @@ class Social extends MY_Controller {
     
     public function register_facebook()
     {
-        $Fbuser = (new Facebook())->get_user();
         $this->load->model('login/ion_auth_model');
-        $userId = $this->ion_auth->get_user_id();
-        if ($Fbuser) {
+        $userId = userdata('user_id');
+
+        if ($this->facebook->logged_in()) {
+            $Fbuser = $this->facebook->user();
             $facebook = array('fb_token'=>$this->session->userdata('fb_token'));
             
             if($this->session->userdata('li_access_token') && $this->session->userdata('li_access_key')){
@@ -86,7 +87,13 @@ class Social extends MY_Controller {
                   );
             }
             $this->ion_auth_model->update($userId,$data);
-            redirect(site_url('seo'));
+            $redirect_url = userdata('redirect_url');
+            if(isset($redirect_url) && $redirect_url == 'seo'){
+                $this->session->unset_userdata('redirect_url');
+                redirect(site_url('seo'));
+            }else{
+                redirect(site_url(''),'refresh');
+            }
         }
     }
     
@@ -246,14 +253,16 @@ class Social extends MY_Controller {
     
     public function post_to_facebook()
     {
+        header('Content-Type: application/json');
         $paramters = array (
             'message' => $_POST['desc'],
             'link' => isset( $_POST['link'] ) ? $_POST['link'] : site_url(),
             'name' => isset( $_POST['title'] ) ? $_POST['title'] : 'Web Zero',
 //                        'picture' => $imgPath
         );
-        $responce = (new Facebook())->publish($paramters);
-        echo json_encode($responce);
+        
+		$result = $this->facebook->publish_content($paramters);
+		echo json_encode($result);
     }
     
     public function post_to_twitter()

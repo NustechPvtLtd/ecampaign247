@@ -1929,7 +1929,7 @@ $(function() {
     $('button#updateContentInFrameSubmit').click(function() {
 
         //alert( elToUpdate.text() )
-        console.log(elToUpdate.html());
+        
         elToUpdate.html($('#editContentModal #contentToEdit').redactor('code.get')).css({'outline': '', 'cursor': ''})
 
         $('#editContentModal textarea').each(function() {

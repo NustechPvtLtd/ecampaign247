@@ -18,7 +18,7 @@
 </style>    
 <div class="container-fluid">
     <div style="display:inline-block" class="col-sm-6 columns">
-        <?php if(!$this->session->userdata('fb_token')):?>
+        <?php if(! $this->facebook->logged_in()):?>
         <div class="linksocial">
             <a href="<?php echo $this->facebook->login_url();?>">
                 <img class="img-responsive" src="<?php echo base_url('assets')?>/img/facebook_button.png" alt="Connect with Facebook"/>

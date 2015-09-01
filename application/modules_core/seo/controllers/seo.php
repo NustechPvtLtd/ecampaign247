@@ -38,6 +38,7 @@ class Seo extends MY_Controller {
         if(!$sites_id){
             redirect(site_url('sites/create'),'location');
         }  else {
+            userdata('redirect_url', 'seo');
             $this->data['siteData'] = $this->sitemodel->getSite($sites_id);
             $this->data['pagesData'] = $this->pagemodel->getPageData($sites_id);
 

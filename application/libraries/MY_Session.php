@@ -23,12 +23,15 @@ class MY_Session extends CI_Session {
 	 */
 	function userdata($item)
 	{
-        if(isset($this->userdata['loggedin_as']) && $this->userdata['loggedin_as']=='admin'){
-            return ( ! isset($this->userdata['admin'][$item])) ? FALSE : $this->userdata['admin'][$item];
-        }else{
-            return ( ! isset($this->userdata['user'][$item])) ? FALSE : $this->userdata['user'][$item];
+        if(isset($this->userdata[$item])){
+            return $this->userdata[$item];
+        } else {
+            if(isset($this->userdata['loggedin_as']) && $this->userdata['loggedin_as']=='admin'){
+                return ( ! isset($this->userdata['admin'][$item])) ? FALSE : $this->userdata['admin'][$item];
+            }else{
+                return ( ! isset($this->userdata['user'][$item])) ? FALSE : $this->userdata['user'][$item];
+            }
         }
-		
 	}
 
 	// --------------------------------------------------------------------
@@ -63,10 +66,14 @@ class MY_Session extends CI_Session {
 		{
 			foreach ($newdata as $key => $val)
 			{
-                if(isset($this->userdata['loggedin_as']) && $this->userdata['loggedin_as']=='admin'){
-                    unset($this->userdata['admin'][$key]);
-                }else{
-                    unset($this->userdata['user'][$key]);
+                if(isset($this->userdata[$key])){
+                    unset($this->userdata[$key]);
+                } else {
+                    if(isset($this->userdata['loggedin_as']) && $this->userdata['loggedin_as']=='admin'){
+                        unset($this->userdata['admin'][$key]);
+                    }else{
+                        unset($this->userdata['user'][$key]);
+                    }
                 }
 			}
 		}
