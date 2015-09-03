@@ -380,36 +380,37 @@ class Ion_auth
 
 		$identity = $this->config->item('identity', 'ion_auth');
                 $this->session->unset_userdata( array($identity => '', 'id' => '', 'user_id' => '') );
-                
-        if(($this->session->userdata['loggedin_as']=='user' && !isset($this->session->userdata['admin'])) || $this->session->userdata['loggedin_as']=='admin'){
-            //delete the remember me cookies if they exist
-            if (get_cookie($this->config->item('identity_cookie_name', 'ion_auth')))
-            {
-                delete_cookie($this->config->item('identity_cookie_name', 'ion_auth'));
-            }
-            if (get_cookie($this->config->item('remember_cookie_name', 'ion_auth')))
-            {
-                delete_cookie($this->config->item('remember_cookie_name', 'ion_auth'));
-            }
+        if(isset($this->session->userdata['loggedin_as'])){
+            if(($this->session->userdata['loggedin_as']=='user' && !isset($this->session->userdata['admin'])) || $this->session->userdata['loggedin_as']=='admin'){
+                //delete the remember me cookies if they exist
+                if (get_cookie($this->config->item('identity_cookie_name', 'ion_auth')))
+                {
+                    delete_cookie($this->config->item('identity_cookie_name', 'ion_auth'));
+                }
+                if (get_cookie($this->config->item('remember_cookie_name', 'ion_auth')))
+                {
+                    delete_cookie($this->config->item('remember_cookie_name', 'ion_auth'));
+                }
 
-            //Destroy the session
-            $this->session->sess_destroy();
+                //Destroy the session
+                $this->session->sess_destroy();
 
-            //Recreate the session
-            if (substr(CI_VERSION, 0, 1) == '2')
-            {
-                $this->session->sess_create();
-            }
-            else
-            {
-                $this->session->sess_regenerate(TRUE);
-            }
+                //Recreate the session
+                if (substr(CI_VERSION, 0, 1) == '2')
+                {
+                    $this->session->sess_create();
+                }
+                else
+                {
+                    $this->session->sess_regenerate(TRUE);
+                }
 
-            $this->set_message('logout_successful');
-        }else{
-            $this->session->unset_user_sess();
-            $this->session->set_userdata(array('loggedin_as'=>'admin'));
-        }
+                $this->set_message('logout_successful');
+            }else{
+                $this->session->unset_user_sess();
+                $this->session->set_userdata(array('loggedin_as'=>'admin'));
+            } 
+        }        
 
 		return TRUE;
 	}

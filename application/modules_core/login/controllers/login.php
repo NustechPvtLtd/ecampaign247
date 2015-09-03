@@ -8,7 +8,7 @@ class Login extends MX_Controller {
 	{
 		parent::__construct();
 		$this->load->database();
-		$this->load->library(array('ion_auth','form_validation', 'template', 'visitor_count'));
+		$this->load->library(array('ion_auth','form_validation', 'template', 'visitor_count', 'facebook'));
         //$this->form_validation->CI =& $this;
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
@@ -80,6 +80,7 @@ class Login extends MX_Controller {
 					'class' => "form-control",
 					'placeholder' => 'Password',
 				);
+                $this->session->unset_userdata('fb_token');
 				$this->template->load('home', 'login', 'home', $this->data);
 				//$this->_render_page('auth/login', $this->data);
 			}
@@ -976,21 +977,82 @@ class Login extends MX_Controller {
 		if (!$render) return $view_html;
 	}
     
+//    function site_contact($id)
+//    {
+//        header('Access-Control-Allow-Origin: *');
+//        $site_id = $this->encrypt->decode($id);
+//
+//        if(!empty($_REQUEST['email']) ){
+//            $result = $this->ion_auth->contact_webpage_owner($_REQUEST['email'], $_REQUEST['name'], $_REQUEST['message'], $site_id);
+//            if($result){
+//                return TRUE;
+//            }  else {
+//                return FALSE;
+//            }
+//        } /*else {
+//            return FALSE;
+//        }*/
+//    }
+    
     function site_contact($id)
     {
         header('Access-Control-Allow-Origin: *');
         $site_id = $this->encrypt->decode($id);
-
-        if(!empty($_REQUEST['email']) ){
-            $result = $this->ion_auth->contact_webpage_owner($_REQUEST['email'], $_REQUEST['name'], $_REQUEST['message'], $site_id);
-            if($result){
-                return TRUE;
-            }  else {
-                return FALSE;
-            }
-        } /*else {
-            return FALSE;
-        }*/
+        $status = array();
+        
+        if(isset($_POST['email']) &&!empty($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['formname'])){
+        	$name 	 = "";
+        	$email 	 = $_POST['email'];
+        	$formname= $_POST['formname'];
+        	$phone 	 = "";
+        	$message = "";
+        	$resmsg  = "";
+        	if($_POST['formname']=="contact1") {
+        		$name 	= isset($_POST['name'])?$_POST['name']:"";
+        		$phone 	= isset($_POST['phone'])?$_POST['phone']:"";
+        		$message= isset($_POST['message'])?$_POST['message']:"";
+        		$resmsg = "<h2>Thank you for contacting us,</h2> <p>We will be in touch soon.</p>";
+        	}
+        	elseif($_POST['formname']=="contact2") {
+        		$name 	= isset($_POST['name'])?$_POST['name']:"";
+        		$message= isset($_POST['message'])?$_POST['message']:"";        		
+        		$resmsg = "<h2>Thank you for contacting us,</h2> <p>We will be in touch soon.</p>";
+        	}
+        	elseif($_POST['formname']=="contact3") {
+        		$name 	= isset($_POST['name'])?$_POST['name']:"";
+        		$phone 	= isset($_POST['phone'])?$_POST['phone']:"";
+        		$message= isset($_POST['message'])?$_POST['message']:"";        		
+        		$resmsg = "<h2>Thank you for contacting us,</h2> <p>We will be in touch soon.</p>";
+        	}
+        	elseif($_POST['formname']=="header10") {
+        		$fname 	= isset($_POST['firstname'])?$_POST['firstname']:"";
+        		$lname 	= isset($_POST['lastname'])?$_POST['lastname']:"";
+        		$name	= $fname." ".$lname;
+        		$message= $name." contact with you..";        		
+        		$resmsg = "<h2>Thank you for contacting us,</h2> <p>We will be in touch soon.</p>";
+        	}
+        	
+        	// Now its time to send the mail to user. Function will work for you...
+        	$result = $this->ion_auth->contact_webpage_owner($email, $name, $message, $site_id ,$phone);
+        	if($result){
+        		$status['status']	= "success";
+        		$status['message']	= $resmsg;
+        		$status['formname']	= $formname;
+        		$status['payload']	= $_POST;
+        		echo json_encode($status);
+        	}  else {
+        		$status['status']	= "error";
+        		$status['formname']	= $formname;
+        		$status['message']	= "Something went wrong, Please try leter.!!!!"; 
+        		echo json_encode($status);
+        	}       
+        }
+        else {
+        	// control will not come here test in future if in use..
+        	$status['status']	= "error";
+        	$status['message']	= "Please feel all required fields...";
+        	echo json_encode($result);
+        }
     }
     
     function visitor_counter($id)

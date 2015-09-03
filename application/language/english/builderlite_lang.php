@@ -146,8 +146,8 @@ $lang['label_building_mode_content'] = "Content";
 $lang['label_building_mode_details'] = "Details";
 
 $lang['mode_tooltip_elements'] = "Allows you to add, remove and re-order blocks on the canvas. You can also view and edit the block's source HTML";
-$lang['mode_tooltip_content'] = "Allows you to edit written conten on your pages. Editable elements will display a red dashed outline when hovering the mouse cursor over it.";
-$lang['mode_tooltip_styling'] = "Allows you edit certain style attributes, images, links and videos. Editable Elements will display a red dashed outline when hovering the cursor over it.";
+$lang['mode_tooltip_content'] = "Allows you to edit written content on your pages. Editable elements will display a red dashed outline when roll-over the mouse cursor over it.";
+$lang['mode_tooltip_styling'] = "Allows you edit certain style attributes, images, links and videos. Editable Elements will display a red dashed outline when roll-over the cursor over it.";
 
 $lang['canvas_empty'] = "Build your page by dragging blocks onto the canvas";
 

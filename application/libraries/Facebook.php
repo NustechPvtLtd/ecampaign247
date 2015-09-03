@@ -19,7 +19,7 @@ if ( session_status() == PHP_SESSION_NONE ) {
  * @category    Libraries
  * @author      Nustech Pvt Ltd
  */
-
+require_once("Facebook/autoload.php");
 // Load all required Facebook classes
 use Facebook\FacebookSession;
 use Facebook\FacebookRedirectLoginHelper;

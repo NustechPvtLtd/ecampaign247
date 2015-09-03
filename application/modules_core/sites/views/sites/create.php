@@ -26,7 +26,7 @@
         		<!--<a href="#exportModal" id="exportPage" data-toggle="modal" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_export')?></a>-->
         		<a href="#previewModal" id="previewPage" class="btn btn-info btn-embossed pull-right disabled actionButtons"><span class="fui-export"></span> <?php echo $this->lang->line('actionbuttons_preview')?></a>
                 
-        		<a href="#" id="publishPage" class="btn btn-inverse btn-embossed pull-right disabled actionButtons" data-siteid="<?php echo $siteData['site']->sites_id;?>" <?php if( $siteData['site']->domain_ok == 0 ):?>data-toggle="tooltip"<?php endif;?> data-placement="bottom" title="You can not publish your site right now. Please update your domain details." ><span class="fui-upload"></span> <?php echo $this->lang->line('actionbuttons_publish')?> <span class="fui-alert text-danger" <?php if( $siteData['site']->domain_ok == 1 ):?>style="display:none"<?php endif;?>></span></a>
+        		<a href="#" id="publishPage" class="btn btn-inverse btn-embossed pull-right disabled actionButtons" data-siteid="<?php echo $siteData['site']->sites_id;?>" <?php if( $siteData['site']->domain_ok == 0 ):?>data-toggle="tooltip"<?php endif;?> data-placement="bottom" title="You can not publish your site right now. Please update your url details from settings menu." ><span class="fui-upload"></span> <?php echo $this->lang->line('actionbuttons_publish')?> <span class="fui-alert text-danger" <?php if( $siteData['site']->domain_ok == 1 ):?>style="display:none"<?php endif;?>></span></a>
         	
         		<div class="modes">
         		
@@ -2031,12 +2031,12 @@
     	      								
     	      								<?php
     	      								
-    	      									$dataUrl = str_replace($this->config->item('elements_dir')."/", "", $this->config->item('images_dir'));
+    	      									$dataUrl = base_url($this->config->item('images_dir')).'/'.$img;
     	      								
     	      								?>
     	      								
     	      								<div class="buttons clearfix">
-    	      									<button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="<?php echo $dataUrl;?>/<?php echo $img;?>"><span class="fui-export"></span> <?php echo $this->lang->line('modal_imagelibrary_button_insert')?></button>
+    	      									<button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="<?php echo $dataUrl;?>"><span class="fui-export"></span> <?php echo $this->lang->line('modal_imagelibrary_button_insert')?></button>
     	      								</div>
     	      							
     	      							</div><!-- /.image -->

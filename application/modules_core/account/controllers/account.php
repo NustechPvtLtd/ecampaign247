@@ -48,7 +48,7 @@ class Account extends MY_Controller {
                                'country'   => $this->input->post('blng_country'),
                                'phone'     => $this->input->post('blng_phone'),
                                'type'      => "billing",
-                               'user_id'   => $this->ion_auth->get_user_id(),
+                               'user_id'   => $this->ion_auth->get_user_id()
                            ),
                            array(
                                'id'        => $address['spng_id'],
@@ -59,20 +59,20 @@ class Account extends MY_Controller {
                                'country'   => $this->input->post('spng_country'),
                                'phone'     => $this->input->post('spng_phone'),
                                'type'      => "shipping",
-                               'user_id'   => $this->ion_auth->get_user_id(),
-                           ),
+                               'user_id'   => $this->ion_auth->get_user_id()
+                           )
                        );
 
                     //check to see if we are updating the user
                     if($this->addressmodel->update_address($data))
                     {
                         //redirect them back to the admin page if admin, or to the base url if non admin
-                        $this->data['message'] = 'Address Updated';
+                        $this->data['message'] = '<div class="alert alert-success">Address Updated</div>';
                     }
                     else
                     {
                         //redirect them back to the admin page if admin, or to the base url if non admin
-                        $this->data['message'] = 'Error';
+                        $this->data['message'] = '<div class="alert alert-error">Error</div>';
                     }
                 }else{
                     $data =array(
@@ -102,13 +102,13 @@ class Account extends MY_Controller {
                        $this->data['message'] = 'Address Updated'; 
                        redirect(site_url('account/address_details'), 'refresh');
                     }else{
-                       $this->data['message'] = 'Error!';
+                       $this->data['message'] = '<div class="alert alert-error">Error</div>';
                     }
                 }
 			}
             else
             {
-                $this->data['message'] = validation_errors();
+                $this->data['message'] = '<div class="alert alert-error">'.validation_errors().'</div>';
             }
         }
         

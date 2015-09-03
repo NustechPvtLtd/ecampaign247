@@ -47,6 +47,9 @@ class Seo extends MY_Controller {
                 '<link href="'.base_url().'assets/sites/css/style.css" rel="stylesheet">',
                 '<link href="'.base_url().'assets/home/css/style.css" rel="stylesheet">'
             );
+            $this->data['js'] = array(
+                '<script type="text/javascript" src="'.base_url().'assets/js/jquery.blockUI.js"></script>'
+            );
             $this->template->load('main', 'seo', 'index', $this->data);
         }				
 	}

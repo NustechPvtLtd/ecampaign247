@@ -118,7 +118,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
-                                    <img src="<?php echo (userdata('avatar'))? base_url('elements').'/images/uploads/'.$this->ion_auth->get_user_id().'/'.userdata( 'avatar' ).'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>" class="img-circle"/>
+                                    <img src="<?php echo (userdata('avatar'))? base_url('elements').'/images/uploads/'.userdata( 'user_id' ).'/'.userdata( 'avatar' ).'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>" class="img-circle"/>
                                     <p>
                                         <?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?>
                                     </p>
@@ -142,7 +142,7 @@
                 <section class="sidebar">
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="<?php echo (userdata('avatar'))? base_url('elements').'/images/uploads/'.$this->ion_auth->get_user_id().'/'.userdata( 'avatar' ).'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>" class="img-circle" />
+                            <img src="<?php echo (userdata('avatar'))? base_url('elements').'/images/uploads/'.userdata( 'user_id' ).'/'.userdata( 'avatar' ).'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>" class="img-circle" />
                         </div>
                         <div class="pull-left info">
                             <p><?php echo ($fullName = ucwords(userdata( 'username' ))) ? $fullName : 'Welcome';?></p>

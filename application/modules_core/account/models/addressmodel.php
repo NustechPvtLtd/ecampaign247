@@ -79,11 +79,8 @@ class Addressmodel extends CI_Model
     
     function update_address($data)
     {
-        if($this->db->update_batch('users_address', $data, 'id')){
-            return TRUE;
-        } else {
-            return FALSE;
-        }
+        $this->db->update_batch('users_address', $data, 'id');
+        return ($this->db->affected_rows() > 0) ? TRUE : FALSE; 
     }
 
 } 

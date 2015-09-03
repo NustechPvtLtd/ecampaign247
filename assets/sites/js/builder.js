@@ -21,6 +21,7 @@ editableItems['h3'] = ['color', 'font-size', 'background-color', 'font-family', 
 editableItems['h4'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['h5'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['p'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['a'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color', 'border', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['img'] = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['hr.dashed'] = ['border-color', 'border-width'];
@@ -627,7 +628,10 @@ var _oldIcon = new Array();
 
 
 function styleClick(el) {
-
+    if($(el).hasClass('demo-map')){
+        return false;
+    }
+    
     theSelector = $(el).attr('data-selector');
 
     $('#editingElement').text(theSelector);

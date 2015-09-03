@@ -71,7 +71,18 @@
 	    					</p>
 	    					</div>
 	    					
-	    					<form class="headerForm">
+	    					<form class="headerForm" id="contact_form_header10">
+                                <div class="form-group error">
+                                    <p class="small errorMessage" id="firstname_error" style="display:none">
+                                        First Name can not be blank.
+                                    </p>
+                                    <p class="small errorMessage" id="lastname_error" style="display:none">
+                                        Last Name can not be blank.
+                                    </p>                                    
+                                    <p class="small errorMessage" id="email_error" style="display:none">
+                                        Email should be email and can not be blank.
+                                    </p>
+                                </div>	    					
 	    						<div class="row">
 	    							<div class="col-xs-6">
 				    					<input type="text" class="form-control" placeholder="First name *" id="firstname" name="firstname">
@@ -86,7 +97,7 @@
 			    					</div>
 			    					
 					    		</div>
-					    		<button type="submit" class="btn btn-primary btn-block"><span class="fui-check"></span> Sign up now</button>
+					    		<button type="submit" id="header10" class="btn btn-primary btn-block submit"><span class="fui-check"></span> Contact Us</button>
 	    					</form>
     				
     					</div><!-- .col -->

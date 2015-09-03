@@ -20,20 +20,20 @@
                             <?php echo form_input($blng_street);?>
                         </div>
                         <div class="form-group">
-                            <?php echo lang('edit_blng_city_label', 'blng_city', 'required');?>
-                            <?php echo form_input($blng_city);?>
+                            <?php echo lang('edit_blng_country_label', 'blng_country', 'required');?>
+                            <?php echo form_dropdown('blng_country', $country, $blng_country,'id="blng_country" class="form-control" onChange="get_state(this.value,this.id);"');?>
                         </div>
                         <div class="form-group">
                             <?php echo lang('edit_blng_state_label', 'blng_state', 'required');?>
                             <?php echo form_dropdown('blng_state', $states, $blng_state, 'id="blng_state" class="form-control"');?>
                         </div>
                         <div class="form-group">
-                            <?php echo lang('edit_blng_zipcode_label', 'blng_zipcode', 'required');?>
-                            <?php echo form_input($blng_zipcode);?>
+                            <?php echo lang('edit_blng_city_label', 'blng_city', 'required');?>
+                            <?php echo form_input($blng_city);?>
                         </div>
                         <div class="form-group">
-                            <?php echo lang('edit_blng_country_label', 'blng_country', 'required');?>
-                            <?php echo form_dropdown('blng_country', $country, $blng_country,'id="blng_country" class="form-control" onChange="get_state(this.value,this.id);"');?>
+                            <?php echo lang('edit_blng_zipcode_label', 'blng_zipcode', 'required');?>
+                            <?php echo form_input($blng_zipcode);?>
                         </div>
                         <div class="form-group">
                             <?php echo lang('edit_blng_phone_label', 'blng_phone');?>
@@ -49,20 +49,20 @@
                             <?php echo form_input($spng_street);?>
                         </div>
                         <div class="form-group">
-                            <?php echo lang('edit_spng_city_label', 'spng_city', 'required');?>
-                            <?php echo form_input($spng_city);?>
+                            <?php echo lang('edit_spng_country_label', 'spng_country', 'required');?>
+                            <?php echo form_dropdown('spng_country', $country, $spng_country, 'id="spng_country" class="form-control" onChange="get_state(this.value,this.id);"');?>
                         </div>
                         <div class="form-group">
                             <?php echo lang('edit_spng_state_label', 'spng_state', 'required');?>
                             <?php echo form_dropdown('spng_state', $states, $spng_state, 'id="spng_state" class="form-control"');?>
                         </div>
                         <div class="form-group">
-                            <?php echo lang('edit_spng_zipcode_label', 'spng_zipcode', 'required');?>
-                            <?php echo form_input($spng_zipcode);?>
+                            <?php echo lang('edit_spng_city_label', 'spng_city', 'required');?>
+                            <?php echo form_input($spng_city);?>
                         </div>
                         <div class="form-group">
-                            <?php echo lang('edit_spng_country_label', 'spng_country', 'required');?>
-                            <?php echo form_dropdown('spng_country', $country, $spng_country, 'id="spng_country" class="form-control" onChange="get_state(this.value,this.id);"');?>
+                            <?php echo lang('edit_spng_zipcode_label', 'spng_zipcode', 'required');?>
+                            <?php echo form_input($spng_zipcode);?>
                         </div>
                         <div class="form-group">
                             <?php echo lang('edit_spng_phone_label', 'spng_phone');?>

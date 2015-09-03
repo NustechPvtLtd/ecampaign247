@@ -236,7 +236,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
         }
         $this->data['plans'] = $plans;
 
-        $this->data['avatar'] = (($id)?$id:$user->id).'/'.$user->avatar;
+        $this->data['avatar'] = ($user->avatar)?$user->avatar:'';
         $this->data['js'] = array(
             '<script type="text/javascript" src="'.base_url().'assets/js/ajaxupload.3.5.js"></script>',
             '<script type="text/javascript" src="'.base_url().'assets/js/jquery.maskedinput.js"></script>',
@@ -248,7 +248,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
     
     public function upload_avatar()
     {
-        $userID = $this->ion_auth->get_user_id();
+        $userID = userdata( 'user_id' );
         
         //if the upload path does not exist, create it
         if( !file_exists( './'.$this->config->item('images_uploadDir').'/'.$userID ) ) {
@@ -265,7 +265,7 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
 
         if ( ! $this->upload->do_upload('uploadfile')) {
             $return['status'] = 'error';
-            $return['message'] = $this->upload->display_errors();
+            $return['message'] = html_escape($this->upload->display_errors());
         } else {
             $imageData=$this->upload->data();
             $data['avatar'] = $imageData['raw_name'].$imageData['file_ext'];
@@ -274,8 +274,9 @@ WHERE `users`.`id` <> {$userID} AND `users`.`parent_id` = {$userID}";
                 $avatar = userdata( 'avatar' );
                 if(!empty($avatar)){
                     unlink($config['upload_path'].$avatar);
-                    userdata( 'avatar', $data['avatar']);
                 }
+                $this->session->unset_userdata('avatar');
+                $this->session->set_userdata(array('avatar' => $data['avatar']));
                 
                 $return['status'] = 'success';
                 $return['message'] = $data['avatar'];

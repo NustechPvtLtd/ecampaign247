@@ -65,7 +65,7 @@
                     <hr>
                     <div class="form-group col-lg-6">
                         <div class="col-lg-2">
-                            <img class="img-thumbnail" src="<?php echo base_url('elements');?>/images/uploads/<?= $avatar;?>">
+                            <img class="img-thumbnail" src="<?php echo !empty($avatar)? base_url('elements').'/images/uploads/'.userdata( 'user_id' ).'/'.$avatar.'?'.time(): base_url('assets').'/sites/images/dude.png?'.time();?>">
                         </div>
                         <div class="col-lg-10">
                             <button type="button" class="btn btn-primary" id="uploadImageButton"><?= ($avatar)?'Change Avatar':'Upload Avatar'?></button>
@@ -98,6 +98,7 @@
             action: '<?php echo site_url('user/upload_avatar/'); ?>',
             name: 'uploadfile',
             cache: false,
+            dataType: "json",
             onSubmit: function(file, ext) {
                 if (!(ext && /^(jpg|png|jpeg|gif)$/.test(ext))) {
                     status.text('Only JPG, PNG or GIF files are allowed');
@@ -105,17 +106,18 @@
                 }
             },
             onComplete: function(file,response) {
-                var obj = jQuery.parseJSON(response);
+                var obj = JSON.parse(response);
                 status.text('Photo Uploaded Sucessfully!');
                 if (obj.status === "error") {
-                    status.html(obj.message);
+                    var messaget = status.html(obj.message).text();
+                    status.html(messaget);
                 } else {
                     files.fadeOut('slow');
                     files.load();
                     files.fadeIn('slow');
-                    files.attr('src','<?php echo base_url();?>' + 'elements/images/uploads/'+'<?= $this->ion_auth->get_user_id();?>' +'/'+ obj.message + '?rand=' + new Date().getTime());
+                    files.attr('src','<?php echo base_url();?>' + 'elements/images/uploads/'+'<?= userdata( 'user_id' );?>' +'/'+ obj.message + '?rand=' + new Date().getTime());
                     $('.img-circle').fadeOut('slow').load().fadeIn('slow');
-                    $('.img-circle').attr('src','<?php echo base_url();?>' + 'elements/images/uploads/'+'<?= $this->ion_auth->get_user_id();?>' +'/'+ obj.message + '?rand=' + new Date().getTime());
+                    $('.img-circle').attr('src','<?php echo base_url();?>' + 'elements/images/uploads/'+'<?= userdata( 'user_id' );?>' +'/'+ obj.message + '?rand=' + new Date().getTime());
                     status.html('');
                 }
 

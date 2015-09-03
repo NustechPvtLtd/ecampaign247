@@ -75,24 +75,28 @@
 </div>
 <script>
     function post_to_facebook(){
+        $.blockUI();
         jQuery.ajax({
             url: "<?php echo site_url('social/post_to_facebook');?>",
             type: "POST",
             data: ({desc:$('#pageData_metaDescription').val(), link:$('#link').val(), title:$('#pageData_title').val()}),
             dataType: "html",
             success: function(msg){
+                $.unblockUI();
                 alert('Your page details successfully share to your facebook profile.');
             }
         });
     }
     
     function post_to_twitter(){
+        $.blockUI();
         jQuery.ajax({
             url: "<?php echo site_url('social/post_to_twitter');?>",
             type: "POST",
             data: ({desc:$('#pageData_metaDescription').val(), link:$('#link').val(), title:$('#pageData_title').val()}),
             dataType: "html",
             success: function(msg){
+                $.unblockUI();
                 alert('Your page details successfully share to your twitter profile.');
             }
         });

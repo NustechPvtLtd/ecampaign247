@@ -352,7 +352,9 @@ class Sitemodel extends CI_Model {
     {
 
         $query = $this->db->from('frames')->where('frames_id', $frameID)->get();
-
+        if ($query->num_rows() == 0) {
+            return false;
+        }
         $res = $query->result();
 
         return $res[0];
