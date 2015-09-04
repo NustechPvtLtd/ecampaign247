@@ -229,5 +229,6 @@ $(document).ready(function(){
 
 
     </script>
+    <script type="text/javascript" src="/support_apps/livechat/php/app.php?widget-init.js"></script>
 </body>
 </html>

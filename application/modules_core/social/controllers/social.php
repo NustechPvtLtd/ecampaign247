@@ -48,76 +48,45 @@ class Social extends MX_Controller {
             $Fbuser = $this->facebook->user();
             $facebook = array('fb_token' => $this->session->userdata('fb_token'));
             $redirect_url = (userdata('redirect_url')) ? userdata('redirect_url') : '';
-            
-            if (isset($redirect_url) && $redirect_url == 'seo') {
-                if ($this->session->userdata('li_access_token') && $this->session->userdata('li_access_key')) {
-                    $linkedin = array(
-                        'access_token' => $this->session->userdata('li_access_token'),
-                        'access_key' => $this->session->userdata('li_access_key'),
-                        'access_verifier' => $this->session->userdata('li_access_verifier')
-                    );
-                    if ($this->session->userdata('tw_access_token') && $this->session->userdata('tw_access_key')) {
-                        $twitter = array(
-                            'access_token' => $this->session->userdata('tw_access_token'),
-                            'access_key' => $this->session->userdata('tw_access_key'),
-                        );
-                        $data = array(
-                            'social_account' => json_encode(array(
-                                'facebook' => $facebook,
-                                'twitter' => $twitter,
-                                'linkedin' => $linkedin
-                            ))
-                        );
-                    } else {
-                        $data = array(
-                            'social_account' => json_encode(array(
-                                'facebook' => $facebook,
-                                'linkedin' => $linkedin
-                            ))
-                        );
-                    }
-                } elseif ($this->session->userdata('tw_access_token') && $this->session->userdata('tw_access_key')) {
-                    $twitter = array(
-                        'access_token' => $this->session->userdata('tw_access_token'),
-                        'access_key' => $this->session->userdata('tw_access_key'),
-                    );
-                    $data = array(
-                        'social_account' => json_encode(array(
-                            'twitter' => $twitter,
-                            'facebook' => $facebook
-                        ))
-                    );
-                } else {
-                    $data = array(
-                        'social_account' => json_encode(array(
-                            'facebook' => $facebook
-                        ))
-                    );
-                }
 
+            if (isset($redirect_url) && $redirect_url == 'seo') {
+                if($this->make_json()){
+                    $data = array(
+                        'social_account' => $this->make_json()
+                    );
+                    
+                    $userId = userdata('user_id');
+                    $this->ion_auth_model->update($userId, $data);
+                }
                 $this->session->unset_userdata('redirect_url');
-                $userId = userdata('user_id');
-                $this->ion_auth_model->update($userId, $data);
                 redirect(site_url('seo'));
             } else {
                 if (!$this->ion_auth->email_check($Fbuser['data']['email'])) {
                     $username = strtolower($Fbuser['data']['name']);
-                    $email    = strtolower($Fbuser['data']['email']);
+                    $email = strtolower($Fbuser['data']['email']);
                     $password = 'facebook2015';
 
                     $additional_data = array(
                         'first_name' => $Fbuser['data']['first_name'],
-        	            'last_name'  => $Fbuser['data']['last_name'],
-        	            'active'    => 1,
+                        'last_name' => $Fbuser['data']['last_name'],
+                        'active' => 1,
                         'social_account' => json_encode(array(
                             'facebook' => $facebook
                         ))
                     );
-                    if($this->ion_auth_model->register($username, $password, $email, $additional_data)){
+                    if ($this->ion_auth_model->register($username, $password, $email, $additional_data)) {
                         $this->ion_auth->login($email, $password);
                     }
                 } else {
                     $this->ion_auth->by_pass_login($Fbuser['data']['email']);
+                    if($this->make_json()){
+                        $data = array(
+                            'social_account' => $this->make_json()
+                        );
+
+                        $userId = userdata('user_id');
+                        $this->ion_auth_model->update($userId, $data);
+                    }
                 }
                 redirect('/', 'refresh');
             }
@@ -152,44 +121,17 @@ class Social extends MX_Controller {
 
             if (isset($_REQUEST['oauth_verifier'])) {
                 $tokenCredentials = $connection->getAccessToken($_REQUEST['oauth_verifier']);
-
-                $twitter = array(
-                    'access_token' => $tokenCredentials['oauth_token'],
-                    'access_key' => $tokenCredentials['oauth_token_secret'],
-                );
-                if ($this->session->userdata('fb_token')) {
-                    $facebook = array('fb_token' => $this->session->userdata('fb_token'));
-                    if ($this->session->userdata('li_access_token') && $this->session->userdata('li_access_key')) {
-                        $linkedin = array(
-                            'access_token' => $this->session->userdata('li_access_token'),
-                            'access_key' => $this->session->userdata('li_access_key'),
-                            'access_verifier' => $this->session->userdata('li_access_verifier')
-                        );
-                        $data = array(
-                            'social_account' => json_encode(array(
-                                'facebook' => $facebook,
-                                'twitter' => $twitter,
-                                'linkedin' => $linkedin
-                            ))
-                        );
-                    } else {
-                        $data = array(
-                            'social_account' => json_encode(array(
-                                'facebook' => $facebook,
-                                'twitter' => $twitter
-                            ))
-                        );
-                    }
-                } else {
-                    $data = array(
-                        'social_account' => json_encode(array(
-                            'twitter' => $twitter
-                        ))
-                    );
-                }
-                $this->ion_auth_model->update($userId, $data);
+                
                 $this->session->set_userdata('tw_access_token', $tokenCredentials['oauth_token']);
                 $this->session->set_userdata('tw_access_key', $tokenCredentials['oauth_token_secret']);
+                if($this->make_json()){
+                    $data = array(
+                        'social_account' => $this->make_json()
+                    );
+                    
+                    $userId = userdata('user_id');
+                    $this->ion_auth_model->update($userId, $data);
+                }
                 redirect(site_url('seo'));
             }
         }
@@ -227,55 +169,21 @@ class Social extends MX_Controller {
             $auth_data = array('linked_in' => serialize($LinkedInOAuth->token), 'oauth_secret' => $this->input->get('oauth_verifier'));
 
             $this->session->set_userdata(array('auth' => $auth_data));
+            
             $linkedin = array(
-                'access_token' => $tokens['oauth_token'],
-                'access_key' => $tokens['oauth_token_secret'],
-                'access_verifier' => $this->input->get('oauth_verifier')
+                'li_access_token'      => $tokens['oauth_token'],
+                'li_access_key'        => $tokens['oauth_token_secret'],
+                'li_access_verifier'   => $this->input->get('oauth_verifier'),
             );
-            if ($this->session->userdata('fb_token')) {
-                $facebook = array('fb_token' => $this->session->userdata('fb_token'));
-                if ($this->session->userdata('tw_access_token') && $this->session->userdata('tw_access_key')) {
-                    $twitter = array(
-                        'access_token' => $this->session->userdata('tw_access_token'),
-                        'access_key' => $this->session->userdata('tw_access_key'),
-                    );
-                    $data = array(
-                        'social_account' => json_encode(array(
-                            'facebook' => $facebook,
-                            'twitter' => $twitter,
-                            'linkedin' => $linkedin
-                        ))
-                    );
-                } else {
-                    $data = array(
-                        'social_account' => json_encode(array(
-                            'facebook' => $facebook,
-                            'linkedin' => $linkedin
-                        ))
-                    );
-                }
-            } elseif ($this->session->userdata('tw_access_token') && $this->session->userdata('tw_access_key')) {
-                $twitter = array(
-                    'access_token' => $this->session->userdata('tw_access_token'),
-                    'access_key' => $this->session->userdata('tw_access_key'),
-                );
+            $this->session->set_userdata($linkedin);
+            if($this->make_json()){
                 $data = array(
-                    'social_account' => json_encode(array(
-                        'twitter' => $twitter,
-                        'linkedin' => $linkedin
-                    ))
+                    'social_account' => $this->make_json()
                 );
-            } else {
-                $data = array(
-                    'social_account' => json_encode(array(
-                        'linkedin' => $linkedin
-                    ))
-                );
+
+                $userId = userdata('user_id');
+                $this->ion_auth_model->update($userId, $data);
             }
-            $this->ion_auth_model->update($userId, $data);
-            $this->session->set_userdata('li_access_token', $this->session->userdata('oauth_access_token'));
-            $this->session->set_userdata('li_access_key', $this->session->userdata('oauth_access_token_secret'));
-            $this->session->set_userdata('li_access_verifier', $this->input->get('oauth_verifier'));
             redirect(site_url('social'));
         }
     }
@@ -396,6 +304,35 @@ class Social extends MX_Controller {
             $this->db->update('users', array('social_account' => json_encode($social_account)), array('id' => $this->ion_auth->get_user_id()));
         }
         redirect(site_url('social'));
+    }
+
+    private function make_json()
+    {
+        $social_account = array();
+
+        if($this->session->userdata('fb_token')){$social_account['facebook'] = array('fb_token' => $this->session->userdata('fb_token'));}
+        
+        if($this->session->userdata('gl_token')){$social_account['google'] = array('gl_token' => $this->session->userdata('gl_token'));}
+        
+        if ($this->session->userdata('li_access_token') && $this->session->userdata('li_access_key')) {
+            $social_account['linkedin'] = array(
+                'access_token' => $this->session->userdata('li_access_token'),
+                'access_key' => $this->session->userdata('li_access_key'),
+                'access_verifier' => $this->session->userdata('li_access_verifier')
+            );
+        }
+
+        if ($this->session->userdata('tw_access_token') && $this->session->userdata('tw_access_key')) {
+            $social_account['twitter'] = array(
+                'access_token' => $this->session->userdata('tw_access_token'),
+                'access_key' => $this->session->userdata('tw_access_key'),
+            );
+        }
+
+        if (!empty($social_account)) {
+            return json_encode($social_account);
+        }
+        return FALSE;
     }
 
 }

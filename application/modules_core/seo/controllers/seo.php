@@ -30,9 +30,10 @@ class Seo extends MY_Controller {
         $this->data['pageHeading'] = ucfirst($this->router->fetch_class());
         $this->data['pageMetaDescription'] = ucfirst($this->router->fetch_class());
         $sites_id = $this->sitemodel->getSiteId($this->ion_auth->get_user_id());
-        
+        $this->data['message'] = '';
         if( !empty( $_POST )){
             $this->pagemodel->updatePageData( $_POST );
+            $this->data['message'] = '<div class="alert alert-success">Page seo information successfuly updated.</br>Please re-publish your page to see the changes!</div>';
         }
         
         if(!$sites_id){

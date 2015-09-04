@@ -4,11 +4,11 @@ class Login extends MX_Controller {
     
 	public $data = array();
     
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->load->database();
-		$this->load->library(array('ion_auth','form_validation', 'template', 'visitor_count', 'facebook'));
+		$this->load->library(array('ion_auth','form_validation', 'template', 'visitor_count', 'facebook', 'google'));
         //$this->form_validation->CI =& $this;
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
@@ -18,7 +18,7 @@ class Login extends MX_Controller {
         $this->load->model('account/plans_model');
 	}
 	
-	function index()
+	public function index()
 	{
 		//$this->data['main_content'] = 'login_form';
 		//$this->load->view('includes/template', $this->data);	
@@ -129,7 +129,7 @@ class Login extends MX_Controller {
 	}
     
     //login the user via ajax request
-    function ajaxLogin(){
+    public function ajaxLogin(){
         if (isset($_POST['id'])) {
             if($this->ion_auth->by_pass_login($_POST['id'])){
                 //if the login is successful
@@ -147,7 +147,7 @@ class Login extends MX_Controller {
     }
     
     //log the user out
-	function logout()
+	public function logout()
 	{
 		//log the user out
 		$logout = $this->ion_auth->logout();
@@ -158,7 +158,7 @@ class Login extends MX_Controller {
 	}	
 	
 	//change password
-	function change_password()
+	public function change_password()
 	{
 		$this->form_validation->set_rules('old', $this->lang->line('change_password_validation_old_password_label'), 'required');
 		$this->form_validation->set_rules('new', $this->lang->line('change_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[new_confirm]');
@@ -226,7 +226,7 @@ class Login extends MX_Controller {
 	}
 
 	//forgot password
-	function forgot_password()
+	public function forgot_password()
 	{
 		//setting validation rules by checking wheather identity is username or email
 		if($this->config->item('identity', 'ion_auth') == 'username' )
@@ -402,7 +402,7 @@ class Login extends MX_Controller {
 
 
 	//activate the user
-	function activate($id, $code=false)
+	public function activate($id, $code=false)
 	{
 		if ($code !== false)
 		{
@@ -428,7 +428,7 @@ class Login extends MX_Controller {
 	}
 
 	//deactivate the user
-	function deactivate($id = NULL)
+	public function deactivate($id = NULL)
 	{
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
@@ -475,7 +475,7 @@ class Login extends MX_Controller {
 	}
 
 	//create a new user
-	function create_user()
+	public function create_user()
 	{
 		$this->data['title'] = 'Create User';
 		$this->data['pageMetaDescription'] = 'webzero.in';
@@ -579,7 +579,7 @@ class Login extends MX_Controller {
 	}
 
 	//edit a user
-	function edit_user($id)
+	public function edit_user($id)
 	{
 		$this->data['title'] = "Edit User";
 
@@ -727,7 +727,7 @@ class Login extends MX_Controller {
 	}
 
 	// create a new group
-	function create_group()
+	public function create_group()
 	{
 		$this->data['title'] = $this->lang->line('create_group_title');
 
@@ -777,7 +777,7 @@ class Login extends MX_Controller {
 	}
 
 	//edit a group
-	function edit_group($id)
+	public function edit_group($id)
 	{
 		// bail if no group id given
 		if(!$id || empty($id))
@@ -837,7 +837,7 @@ class Login extends MX_Controller {
 		$this->_render_page('login/edit_group', $this->data);
 	}
     
-	function register()
+	public function register()
 	{
 	    $this->data ['title'] = 'Registration';
 	        
@@ -943,6 +943,42 @@ class Login extends MX_Controller {
 	    }
 	}
 
+    public function register_google()
+    {
+        if($this->google->getUser()){
+            $google = array('gl_token' => $this->session->userdata('gl_token'));
+            $userInfo = $this->google->getUser();
+            if (!$this->ion_auth->email_check($userInfo->email)) {
+                $username = strtolower($userInfo->name);
+                $email    = strtolower($userInfo->email);
+                $password = 'google2015';
+
+                $additional_data = array(
+                    'first_name' => $userInfo->givenName,
+                    'last_name'  => $userInfo->familyName,
+                    'active'    => 1,
+                    'social_account' => json_encode(array(
+                        'google' => $google
+                    ))
+                );
+                if($this->ion_auth_model->register($username, $password, $email, $additional_data)){
+                    $this->ion_auth->login($email, $password);
+                }
+            } else {
+                $this->ion_auth->by_pass_login($userInfo->email);
+                if($this->make_json()){
+                    $data = array(
+                        'social_account' => $this->make_json()
+                    );
+
+                    $userId = userdata('user_id');
+                    $this->ion_auth_model->update($userId, $data);
+                }
+            }
+            redirect('/', 'refresh');
+        }
+    }
+    
 	function _get_csrf_nonce()
 	{
 		$this->load->helper('string');
@@ -994,7 +1030,7 @@ class Login extends MX_Controller {
 //        }*/
 //    }
     
-    function site_contact($id)
+    public function site_contact($id)
     {
         header('Access-Control-Allow-Origin: *');
         $site_id = $this->encrypt->decode($id);
@@ -1055,7 +1091,7 @@ class Login extends MX_Controller {
         }
     }
     
-    function visitor_counter($id)
+    public function visitor_counter($id)
     {
         header('Access-Control-Allow-Origin: *');
         $site_id = $this->encrypt->decode($id);
@@ -1063,5 +1099,34 @@ class Login extends MX_Controller {
         if(!empty($_REQUEST['ip']) && $site_id ){
             $this->visitor_count->visitors( $_REQUEST['ip'], $site_id, $_REQUEST['page_id'], $_REQUEST['page_url'] );
         }
+    }
+    
+    private function make_json()
+    {
+        $social_account = array();
+
+        if($this->session->userdata('fb_token')){$social_account['facebook'] = array('fb_token' => $this->session->userdata('fb_token'));}
+        
+        if($this->session->userdata('gl_token')){$social_account['google'] = array('gl_token' => $this->session->userdata('gl_token'));}
+        
+        if ($this->session->userdata('li_access_token') && $this->session->userdata('li_access_key')) {
+            $social_account['linkedin'] = array(
+                'access_token' => $this->session->userdata('li_access_token'),
+                'access_key' => $this->session->userdata('li_access_key'),
+                'access_verifier' => $this->session->userdata('li_access_verifier')
+            );
+        }
+
+        if ($this->session->userdata('tw_access_token') && $this->session->userdata('tw_access_key')) {
+            $social_account['twitter'] = array(
+                'access_token' => $this->session->userdata('tw_access_token'),
+                'access_key' => $this->session->userdata('tw_access_key'),
+            );
+        }
+
+        if (!empty($social_account)) {
+            return json_encode($social_account);
+        }
+        return FALSE;
     }
 }

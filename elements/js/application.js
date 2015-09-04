@@ -223,103 +223,107 @@ String.prototype.repeat = function(num) {
     $('.error').hide();
     $(".submit").click(function() {
         // Check Which form is trying to be submit and do according process.
+    	
+    	// get parent element.
+    	frm = $(this).parent('form');
+
         var formname = $(this).attr("id");
         var formdata = "";
         if(formname=="contact1") {
-        	formdata = $("#contact_form_contact1").serialize()+"&formname="+formname;
+        	formdata = frm.serialize()+"&formname="+formname;
         	// validate and process form here
-            var name = $("#contact_form_contact1 input#name").val();
+            var name = frm.find("input#name").val();
             if (name == "") {
-                $('#contact_form_contact1 .error').show();
-                $("#contact_form_contact1 #name_error").show();
-                $("#contact_form_contact1 input#name").focus();
+            	frm.find('.error').show();
+            	frm.find('#name_error').show();
+            	frm.find('input#name').focus();
                 return false;
             }
-            var email = $("#contact_form_contact1 input#email").val();
+            var email = frm.find("input#email").val();
             var emailReg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             if (!emailReg.test(email)) {
-                $('#contact_form_contact1 .error').show();
-                $("#contact_form_contact1 #email_error").show();
-                $("#contact_form_contact1 input#email").focus();
+            	frm.find('.error').show();
+            	frm.find("#email_error").show();
+            	frm.find("input#email").focus();
                 return false;
             }
-            var phone = $("#contact_form_contact1 input#phone").val();
+            var phone = frm.find("input#phone").val();
             if (phone == "") {
-                $('#contact_form_contact1 .error').show();
-                $("#contact_form_contact1 #phone_error").show();
-                $("#contact_form_contact1 input#phone").focus();
+            	frm.find('.error').show();
+            	frm.find("#phone_error").show();
+            	frm.find("input#phone").focus();
                 return false;
             }        	
         	
         }
         else if(formname=="contact2") {
-        	formdata = $("#contact_form_contact2").serialize()+"&formname="+formname
+        	formdata = frm.serialize()+"&formname="+formname
         	// validate and process form here
-            var name = $("#contact_form_contact2 input#name").val();
+            var name = frm.find("input#name").val();
             if (name == "") {
-                $('#contact_form_contact2 .error').show();
-                $("#contact_form_contact2 #name_error").show();
-                $("#contact_form_contact2 input#name").focus();
+            	frm.find('.error').show();
+            	frm.find("#name_error").show();
+            	frm.find("input#name").focus();
                 return false;
             }
-            var email = $("#contact_form_contact2 input#email").val();
+            var email = frm.find("input#email").val();
             var emailReg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             if (!emailReg.test(email)) {
-                $('#contact_form_contact2 .error').show();
-                $("#contact_form_contact2 #email_error").show();
-                $("#contact_form_contact2 input#email").focus();
+            	frm.find('.error').show();
+            	frm.find("#email_error").show();
+            	frm.find("input#email").focus();
                 return false;
             }
         }
         else if(formname=="contact3") {
-        	formdata = $("#contact_form_contact3").serialize()+"&formname="+formname
+        	formdata = frm.serialize()+"&formname="+formname
         	// validate and process form here
-            var name = $("#contact_form_contact3 input#name").val();
+            var name = frm.find("input#name").val();
             if (name == "") {
-                $('#contact_form_contact3 .error').show();
-                $("#contact_form_contact3 #name_error").show();
-                $("#contact_form_contact3 input#name").focus();
+            	frm.find('.error').show();
+            	frm.find("#name_error").show();
+            	frm.find("input#name").focus();
                 return false;
             }
-            var email = $("#contact_form_contact3 input#email").val();
+            var email = frm.find("input#email").val();
             var emailReg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             if (!emailReg.test(email)) {
-                $('#contact_form_contact3 .error').show();
-                $("#contact_form_contact3 #email_error").show();
-                $("#contact_form_contact3 input#email").focus();
+            	frm.find('.error').show();
+            	frm.find("#email_error").show();
+            	frm.find("input#email").focus();
                 return false;
             }
-            var phone = $("#contact_form_contact3 input#phone").val();
+            var phone = frm.find("input#phone").val();
             if (phone == "") {
-                $('#contact_form_contact3 .error').show();
-                $("#contact_form_contact3 #phone_error").show();
-                $("#contact_form_contact3 input#phone").focus();
+            	frm.find('.error').show();
+            	frm.find("#phone_error").show();
+            	frm.find("input#phone").focus();
                 return false;
             }           	
         }
         else if(formname=="header10") {
-        	formdata = $("#contact_form_header10").serialize()+"&formname="+formname
+        	formdata = frm.serialize()+"&formname="+formname
         	// validate and process form here
-            var first = $("#contact_form_header10 input#firstname").val();
+            var first = frm.find("input#firstname").val();
             if (first == "") {
-                $('#contact_form_header10 .error').show();
-                $("#contact_form_header10 #firstname_error").show();
-                $("#contact_form_header10 input#firstname").focus();
+            	frm.find('.error').show();
+            	frm.find("#firstname_error").show();
+            	frm.find("input#firstname").focus();
                 return false;
             }
-            var last = $("#contact_form_header10 input#lastname").val();
+            var last = frm.find("input#lastname").val();
             if (last == "") {
-                $('#contact_form_header10 .error').show();
-                $("#contact_form_header10 #lastname_error").show();
-                $("#contact_form_header10 input#lastname").focus();
+            	frm.find('.error').show();
+            	frm.find("#lastname_error").show();
+            	frm.find("input#lastname").focus();
                 return false;
             }              
-            var email = $("#contact_form_header10 input#email").val();
+            var email = frm.find("input#email").val();
             var emailReg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             if (!emailReg.test(email)) {
-                $('#contact_form_header10 .error').show();
-                $("#contact_form_header10 #email_error").show();
-                $("#contact_form_header10 input#email").focus();
+            	frm.find('.error').show();
+            	frm.find("#email_error").show();
+            	frm.find("input#email").focus();
                 return false;
             }
         }        
@@ -331,19 +335,18 @@ String.prototype.repeat = function(num) {
           crossDomain: true,
           success: function(data) {
         	var json = JSON.parse(data);
-        	var cid	 = '#contact_form_'+json.formname;        	
         	if(json.status=="success") {
-                $(cid).html("<div id='message'></div>");
-                $(cid+' #message').html(json.message)
+        		frm.html("<div id='message'></div>");
+                frm.find('#message').html(json.message)
                 .fadeIn(300, function() {
-                  $(cid+' #message').append("<img id='checkmark' src='"+site_url + "/images/icons/check.png' width=26 />");
+                	frm.find('#message').append("<img id='checkmark' src='"+site_url + "/images/icons/check.png' width=26 />");
                 });            		
         	}
         	else if(json.status=="error"){
-                $(cid).html("<div id='message'></div>");
-                $(cid+' #message').html(json.message)
+                frm.html("<div id='message'></div>");
+                frm.find('#message').html(json.message)
                 .fadeIn(300, function() {
-                  $(cid+' #message').append("<img id='checkmark' src='"+site_url + "/images/icons/abort.png' width=26 />");
+                	frm.find('#message').append("<img id='checkmark' src='"+site_url + "/images/icons/abort.png' width=26 />");
                 });        		
         	}
           },

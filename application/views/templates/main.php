@@ -133,6 +133,7 @@
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.resize.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.categories.min.js"></script>
+        <script type="text/javascript" src="/support_apps/livechat/php/app.php?widget-init.js"></script>
         <?php if(isset($js)) echo implode("\n", $js) . "\n";?>
     </body>
 </html>

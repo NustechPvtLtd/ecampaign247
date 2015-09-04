@@ -1,3 +1,6 @@
+<div class="info_content">
+    <?php echo $message;?>
+</div>
 <div class="box box-primary no-top-border">				
     <div class="box-header">
         <h4>Update SEO information for your page: </h4>

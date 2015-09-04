@@ -1065,7 +1065,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
         
-        $query = $this->db->select('username, email, id, password, active, avatar, social_account, last_login, visitor_count, eccommerce, premium_domain, expiration_type, expiration, plan_id')
+        $query = $this->db->select('first_name, last_name, email, id, password, active, avatar, social_account, last_login, visitor_count, eccommerce, premium_domain, expiration_type, expiration, plan_id')
                           ->join('price_plan', 'price_plan.plan_id = users.price_plan_id','left')
 		                  ->where('id', $id)
 		                  ->or_where('email', $id)

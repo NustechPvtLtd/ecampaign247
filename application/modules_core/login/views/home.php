@@ -283,7 +283,7 @@ type="text">-->
                         </div>
 
                         <div class="form-group">
-                            <a class="btn btn-primary google_btn" href="<?php // echo $this->googleplus->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
+                            <a class="btn btn-primary google_btn" href="<?php echo $this->google->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
                         </div>
 
                         <div class="form-group">
@@ -399,7 +399,7 @@ type="text">-->
                             </div>
 
                             <div class="form-group">
-                                <a class="btn btn-primary google_btn" href="<?php // echo $this->googleplus->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
+                                <a class="btn btn-primary google_btn" href="<?php echo $this->google->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
                             </div>
 
                             <div class="form-group">
