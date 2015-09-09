@@ -101,8 +101,8 @@ class Social extends MX_Controller {
         $userId = $this->ion_auth->get_user_id();
         if (isset($_GET['register'])) {
             $tok = $this->twitteroauth->getRequestToken(site_url('social/register_twitter'));
-            $this->session->set_userdata('oauth_token', $tok['oauth_token']);
-            $this->session->set_userdata('oauth_token_secret', $tok['oauth_token_secret']);
+            $this->session->set_userdata('request_token', $tok['oauth_token']);
+            $this->session->set_userdata('request_token_secret', $tok['oauth_token_secret']);
 
             switch ($this->twitteroauth->http_code) {
                 case 200:
@@ -117,11 +117,12 @@ class Social extends MX_Controller {
         }
 
         if (!isset($_REQUEST['denied'])) {
-            $connection = new TwitterOAuth($this->session->userdata('oauth_token'), $this->session->userdata('oauth_token_secret'));
+            $connection = new TwitterOAuth($this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
 
             if (isset($_REQUEST['oauth_verifier'])) {
                 $tokenCredentials = $connection->getAccessToken($_REQUEST['oauth_verifier']);
-                
+                $this->session->unset_userdata('request_token');
+                $this->session->unset_userdata('request_token_secret');
                 $this->session->set_userdata('tw_access_token', $tokenCredentials['oauth_token']);
                 $this->session->set_userdata('tw_access_key', $tokenCredentials['oauth_token_secret']);
                 if($this->make_json()){

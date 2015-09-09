@@ -1714,8 +1714,8 @@ $(function() {
         });
 
     });
-
-
+    
+    
     //disable on load
     $('input:radio[name=mode]').parent().addClass('disabled');
     $('input:radio[name=mode]#modeBlock').radio('check');
@@ -1758,8 +1758,15 @@ $(function() {
 
             //active content edit mode
             $('#pageList ul li iframe').each(function() {
-
-
+                
+                //In editor image and icon click disable to prevent frame load
+                $(this).contents().find('a').on('click', function(e){
+                   if($(this).find('img, span.fa').length>0){
+                       e.preventDefault();
+                   } 
+                });
+                
+                
                 for (i = 0; i < editableContent.length; ++i) {
 
                     //remove old events
@@ -1780,7 +1787,7 @@ $(function() {
                         e.preventDefault();
 
                         e.stopPropagation();
-
+                        
                         $('#editContentModal #contentToEdit').val($(this).html())
 
                         $('#editContentModal').modal('show');
@@ -2217,9 +2224,9 @@ $(function() {
                 //remove .frameCovers
                 theContents = $(this).contents().find(pageContainer);
 
-                theContents.find('.frameCover').each(function() {
-                    $(this).remove();
-                });
+//                theContents.find('.frameCover').each(function() {
+//                    $(this).remove();
+//                });
                 toAdd = theContents.html();
 
                 //grab scripts
@@ -2943,9 +2950,9 @@ $(function() {
                     //remove .frameCovers				
                     theContents = $(this).contents().find(pageContainer);
 
-                    theContents.find('.frameCover').each(function() {
-                        $(this).remove();
-                    });
+//                    theContents.find('.frameCover').each(function() {
+//                        $(this).remove();
+//                    });
 
                     toAdd = theContents.html();
 

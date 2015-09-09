@@ -336,6 +336,7 @@ body .panel-default > .panel-heading {
 .sites .site {
 	border: 2px solid #bdc3c7;
 	padding: 20px;
+        margin: 10px;
 }
 
 .sites .site .siteLink {
@@ -850,7 +851,7 @@ body .panel-default > .panel-heading {
 	width: 100%;
 	height: auto;
 	overflow: hidden;
-	position: relative;
+	/*position: relative;*/
 }
 
 .images .image .imageWrap img {

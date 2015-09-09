@@ -8,7 +8,7 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="<?php echo base_url();?>assets/img/favicon.ico">
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="<?php echo base_url();?>assets/img/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/ionicons.min.css" />
@@ -169,16 +169,7 @@
                     		<?php 
                     	}
                     ?>
-                    <?php //if (Yii::app()->options->get('system.common.show_customer_timeinfo', 'no') == 'yes' && version_compare(EC_VERSION, '1.3.4.4', '>=')) { ?> 
-                    <div class="timeinfo">
-                        <div class="pull-left"><?php echo 'Local time';?></div>
-                        <div class="pull-right"><?php echo unix_to_human(time()); ?></div>
-                        <div class="clearfix"><!-- --></div>
-                        <div class="pull-left"><?php echo 'System time';?></div>
-                        <div class="pull-right"><?php echo date('Y-m-d H:i:s');?></div>
-                        <div class="clearfix"><!-- --></div>
-                    </div> 
-                    <?php //} ?>                    
+                  
                 </section>
             </aside>
             <aside class="right-side">

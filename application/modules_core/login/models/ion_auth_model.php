@@ -932,7 +932,7 @@ class Ion_auth_model extends CI_Model
 		    'ip_address'    => $ip_address,
 		    'created_on'    => time(),
 		    'price_plan_id' => $this->config->item('default_plan', 'ion_auth'),
-		    'active'        => ($additional_data['active'])?$additional_data['active']:($manual_activation === false ? 1 : 0)
+		    'active'        => (isset($additional_data['active']))?$additional_data['active']:($manual_activation === false ? 1 : 0)
 		);
 
 		if ($this->store_salt)

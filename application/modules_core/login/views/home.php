@@ -279,16 +279,16 @@ type="text">-->
                 <div class="login_form_container wp1 delay-1s">
                     <div class="col-md-6 social_btn_group">
                         <div class="form-group">
-                            <a class="btn btn-primary facebook_btn" href="<?php echo $this->facebook->login_url(); ?>"><i class="fa fa-facebook-f"></i>Facebook Login</a>
+                            <a class="btn btn-primary facebook_btn" href="<?php // echo $this->facebook->login_url(); ?>"><i class="fa fa-facebook-f"></i>Facebook Login</a>
                         </div>
 
                         <div class="form-group">
-                            <a class="btn btn-primary google_btn" href="<?php echo $this->google->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
+                            <a class="btn btn-primary google_btn" href="<?php // echo $this->google->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
                         </div>
 
-                        <div class="form-group">
-                            <a class="btn btn-primary twitter_btn"><i class="fa fa-twitter"></i>Twitter Login</a>
-                        </div>
+                        <!--                        <div class="form-group">
+                                                    <a class="btn btn-primary twitter_btn"><i class="fa fa-twitter"></i>Twitter Login</a>
+                                                </div>-->
                     </div>
 
                     <div class="col-md-6">
@@ -395,16 +395,16 @@ type="text">-->
                     <div class="login_form">
                         <div class="col-md-6 social_btn_group">
                             <div class="form-group">
-                                <a class="btn btn-primary facebook_btn" href="<?php echo $this->facebook->login_url(); ?>"><i class="fa fa-facebook-f"></i>Facebook Login</a>
+                                <a class="btn btn-primary facebook_btn" href="<?php // echo $this->facebook->login_url(); ?>"><i class="fa fa-facebook-f"></i>Facebook Login</a>
                             </div>
 
                             <div class="form-group">
-                                <a class="btn btn-primary google_btn" href="<?php echo $this->google->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
+                                <a class="btn btn-primary google_btn" href="<?php // echo $this->google->login_url(); ?>"><i class="fa fa-google-plus"></i>Google+ Login</a>
                             </div>
 
-                            <div class="form-group">
-                                <a class="btn btn-primary twitter_btn"><i class="fa fa-twitter"></i>Twitter Login</a>
-                            </div>
+                            <!--                            <div class="form-group">
+                                                            <a class="btn btn-primary twitter_btn"><i class="fa fa-twitter"></i>Twitter Login</a>
+                                                        </div>-->
                         </div>
 
                         <div class="col-md-6">
