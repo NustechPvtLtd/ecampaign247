@@ -628,10 +628,10 @@ var _oldIcon = new Array();
 
 
 function styleClick(el) {
-    if($(el).hasClass('demo-map')){
+    if ($(el).hasClass('demo-map')) {
         return false;
     }
-    
+
     theSelector = $(el).attr('data-selector');
 
     $('#editingElement').text(theSelector);
@@ -779,7 +779,7 @@ function styleClick(el) {
 
 
     }
-    
+
     if ($(el).attr('data-type') == 'video') {
 
         $('a#video_Link').parent().show();
@@ -808,8 +808,8 @@ function styleClick(el) {
         }
 
     }
-    
-    
+
+
     if ($(el).attr('data-type') == 'document') {
 
         $('a#document_Link').parent().show();
@@ -825,7 +825,7 @@ function styleClick(el) {
 //
 //        $('#document_Tab input#documentURL').val(match[1]);
 
-        alert( $(el).prev().attr('src') );
+        alert($(el).prev().attr('src'));
 
     }
 
@@ -1597,7 +1597,7 @@ $(function() {
 
             $('<li class="" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-th-list"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
         }
-        else if (niceKey == "ecommerce_tables" && display_ecom=='yes') {
+        else if (niceKey == "ecommerce_tables" && display_ecom == 'yes') {
 
             $('<li class="ecommerce_tables" ><a href="" id="' + niceKey + '"><span aria-hidden="true" class="glyphicon glyphicon-th-list"></span><span class="txt">' + key + '</span></a></li>').appendTo('#menu #main ul#elements');
         }
@@ -1714,8 +1714,8 @@ $(function() {
         });
 
     });
-    
-    
+
+
     //disable on load
     $('input:radio[name=mode]').parent().addClass('disabled');
     $('input:radio[name=mode]#modeBlock').radio('check');
@@ -1758,15 +1758,15 @@ $(function() {
 
             //active content edit mode
             $('#pageList ul li iframe').each(function() {
-                
+
                 //In editor image and icon click disable to prevent frame load
-                $(this).contents().find('a').on('click', function(e){
-                   if($(this).find('img, span.fa').length>0){
-                       e.preventDefault();
-                   } 
+                $(this).contents().find('a').on('click', function(e) {
+                    if ($(this).find('img, span.fa').length > 0) {
+                        e.preventDefault();
+                    }
                 });
-                
-                
+
+
                 for (i = 0; i < editableContent.length; ++i) {
 
                     //remove old events
@@ -1787,7 +1787,7 @@ $(function() {
                         e.preventDefault();
 
                         e.stopPropagation();
-                        
+
                         $('#editContentModal #contentToEdit').val($(this).html())
 
                         $('#editContentModal').modal('show');
@@ -1940,8 +1940,30 @@ $(function() {
     $('button#updateContentInFrameSubmit').click(function() {
 
         //alert( elToUpdate.text() )
-        
-        elToUpdate.html($('#editContentModal #contentToEdit').redactor('code.get')).css({'outline': '', 'cursor': ''})
+        if (elToUpdate.hasClass('pprice') == true)
+        {
+            var text1 = $('#editContentModal #contentToEdit').redactor('code.get');
+
+            var checkprice = /^\d+(\.\d{0,2})?$/;
+            var pricevalid = checkprice.test(text1);
+
+            if (pricevalid == false)
+            {
+                alert("Please enter price only in numbers");
+                return false;
+            }
+
+        }
+
+
+        elToUpdate.html($('#editContentModal #contentToEdit').redactor('code.get')).css({'outline': '', 'cursor': ''});
+        var text = elToUpdate.text();
+
+        if (elToUpdate.hasClass('createproduct') == true)
+        {
+            //function to set values for product form 1
+            updateproductinfo(elToUpdate, text);
+        }
 
         $('#editContentModal textarea').each(function() {
 
@@ -1959,6 +1981,91 @@ $(function() {
 
     })
 
+
+    //set value for product no.1 //..............shubhangee
+    function updateproductinfo(elToUpdate, text)
+    {
+
+        var elem = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.productform1');
+
+        console.log(elem);
+
+        if (elem.find('.productid').val() == "")
+        {
+            var randid = makeid();
+            elem.find('.productid').val(randid);
+
+            var redirecturl = siteUrl + "products/buynow?pid=" + randid;
+
+            console.log($(elToUpdate).parents('div.pricing1').children(':last-child').find('.buynowbtn').attr('href', redirecturl));
+
+        }
+
+        var productid = elem.find('.productid').val();
+
+        if (elToUpdate.hasClass('pname') == true)
+        {
+            elem.find('.productname').val(text);
+        }
+
+        if (elToUpdate.hasClass('pprice') == true)
+        {
+            elem.find('.productprice').val(text);
+
+        }
+
+        if (elToUpdate.hasClass('pdescription') == true)
+        {
+            elem.find('.productdesc').val(text);
+        }
+
+        if (elem.find('.productname').val() == "")
+        {
+            var pname = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.pname').text();
+            elem.find('.productname').val(pname);
+        }
+
+        if (elem.find('.productprice').val() == "")
+        {
+            var pprice = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.pprice').text();
+            elem.find('.productprice').val(pprice);
+        }
+
+        if (elem.find('.productdesc').val() == "")
+        {
+            var desc = $(elToUpdate).parents('div.pricing1').children(':last-child').find('.pdescription').text();
+            elem.find('.productdesc').val(desc);
+        }
+
+        var img1 = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.img1').attr('src');
+
+        var pprice = elem.find('.productprice').val();
+        var pdescription = elem.find('.productdesc').val();
+        var pname = elem.find('.productname').val();
+
+        siteId = $('#pageList ul:visible').attr('data-siteid');
+
+        $.ajax({
+            url: siteUrl + "sites/createuserproducts/",
+            type: "POST",
+            dataType: "json",
+            data: 'site_id=' + siteId + '&productid=' + productid + '&pname=' + pname + '&pprice=' + pprice + '&pdescription=' + pdescription + '&img1=' + img1,
+        }).done(function(response) {
+        });
+
+    }
+
+    //generate random id
+    function makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 10; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
 
     //close styleEditor
     $('#styleEditor > a.close').click(function(e) {

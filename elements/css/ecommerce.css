@@ -12,7 +12,7 @@
 {
     background:transparent;
 }
-.carousel-control{display:none;}
+.carousel-control{display:block;}
 .carousel:hover .carousel-control{display:block;}
 
 .panel {border:0px;}

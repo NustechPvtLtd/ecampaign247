@@ -33,24 +33,6 @@
                 </a>
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
-                        <!-- <li class="dropdown tasks-menu">
-                            <a href="javascript;;" class="header-account-stats dropdown-toggle" data-url="<?php //echo site_url('account/usage');?>" data-toggle="dropdown" title="<?php //echo 'Account usage';?>">
-                                <i class="fa fa-tasks"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header"><?php //echo 'Account usage';?></li>
-                                <li>
-                                    <ul class="menu">
-                                        <li>
-                                            <a href="#"><h3><?php //echo 'Please wait, processing...';?></h3></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="footer">
-                                    <a href="javascript:;" class="header-account-stats-refresh"><?php //echo 'Refresh';?></a>
-                                </li>
-                            </ul>
-                        </li> -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
@@ -98,7 +80,6 @@
                         include_once 'admin_menu.php';
                     }?>
                     </ul>
-                    <?php //if (Yii::app()->options->get('system.common.show_customer_timeinfo', 'no') == 'yes' && version_compare(EC_VERSION, '1.3.4.4', '>=')) { ?> 
                     <div class="timeinfo">
                         <div class="pull-left"><?php echo 'Local time';?></div>
                         <div class="pull-right"><?php echo unix_to_human(time()); ?></div>
@@ -106,8 +87,7 @@
                         <div class="pull-left"><?php echo 'System time';?></div>
                         <div class="pull-right"><?php echo date('Y-m-d H:i:s');?></div>
                         <div class="clearfix"><!-- --></div>
-                    </div> 
-                    <?php //} ?>                    
+                    </div>                 
                 </section>
             </aside>
             <aside class="right-side">
@@ -125,15 +105,15 @@
         <footer>
             <div class="clearfix"><!-- --></div>
         </footer>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/knockout-3.1.0.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/notify.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/adminlte.js"></script>	
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/knockout-3.1.0.js"></script>
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/notify.js"></script>
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/adminlte.js"></script>	
 		<!--<script type="text/javascript" src="<?php //echo base_url();?>customer/assets/js/app.js"></script>-->
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.min.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.resize.min.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/flot/jquery.flot.categories.min.js"></script>
-        <script type="text/javascript" src="/support_apps/livechat/php/app.php?widget-init.js"></script>
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/flot/jquery.flot.min.js"></script>
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/flot/jquery.flot.resize.min.js"></script>
+		<script type="text/javascript" defer="defer" src="<?php echo base_url();?>assets/js/flot/jquery.flot.categories.min.js"></script>
+<!--        <script type="text/javascript" defer="defer" src="/support_apps/livechat/php/app.php?widget-init.js"></script>-->
         <?php if(isset($js)) echo implode("\n", $js) . "\n";?>
     </body>
 </html>

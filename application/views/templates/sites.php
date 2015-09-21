@@ -188,19 +188,19 @@
             <div class="clearfix"><!-- --></div>
         </footer>
 		<!-- Load JS here for greater good =============================-->
-	    <script src="<?php echo base_url();?>assets/sites/js/jquery-ui.min.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/jquery.ui.touch-punch.min.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/bootstrap.min.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/bootstrap-select.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/bootstrap-switch.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/flatui-checkbox.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/flatui-radio.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/jquery.tagsinput.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/flatui-fileinput.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/jquery.placeholder.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/jquery.zoomer.js"></script>
-	    <script src="<?php echo base_url();?>assets/sites/js/application.js"></script>
-        <script src="<?php echo base_url();?>assets/js/adminlte.js" ></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/jquery-ui.min.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/jquery.ui.touch-punch.min.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/bootstrap.min.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/bootstrap-select.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/bootstrap-switch.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/flatui-checkbox.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/flatui-radio.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/jquery.tagsinput.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/flatui-fileinput.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/jquery.placeholder.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/jquery.zoomer.js" type="text/javascript" defer="defer"></script>
+	    <script src="<?php echo base_url();?>assets/sites/js/application.js" type="text/javascript" defer="defer"></script>
+        <script src="<?php echo base_url();?>assets/js/adminlte.js" type="text/javascript" defer="defer"></script>
         <?php if(isset($js)) echo implode("\n", $js) . "\n";?>
         <script>
                 var baseUrl = "<?php echo base_url();?>";

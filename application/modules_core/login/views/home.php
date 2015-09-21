@@ -321,11 +321,10 @@ type="text">-->
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="embed-responsive embed-responsive-16by9">
+                <div class="embed-responsive embed-responsive-16by9" id="load-youtube">
                     <img height="auto" id="vd_img" src="<?php echo base_url(); ?>assets/home/img/vd_img.jpg"
-                         width="100%"> <iframe class="embed-responsive-item"
-                         src=
-                         "https://www.youtube.com/embed/nwpRPKco_QQ"></iframe>
+                         width="100%"> 
+                    <!--<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nwpRPKco_QQ"></iframe>-->
                 </div>
             </div>
         </div>
@@ -431,3 +430,24 @@ type="text">-->
         </div>
     </div>
 </div>
+<script type="text/javascript" defer="defer">
+//doesn't block the load event
+function createIframe(){
+  var i = document.createElement("iframe");
+  i.src = "https://www.youtube.com/embed/nwpRPKco_QQ";
+  i.scrolling = "auto";
+  i.frameborder = "0";
+  i.width = "200px";
+  i.height = "100px";
+  i.class = "embed-responsive-item";
+  document.getElementById("load-youtube").appendChild(i);
+};
+	
+// Check for browser support of event handling capability
+if (window.addEventListener)
+window.addEventListener("load", createIframe, false);
+else if (window.attachEvent)
+window.attachEvent("onload", createIframe);
+else window.onload = createIframe;
+
+</script>

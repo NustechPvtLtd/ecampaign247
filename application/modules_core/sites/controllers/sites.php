@@ -1,4 +1,7 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 class Sites extends MY_Controller {
 
@@ -20,15 +23,12 @@ class Sites extends MY_Controller {
 
         $this->data['pageTitle'] = $this->lang->line('sites_page_title');
 
-		if(!$this->ion_auth->logged_in()) {
+        if (!$this->ion_auth->logged_in()) {
 
             redirect('/login');
-		
         }
-			
     }
 
-	
     /*
 
       lists all sites
@@ -208,7 +208,6 @@ class Sites extends MY_Controller {
 
             $this->data['siteData'] = $siteData;
 
-
             //get page data
             $pagesData = $this->pagemodel->getPageData($siteID);
 
@@ -217,17 +216,13 @@ class Sites extends MY_Controller {
                 $this->data['pagesData'] = $pagesData;
             }
 
-
             //collect data for the image library
 
-            $user = $this->ion_auth->user()->row();
-
-            $userID = $user->id;
+            $userID = userdata('user_id');
 
             $userImages = $this->usermodel->getUserImages($userID);
 
             if ($userImages) {
-
                 $this->data['userImages'] = $userImages;
             }
 
@@ -235,7 +230,6 @@ class Sites extends MY_Controller {
             $adminImages = $this->sitemodel->adminImages();
 
             if ($adminImages) {
-
                 $this->data['adminImages'] = $adminImages;
             }
 
@@ -243,18 +237,18 @@ class Sites extends MY_Controller {
             $this->data['builder'] = true;
             $this->data['page'] = "site";
             $this->data['js'] = array(
-                '<script src="' . base_url() . 'assets/sites/js/spectrum.js"></script>',
-                '<script src="' . base_url() . 'assets/sites/js/chosen.jquery.min.js"></script>',
-                '<script src="' . base_url() . 'assets/sites/js/redactor/redactor.min.js"></script>',
-                '<script src="' . base_url() . 'assets/sites/js/redactor/table.js"></script>',
-                '<script src="' . base_url() . 'assets/sites/js/redactor/bufferButtons.js"></script>',
-                '<script src="' . base_url() . 'assets/sites/js/src-min-noconflict/ace.js"></script>',
-                '<script src="' . site_url('sites/getelements') . '"></script>',
-                '<script src="' . base_url() . 'assets/js/jquery.blockUI.js"></script>',
-                '<script src="' . base_url() . 'assets/sites/js/builder.js"></script>',
-                '<script type="text/javascript" src="' . base_url('assets/sites/js/bootstrap-switch.min.js') . '"></script>',
-                '<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>',
-                '<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>'
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/spectrum.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/chosen.jquery.min.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/redactor/redactor.min.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/redactor/table.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/redactor/bufferButtons.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/src-min-noconflict/ace.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . site_url('sites/getelements') . '"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/js/jquery.blockUI.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url() . 'assets/sites/js/builder.js"></script>',
+                '<script type="text/javascript" defer="defer" src="' . base_url('assets/sites/js/bootstrap-switch.min.js') . '"></script>',
+                '<script type="text/javascript" defer="defer" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>',
+                '<script type="text/javascript" defer="defer" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>'
             );
             $this->template->load('sites', 'sites', 'sites/create', $this->data);
             //$this->load->view('', $this->data);
@@ -389,7 +383,7 @@ class Sites extends MY_Controller {
     {
 
         $frame = $this->sitemodel->getSingleFrame($frameID);
-        if(!$frame){
+        if (!$frame) {
             return FALSE;
         }
         $frameContent = $frame->frames_content;
@@ -545,7 +539,6 @@ class Sites extends MY_Controller {
 
             //insert header includes;
             $pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
-
         } else {
             //insert title
             $meta = '<title>' . $siteDetails['site']->sites_name . '</title>';
@@ -554,14 +547,14 @@ class Sites extends MY_Controller {
             $pageContent = str_replace('<!--pageMeta-->', $meta, $content);
             $pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
         }
-        
+
         //remove video cover
         $pageContent = str_replace('<div style="" data-selector=".frameCover" class="frameCover" data-type="video"></div>', "", $pageContent);
         $pageContent = str_replace('<div style="margin: 0px;" data-selector=".frameCover" class="frameCover" data-type="video"></div>', "", $pageContent);
         $pageContent = str_replace('<div data-selector=".frameCover" class="frameCover" data-type="video"></div>', "", $pageContent);
         $pageContent = str_replace('<div data-type="video" class="frameCover" data-selector=".frameCover"></div>', "", $pageContent);
         $pageContent = str_replace('class="frameCover"', "", $pageContent);
-        
+
         $pageContent = str_replace("<!-- site contact url div -->", '<div id="contact-url" data-content="' . site_url('login/site_contact/' . $this->encrypt->encode($_POST['siteID'])) . '"></div>', $pageContent);
 
         $pageContent = str_replace("<!-- site counter url div -->", '<div id="counter-url" data-content="' . site_url('login/visitor_counter/' . $this->encrypt->encode($_POST['siteID'])) . '"></div>', $pageContent);
@@ -638,7 +631,7 @@ class Sites extends MY_Controller {
             if (!mkdir('./temp/' . $userID, 0777)) {
                 die('Directory not created');
             }
-        }  else {
+        } else {
             remove_directory('./temp/' . $userID);
             if (!mkdir('./temp/' . $userID, 0777)) {
                 die('Directory not created');
@@ -663,7 +656,6 @@ class Sites extends MY_Controller {
 
                 //insert header includes;
                 $pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
-
             } else {
                 //insert title
                 $meta = '<title>' . $siteDetails['site']->sites_name . '</title>';
@@ -673,7 +665,7 @@ class Sites extends MY_Controller {
 
                 $pageContent = str_replace("<!--headerIncludes-->", $header_includes, $pageContent);
             }
-            
+
             //remove viedo cover
             $pageContent = str_replace('<div style="" data-selector=".frameCover" class="frameCover" data-type="video"></div>', "", $pageContent);
             $pageContent = str_replace('<div style="margin: 0px;" data-selector=".frameCover" class="frameCover" data-type="video"></div>', "", $pageContent);
@@ -848,6 +840,19 @@ class Sites extends MY_Controller {
                 return FALSE;
             }
         }
+    }
+
+    //function to create users products......shubhangee
+    public function createuserproducts()
+    {
+        $site_id = $_POST['site_id'];
+        $productid = $_POST['productid'];
+        $pname = $_POST['pname'];
+        $pprice = $_POST['pprice'];
+        $pdescription = $_POST['pdescription'];
+        $img1 = $_POST['img1'];
+
+        $this->sitemodel->createuserproducts($site_id, $productid, $pname, $pprice, $pdescription, $img1);
     }
 
 }

@@ -253,3 +253,33 @@ ul.pagination li.selected, ul.pagination li.selected a {
     padding: 0px 5px 2px 15px;
     font-size: 14px; 
 }
+
+
+/*css for ecommerce products....shubhangee...*/
+
+.productname{
+	font-size: 18px; 
+	color: inherit;
+    font-family: "Lato",Helvetica,Arial,sans-serif;
+    font-weight: 700;
+}
+
+.productprice{
+	color: #16a085;
+    font-size: 18px;
+}
+
+.imageborderradius{border-radius:5px; margin-left: -13px;}
+
+.fontsizenone table th, table td {
+    font-size:14px;
+	margin:0px auto;
+}
+
+.headingordertbl{ font-weight:bold; padding:7px; }
+
+.paddingbig{padding:10px; }
+
+.mediumfont{font-size:15px;}
+
+.emptyfield{border:1px solid #F00;}

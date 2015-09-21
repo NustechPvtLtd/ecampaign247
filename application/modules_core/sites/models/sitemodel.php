@@ -323,7 +323,6 @@ class Sitemodel extends CI_Model {
         return $siteArray;
     }
 
-    
     public function getSiteId($user_id)
     {
         $this->db->select('sites_id');
@@ -342,6 +341,7 @@ class Sitemodel extends CI_Model {
         $site = $res[0];
         return $site->sites_id;
     }
+
     /*
 
       grabs a single frame and returns it
@@ -624,6 +624,31 @@ class Sitemodel extends CI_Model {
             return TRUE;
         } else {
             return FALSE;
+        }
+    }
+
+    //function to create users products......shubhangee
+
+    public function createuserproducts($site_id, $productid, $pname, $pprice, $pdescription, $img1)
+    {
+        $uid = $this->ion_auth->get_user_id();
+
+        $fullui = "";
+        if (strpos($img1, "/images/") == true) {
+            $fullui = $img1;
+        } else {
+            $url = site_url();
+            $newsite = explode('index.php', $url);
+
+            $fullui = $newsite[0] . "elements/" . $img1;
+        }
+	
+        $query = $this->db->query("select * from users_products where product_id='" . $productid . "' ") or die(mysql_error());
+        $res = $query->result();
+        if (!empty($res)) {
+            $query = $this->db->query("update users_products set name='" . $pname . "',description='" . $pdescription . "',price='" . $pprice . "',site_id='" . $site_id . "',image1='" . $fullui . "' where product_id='" . $productid . "' ");
+        } else {
+            $query = $this->db->query("insert into users_products(user_id,product_id,name,description,price,site_id,image1)values('" . $uid . "','" . $productid . "','" . $pname . "','" . $pdescription . "','" . $pprice . "','" . $site_id . "','" . $fullui . "')");
         }
     }
 
