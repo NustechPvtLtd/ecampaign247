@@ -45,11 +45,11 @@ class Sitemodel extends CI_Model {
 
         $res = $query->result();
 
-        $allSites = array(); //array holding all sites and associated data
+        $allSites = []; //array holding all sites and associated data
 
         foreach ($res as $site) {
 
-            $temp = array();
+            $temp = [];
 
             $temp['siteData'] = $site;
 
@@ -146,11 +146,11 @@ class Sitemodel extends CI_Model {
         $userID = $user->id;
 
         //create site
-        $data = array(
+        $data = [
             'sites_name' => 'My New Site',
             'users_id' => $userID,
             'sites_created_on' => time()
-        );
+        ];
 
         $this->db->insert('sites', $data);
 
@@ -177,11 +177,11 @@ class Sitemodel extends CI_Model {
 
         //create the site item first
 
-        $data = array(
+        $data = [
             'users_id' => $userID,
             'sites_name' => $siteName,
             'sites_created_on' => time()
-        );
+        ];
 
         $this->db->insert('sites', $data);
 
@@ -204,9 +204,9 @@ class Sitemodel extends CI_Model {
 
         //update the site details first
 
-        $data = array(
+        $data = [
             'sites_lastupdate_on' => time()
-        );
+        ];
 
         $this->db->where('sites_id', $siteID);
         $this->db->update('sites', $data);
@@ -277,7 +277,7 @@ class Sitemodel extends CI_Model {
 
         $site = $res[0];
 
-        $siteArray = array();
+        $siteArray = [];
         $siteArray['site'] = $site;
 
 
@@ -288,7 +288,7 @@ class Sitemodel extends CI_Model {
         $res = $query->result();
 
 
-        $pageFrames = array();
+        $pageFrames = [];
 
         foreach ($res as $page) {
 
@@ -307,7 +307,7 @@ class Sitemodel extends CI_Model {
 
         $folderContent = directory_map($this->config->item('elements_dir'), 2);
 
-        $assetFolders = array();
+        $assetFolders = [];
 
         foreach ($folderContent as $key => $item) {
 
@@ -375,7 +375,7 @@ class Sitemodel extends CI_Model {
 
         $folderContent = directory_map($this->config->item('elements_dir'), 2);
 
-        $assetFolders = array();
+        $assetFolders = [];
 
         foreach ($folderContent as $key => $item) {
 
@@ -393,7 +393,7 @@ class Sitemodel extends CI_Model {
 
         $pages = $query->result();
 
-        $return = array();
+        $return = [];
 
         $return['assetFolders'] = $assetFolders;
         $return['pages'] = $pages;
@@ -410,14 +410,14 @@ class Sitemodel extends CI_Model {
     public function trash($siteID)
     {
 
-        $data = array(
+        $data = [
             'sites_trashed' => 1
-        );
+        ];
 
         $this->db->where('sites_id', $siteID);
         if ($this->db->update('sites', $data)) {
             $this->db->where('sites_id', $siteID);
-            $this->db->update('pages', array('pages_trashed' => 1));
+            $this->db->update('pages', ['pages_trashed' => 1]);
         }
     }
 
@@ -430,9 +430,9 @@ class Sitemodel extends CI_Model {
     public function publish($siteID, $remote_url)
     {
 
-        $data = array(
+        $data = [
             'published' => 1
-        );
+        ];
 
         $this->db->where('sites_id', $siteID);
         $this->db->update('sites', $data);
@@ -453,7 +453,7 @@ class Sitemodel extends CI_Model {
 
             //print_r( $folderContent );
 
-            $adminImages = array();
+            $adminImages = [];
 
             foreach ($folderContent as $key => $item) {
 
@@ -487,11 +487,11 @@ class Sitemodel extends CI_Model {
     {
         foreach ($siteData as $pageName => $frames) {
 
-            $data = array(
+            $data = [
                 'sites_id' => $siteID,
                 'pages_name' => $pageName,
                 'pages_timestamp' => time()
-            );
+            ];
 
             $this->db->insert('pages', $data);
 
@@ -511,14 +511,14 @@ class Sitemodel extends CI_Model {
                 if (stristr($frameContent, 'src="' . base_url('elements') . '/images')) {
                     $frameContent = str_replace('src="' . base_url('elements') . '/images', 'src="images', $frameContent);
                 }
-                $data = array(
+                $data = [
                     'pages_id' => $pageID,
                     'sites_id' => $siteID,
                     'frames_content' => $frameContent,
                     'frames_height' => $frameData['frameHeight'],
                     'frames_original_url' => $frameData['originalUrl'],
                     'frames_timestamp' => time()
-                );
+                ];
 
                 $this->db->insert('frames', $data);
             }
@@ -538,11 +538,11 @@ class Sitemodel extends CI_Model {
 
         foreach ($siteData as $pageName => $frames) {
 
-            $data = array(
+            $data = [
                 'sites_id' => $siteID,
                 'pages_name' => $pageName,
                 'pages_timestamp' => time()
-            );
+            ];
 
             if (isset($pagesData[$pageName]['pages_title'])) {
 
@@ -574,16 +574,16 @@ class Sitemodel extends CI_Model {
                         $frameContent = str_replace('<script src="' . base_url('elements') . '/', '<script src="', $frameContent);
                     }
                     if (stristr($frameContent, 'src="' . base_url('elements') . '/images')) {
-                        $frameContent = str_replace('src="' . base_url('elements') . '/images', 'src="images', $frameContent);
+                        $frameContent = str_replace('src="' . base_url('elements') . '/images', 'src="/elements/images', $frameContent);
                     }
-                    $data = array(
+                    $data = [
                         'pages_id' => $pagesData[$pageName]['pages_id'],
                         'sites_id' => $siteID,
                         'frames_content' => $frameContent,
                         'frames_height' => $frameData['frameHeight'],
                         'frames_original_url' => $frameData['originalUrl'],
                         'frames_timestamp' => time()
-                    );
+                    ];
 
                     $this->db->insert('frames', $data);
                 }
@@ -598,9 +598,9 @@ class Sitemodel extends CI_Model {
     public function deleteAllFor($userID)
     {
 
-        $data = array(
+        $data = [
             'sites_trashed' => 1
-        );
+        ];
 
         $this->db->where('users_id', $userID);
         $this->db->update('sites', $data);
@@ -620,7 +620,7 @@ class Sitemodel extends CI_Model {
     {
         $this->db->where('sites_id', $site_id);
         $this->db->where('pages_name', $page_name);
-        if ($this->db->update('pages', array('pages_trashed' => 1))) {
+        if ($this->db->update('pages', ['pages_trashed' => 1])) {
             return TRUE;
         } else {
             return FALSE;
@@ -642,7 +642,7 @@ class Sitemodel extends CI_Model {
 
             $fullui = $newsite[0] . "elements/" . $img1;
         }
-	
+
         $query = $this->db->query("select * from users_products where product_id='" . $productid . "' ") or die(mysql_error());
         $res = $query->result();
         if (!empty($res)) {

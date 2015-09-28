@@ -7,7 +7,7 @@
 
 /* SETTINGS */
 
-var pageContainer = "#page";
+var pageContainer = ".page";
 
 var editableItems = new Array();
 
@@ -79,7 +79,7 @@ $(window).load(function() {
         $('#publishPage').tooltip('show');
 
         setTimeout(function() {
-            $('#publishPage').tooltip('hide')
+            $('#publishPage').tooltip('hide');
         }, 5000);
 
     }
@@ -188,13 +188,13 @@ function prepPagesforSave() {
 
         pageFrames = [];
 
-        if ($(this).find('iframe').size() > 0) {//we've got frames
+        if ($(this).find('section').size() > 0) {//we've got frames
 
-            $(this).find('iframe').each(function() {
+            $(this).find('section').each(function() {
 
                 frame = {};
-
-                frame['frameContent'] = "<html>" + $(this).contents().find('html').html() + "</html>";
+                
+                frame['frameContent'] = $(this).html();
 
                 //get real frame height rather then from the array
 
@@ -206,13 +206,10 @@ function prepPagesforSave() {
 
                 $(this).closest('ul').show();
 
-
-                frame['frameHeight'] = this.contentWindow.document.body.offsetHeight;
+                frame['frameHeight'] = this.offsetHeight;
 
                 //update the array as well
-                frames[$(this).attr('id')] = this.contentWindow.document.body.offsetHeight;
-
-
+                frames[$(this).attr('id')] = this.offsetHeight;
 
                 frame['originalUrl'] = $(this).attr('data-originalurl');
 
@@ -220,7 +217,7 @@ function prepPagesforSave() {
 
                 pageFrames.push(frame);
 
-            })
+            });
 
             thePages[pageName] = pageFrames;
 
@@ -229,8 +226,6 @@ function prepPagesforSave() {
             thePages[pageName] = '';
 
         }
-
-
 
     });
 
@@ -262,7 +257,6 @@ function makeDraggable(theID) {
 
             },
             start: function() {
-
                 //switch to block mode
                 $('input:radio[name=mode]').parent().addClass('disabled');
                 $('input:radio[name=mode]#modeBlock').radio('check');
@@ -273,20 +267,20 @@ function makeDraggable(theID) {
 
                     $(this).show();
 
-                })
+                });
 
                 //deactivate designmode
 
-                $('#pageList ul li iframe').each(function() {
+                $('#pageList ul li section').each(function() {
 
-                    this.contentDocument.designMode = "off";
+                    this.designMode = "off";
 
-                })
+                });
 
             }
         });
 
-    })
+    });
 
     $('#elements li a').each(function() {
 
@@ -301,37 +295,48 @@ function makeDraggable(theID) {
 }
 
 function makeSortable(el) {
-
     el.sortable({
         revert: true,
         placeholder: "drop-hover",
         beforeStop: function(event, ui) {
 
-            //alert( ui.item.find('iframe').attr('src') )
-
             if (ui.item.find('.zoomer-cover > button').size() == 0) {
 
-                if (ui.item.find('iframe').size() > 0) {//iframe thumbnails
+                if (ui.item.find('section').size() > 0) {//iframe thumbnails
 
                     theHeight = ui.item.height() / 0.25;
 
                     theHeight = theHeight * 0.8;
 
-                    var attr = ui.item.find('iframe').attr('sandbox');
+                    var attr = ui.item.find('section').attr('sandbox');
 
+                    ui.item.html('<section src="' + ui.item.find('section').attr('src') + '" scrolling="no" data-originalurl="' + ui.item.find('section').attr('src') + '" frameborder="0" sandbox="allow-same-origin"></section>');
                     if (typeof attr !== typeof undefined && attr !== false) {
-
-                        ui.item.html('<iframe src="' + ui.item.find('iframe').attr('src') + '" scrolling="no" data-originalurl="' + ui.item.find('iframe').attr('src') + '" frameborder="0" sandbox="allow-same-origin"><iframe>');
-
+                        
+                        $.ajax({
+                            type: "POST",
+                            url: ui.item.find('section').attr('data-originalurl'),
+                            success: function(data) {
+                                ui.item.find('section').html(data);
+                            }
+                        });
+                        
                     } else {
-
-                        ui.item.html('<iframe src="' + ui.item.find('iframe').attr('src') + '" scrolling="no" data-originalurl="' + ui.item.find('iframe').attr('src') + '" frameborder="0"><iframe>');
-
+                        
+                        ui.item.html('<section src="' + ui.item.find('section').attr('src') + '" scrolling="no" data-originalurl="' + ui.item.find('section').attr('src') + '" frameborder="0"></section>');
+                        $.ajax({
+                            type: "POST",
+                            url: ui.item.find('section').attr('data-originalurl'),
+                            success: function(data) {
+                                ui.item.find('section').html(data);
+                            }
+                        });
+                        
                     }
 
-                    ui.item.find('iframe').uniqueId();
+                    ui.item.find('section').uniqueId();
 
-                    ui.item.find('iframe').zoomer({
+                    ui.item.find('section').zoomer({
                         zoom: 0.8,
                         width: $('#screen').width(),
                         height: theHeight
@@ -342,32 +347,35 @@ function makeSortable(el) {
                     ui.item.find('.zoomer-cover a').remove();
                     ui.item.find('.zoomer-cover').text('');
 
-
                 } else {//image thumbnails
-
                     theHeight = ui.item.find('img').attr('data-height') * 0.8;
 
-                    ui.item.html('<iframe src="' + ui.item.find('img').attr('data-src') + '" scrolling="no" data-originalurl="' + ui.item.find('img').attr('data-src') + '" frameborder="0"><iframe>');
+                    ui.item.html('<section src="' + ui.item.find('img').attr('data-src') + '" scrolling="no" data-originalurl="' + ui.item.find('img').attr('data-src') + '" frameborder="0"></section>');
+                    $.ajax({
+                        type: "POST",
+                        url: ui.item.find('section').attr('data-originalurl'),
+                        success: function(data) {
+                            ui.item.find('section').html(data);
+                        }
+                    });
 
-                    ui.item.find('iframe').uniqueId();
+                    ui.item.find('section').uniqueId();
 
-                    ui.item.find('iframe').zoomer({
+                    ui.item.find('section').zoomer({
                         zoom: 0.8,
                         width: $('#screen').width(),
                         height: theHeight,
                         message: "Drag&Drop Me!"
                     });
 
-                    ui.item.find('iframe').load(function() {
+                    ui.item.find('section').load(function() {
 
-                        heightAdjustment(ui.item.find('iframe').attr('id'), true);
+                        heightAdjustment(ui.item.find('section').attr('id'), true);
 
                     });
 
-
                     //remove the link if it excists
                     ui.item.find('.zoomer-cover a').remove();
-
                 }
 
                 //add a delete button
@@ -383,7 +391,7 @@ function makeSortable(el) {
 
 
                 //dropped element, so we've got pending changes
-                setPendingChanges(true)
+                setPendingChanges(true);
 
             }
 
@@ -411,45 +419,55 @@ $('#element').on('click', 'li', function() {
     var el = ui.clone();
 
     theHeight = ui.find('img').attr('data-height') * 0.8;
-    el.html('<iframe src="' + ui.find('img').attr('data-src') + '" scrolling="no" data-originalurl="' + ui.find('img').attr('data-src') + '" frameborder="0"><iframe>');
+    el.html('<section src="' + ui.find('img').attr('data-src') + '" scrolling="no" data-originalurl="' + ui.find('img').attr('data-src') + '" frameborder="0"></section>');
+    
+    $.ajax({
+        type: "POST",
+        url: el.find('section').attr('data-originalurl'),
+        success: function(data) {
+            el.find('section').html(data);
+        }
+    }).done(function(){
+        el.find('section').uniqueId();
 
-    el.find('iframe').uniqueId();
+        el.find('section').zoomer({
+           zoom: 0.8,
+           width: $('#screen').width(),
+           height: theHeight,
+           message: "Drag&Drop Me!"
+        });
 
-    el.find('iframe').zoomer({
-        zoom: 0.8,
-        width: $('#screen').width(),
-        height: theHeight,
-        message: "Drag&Drop Me!"
+        el.find('section').load(function() {
+           heightAdjustment(el.find('section').attr('id'), true);
+        });
+
+        //remove the link if it excists
+        el.find('.zoomer-cover a').remove();
+
+        //add a delete button
+        delButton = $('<button type="button" class="btn btn-danger deleteBlock"><span class="fui-trash"></span> remove</button>');
+        resetButton = $('<button type="button" class="btn btn-warning resetBlock"><i class="fa fa-refresh"></i> reset</button>');
+        htmlButton = $('<button type="button" class="btn btn-inverse htmlBlock"><i class="fa fa-code"></i> source</button>');
+
+        el.find('.zoomer-cover').append(delButton);
+        el.find('.zoomer-cover').append($('<div style="clear:both; height:0px">'));
+        el.find('.zoomer-cover').append(resetButton);
+        el.find('.zoomer-cover').append($('<div style="clear:both; height:0px">'));
+        el.find('.zoomer-cover').append(htmlButton);
+
+        //dropped element, so we've got pending changes
+        setPendingChanges(true);
+        $('#pageList > ul:visible').append(el);
+        $('#pageList > ul:visible li').each(function() {
+           $(this).find('.zoomer-cover > a').remove();
+        });
+        pageEmpty();
+        allEmpty();
+        $('#start').hide();
     });
 
-    el.find('iframe').load(function() {
-        heightAdjustment(el.find('iframe').attr('id'), true);
-    });
-
-    //remove the link if it excists
-    el.find('.zoomer-cover a').remove();
-
-    //add a delete button
-    delButton = $('<button type="button" class="btn btn-danger deleteBlock"><span class="fui-trash"></span> remove</button>');
-    resetButton = $('<button type="button" class="btn btn-warning resetBlock"><i class="fa fa-refresh"></i> reset</button>');
-    htmlButton = $('<button type="button" class="btn btn-inverse htmlBlock"><i class="fa fa-code"></i> source</button>');
-
-    el.find('.zoomer-cover').append(delButton);
-    el.find('.zoomer-cover').append($('<div style="clear:both; height:0px">'));
-    el.find('.zoomer-cover').append(resetButton);
-    el.find('.zoomer-cover').append($('<div style="clear:both; height:0px">'));
-    el.find('.zoomer-cover').append(htmlButton);
-
-    //dropped element, so we've got pending changes
-    setPendingChanges(true);
-    $('#pageList ul:visible').append(el);
-    $('#pageList ul:visible li').each(function() {
-        $(this).find('.zoomer-cover > a').remove();
-    });
-    pageEmpty();
-    allEmpty();
-    $('#start').hide();
-});
+ });
+ 
 function buildeStyleElements(el, theSelector) {
 
     for (x = 0; x < editableItems[theSelector].length; x++) {
@@ -476,14 +494,12 @@ function buildeStyleElements(el, theSelector) {
 
                 newOption = $('<option value="' + editableItemOptions[theSelector + " : " + editableItems[theSelector][x]][z] + '">' + editableItemOptions[theSelector + " : " + editableItems[theSelector][x]][z] + '</option>');
 
-
                 if (editableItemOptions[theSelector + " : " + editableItems[theSelector][x]][z] == $(el).css(editableItems[theSelector][x])) {
 
                     //current value, marked as selected
                     newOption.attr('selected', 'true');
 
                 }
-
 
                 newDropDown.append(newOption)
 
@@ -492,7 +508,6 @@ function buildeStyleElements(el, theSelector) {
             newStyleEl.append(newDropDown);
 
             newDropDown.selectpicker({style: 'btn-sm btn-default', menuStyle: 'dropdown-inverse'});
-
 
         } else {
 
@@ -524,9 +539,9 @@ function buildeStyleElements(el, theSelector) {
 
 
                         //we've got pending changes
-                        setPendingChanges(true)
+                        setPendingChanges(true);
 
-                    })
+                    });
 
                 });
 
@@ -537,7 +552,6 @@ function buildeStyleElements(el, theSelector) {
                 if ($(el).css(editableItems[theSelector][x]) != 'transparent' && $(el).css(editableItems[theSelector][x]) != 'none' && $(el).css(editableItems[theSelector][x]) != '') {
 
                     newStyleEl.val($(el).css(editableItems[theSelector][x]));
-
                 }
 
                 newStyleEl.find('input').spectrum({
@@ -569,7 +583,7 @@ function buildeStyleElements(el, theSelector) {
         $('#styleElements').append(newStyleEl);
 
 
-        $('#styleEditor form#stylingForm').height('auto')
+        $('#styleEditor form#stylingForm').height('auto');
 
     }
 
@@ -583,33 +597,31 @@ function heightAdjustment(el, par) {
 
     if (par == false) {//el is element inside iframe
 
-        $('#pageList li:visible iframe').each(function() {
+        $('#pageList li:visible section').each(function() {
 
-            theBody = $(this).contents().find('body');
+            theBody = $(this).contents().find('div.page');
 
-            if ($.contains(document.getElementById($(this).attr('id')).contentWindow.document, el)) {
+            if ($.contains(document.getElementById($(this).attr('id')), el)) {
 
                 frameID = $(this).attr('id');
-
-                //alert( frameID )
 
                 return false;
 
             }
 
-        })
+        });
 
         theFrame = document.getElementById(frameID);
 
     } else {//el is frame ID
 
-        theFrame = document.getElementById(el)
+        theFrame = document.getElementById(el);
 
     }
 
     //realHeight = theFrame.contentWindow.document.body.offsetHeight;
-
-    realHeight = theFrame.contentWindow.document.body.offsetHeight;
+    
+    realHeight = theFrame.offsetHeight;
 
     //alert( realHeight )
 
@@ -726,8 +738,7 @@ function styleClick(el) {
 
         $('select#pageLinksDropdown option:not(:first)').remove();
 
-
-        $('#pageList ul:visible iframe').each(function() {
+        $('#pageList ul:visible section').each(function() {
 
             if ($(this).contents().find(pageContainer + " > *:first").attr('id') != undefined) {
 
@@ -741,13 +752,11 @@ function styleClick(el) {
 
                 }
 
-
-
                 $('select#pageLinksDropdown').append(newOption);
 
             }
 
-        })
+        });
 
         //if there aren't any blocks to list, hide the dropdown
 
@@ -763,7 +772,6 @@ function styleClick(el) {
 
         }
 
-
     }
 
     if ($(el).prop('tagName') == 'IMG') {
@@ -773,10 +781,8 @@ function styleClick(el) {
         //set the current SRC
         $('.imageFileTab').find('input#imageURL').val($(el).attr('src'))
 
-
         //reset the file upload
         $('.imageFileTab').find('a.fileinput-exists').click();
-
 
     }
 
@@ -850,7 +856,7 @@ function styleClick(el) {
 
             }
 
-        })
+        });
 
     }
 
@@ -858,17 +864,17 @@ function styleClick(el) {
     //$(el).addClass('builder_active');	
 
     //remove borders from other elements
-    $('#pageList ul:visible li iframe').each(function() {
+    $('#pageList ul:visible li section').each(function() {
 
         //remove borders		
 
         for (var key in editableItems) {
 
-            $(this).contents().find(pageContainer + ' ' + key).css({'outline': '', 'cursor': '', 'outline-offset': ''});
+            $(this).contents().find(key).css({'outline': '', 'cursor': '', 'outline-offset': ''});
 
-            $(this).contents().find(pageContainer + ' ' + key).hover(function() {
+            $(this).contents().find(key).hover(function() {
 
-                if ($(this).closest('body').width() != $(this).width()) {
+                if ($(this).closest('div.page').width() != $(this).width()) {
 
                     $(this).css({'outline': '3px dashed red', 'cursor': 'pointer'});
 
@@ -880,7 +886,7 @@ function styleClick(el) {
 
             }, function() {
 
-                if ($(this).closest('body').width() != ($(this).width() + 6)) {
+                if ($(this).closest('div.page').width() != ($(this).width() + 6)) {
 
                     $(this).css({'outline': '', 'cursor': ''});
 
@@ -890,7 +896,7 @@ function styleClick(el) {
 
                 }
 
-            })
+            });
 
         }
 
@@ -899,7 +905,7 @@ function styleClick(el) {
     //unbind event
     $(el).unbind('mouseenter mouseleave');
 
-    if ($(el).closest('body').width() != $(el).width()) {
+    if ($(el).closest('div.page').width() != $(el).width()) {
 
         $(el).css({'outline': '3px dashed red', 'cursor': 'pointer'});
 
@@ -917,12 +923,12 @@ function styleClick(el) {
 
         $(this).remove();
 
-    })
+    });
 
 
     //load the attributes
 
-    buildeStyleElements(el, theSelector)
+    buildeStyleElements(el, theSelector);
 
 
     //show style editor if hidden
@@ -950,22 +956,18 @@ function styleClick(el) {
             //hide modal
             $('#imageModal').modal('hide');
 
-
             //height adjustment of the iframe heightAdjustment
-
-            randomEl = $(el).closest('body').find('*:first');
-
-            heightAdjustment(randomEl[0])
-
+            randomEl = $(el).closest('div.page').find('*:first');
+            heightAdjustment(randomEl[0]);
 
             //we've got pending changes
             setPendingChanges(true);
 
             $(this).unbind('click');
 
-        })
+        });
 
-    })
+    });
 
 
     //save button
@@ -977,7 +979,7 @@ function styleClick(el) {
 
             $(el).css($(this).attr('name'), $(this).val())
 
-        })
+        });
 
 
         //links
@@ -1060,11 +1062,10 @@ function styleClick(el) {
 
                 }
 
-            })
+            });
 
 
         } else if ($('a#img_Link').css('display') == 'block') {
-
 
             //no image to upload, just a SRC change
             if ($('input#imageURL').val() != '' && $('input#imageURL').val() != $(el).attr('src')) {
@@ -1072,7 +1073,6 @@ function styleClick(el) {
                 $(el).attr('src', $('input#imageURL').val());
 
             }
-
 
         }
 
@@ -1126,9 +1126,9 @@ function styleClick(el) {
 
             setTimeout(function() {
                 $('#detailsAppliedMessage').fadeOut(1000)
-            }, 3000)
+            }, 3000);
 
-        })
+        });
 
 
         //clean up inline stuff
@@ -1181,26 +1181,26 @@ function styleClick(el) {
 
                 toDel.fadeOut(500, function() {
 
-                    randomEl = $(this).closest('body').find('*:first');
+                    randomEl = $(this).closest('div.page').find('*:first');
 
                     toDel.remove();
 
                     heightAdjustment(randomEl[0]);
 
                     //we've got pending changes
-                    setPendingChanges(true)
+                    setPendingChanges(true);
 
-                })
+                });
 
                 $('#deleteElement').modal('hide');
 
                 closeStyleEditor();
 
-            })
+            });
 
-        })
+        });
 
-    })
+    });
 
 
     //clone button
@@ -1235,13 +1235,13 @@ function styleClick(el) {
 
         for (var key in editableItems) {
 
-            $(el).closest('body').find(pageContainer + ' ' + key).each(function() {
+            $(el).closest('div.page').find(key).each(function() {
 
                 if ($(this)[0] === $(theOne)[0]) {
 
                     theOne.hover(function() {
 
-                        if ($(this).closest('body').width() != $(this).width()) {
+                        if ($(this).closest('div.page').width() != $(this).width()) {
 
                             $(this).css({'outline': '3px dashed red', 'cursor': 'pointer'});
 
@@ -1253,7 +1253,7 @@ function styleClick(el) {
 
                     }, function() {
 
-                        if ($(this).closest('body').width() != ($(this).width() + 6)) {
+                        if ($(this).closest('div.page').width() != ($(this).width() + 6)) {
 
                             $(this).css({'outline': '', 'cursor': ''});
 
@@ -1287,13 +1287,13 @@ function styleClick(el) {
 
         heightAdjustment(el);
 
-    })
+    });
 
 
     //reset button
     $('button#resetStyleButton').unbind('click').bind('click', function() {
 
-        if ($(el).closest('body').width() != $(el).width()) {
+        if ($(el).closest('div.page').width() != $(el).width()) {
 
             $(el).attr('style', '').css({'outline': '3px dashed red', 'cursor': 'pointer'})
 
@@ -1307,9 +1307,9 @@ function styleClick(el) {
 
         $('#styleEditor form#stylingForm .form-group:not(#styleElTemplate)').fadeOut(500, function() {
 
-            $(this).remove()
+            $(this).remove();
 
-        })
+        });
 
         //reset icon
 
@@ -1333,18 +1333,15 @@ function styleClick(el) {
 
                 }
 
-            })
+            });
 
         }
 
         setTimeout(function() {
             buildeStyleElements(el, theSelector)
-        }, 550)
+        }, 550);
 
-    })
-
-
-
+    });
 
 }
 
@@ -1357,26 +1354,26 @@ function closeStyleEditor() {
 
         $('#styleEditor').animate({'left': '-300px'}, 250);
 
-        $('#pageList ul li iframe').each(function() {
+        $('#pageList ul li section').each(function() {
 
             //remove hover events used by Styling modus			
 
             for (var key in editableItems) {
 
-                $(this).contents().find(pageContainer + ' ' + key).unbind('mouseenter mouseleave click').css({'outline': '', 'cursor': '', 'outline-offset': ''});
+                $(this).contents().find(key).unbind('mouseenter mouseleave click').css({'outline': '', 'cursor': '', 'outline-offset': ''});
 
             }
 
 
             if ($('input:radio[name=mode]:checked').val() == 'styling') {
 
-                $('#pageList ul li iframe').each(function() {
+                $('#pageList ul li section').each(function() {
 
                     for (var key in editableItems) {
 
-                        $(this).contents().find(pageContainer + ' ' + key).hover(function() {
+                        $(this).contents().find(key).hover(function() {
 
-                            if ($(this).closest('body').width() != $(this).width()) {
+                            if ($(this).closest('div.page').width() != $(this).width()) {
 
                                 $(this).css({'outline': '3px dashed red', 'cursor': 'pointer'});
 
@@ -1388,7 +1385,7 @@ function closeStyleEditor() {
 
                         }, function() {
 
-                            if ($(this).closest('body').width() != ($(this).width() + 6)) {
+                            if ($(this).closest('div.page').width() != ($(this).width() + 6)) {
 
                                 $(this).css({'outline': '', 'cursor': ''});
 
@@ -1404,17 +1401,17 @@ function closeStyleEditor() {
 
                             e.stopPropagation();
 
-                            styleClick(this, key)
+                            styleClick(this, key);
 
                         });
 
                     }
 
-                })
+                });
 
             }
 
-        })
+        });
 
     }
 
@@ -1449,13 +1446,13 @@ $(function() {
 
         $('input#vimeoID').val('');
 
-    })
+    });
 
     $('input#vimeoID').focus(function() {
 
         $('input#youtubeID').val('');
 
-    })
+    });
 
 
     //chosen font-awesome dropdown
@@ -1565,9 +1562,9 @@ $(function() {
             $(this).css('position', 'relative');
             $(this).css('right', 'auto');
 
-        })
+        });
 
-    })
+    });
 
     for (var key in _Elements.elements) {
 
@@ -1614,28 +1611,27 @@ $(function() {
 
             //alert( data.elements[key][x].url )
 
-
             if (_Elements.elements[key][x].thumbnail == null) {//we'll need an iframe
 
                 //build us some iframes!
 
                 if (_Elements.elements[key][x].sandbox != null) {
 
-                    newItem = $('<li class="element ' + niceKey + '"><iframe src="' + baseUrl + _Elements.elements[key][x].url + '" scrolling="no" sandbox="allow-same-origin"></iframe></li>');
+                    newItem = $('<li class="element ' + niceKey + '"><section src="' + baseUrl + _Elements.elements[key][x].url + '" scrolling="no" sandbox="allow-same-origin"></section></li>');
 
                 } else {
 
-                    newItem = $('<li class="element ' + niceKey + '"><iframe src="about:blank" scrolling="no"></iframe></li>');
+                    newItem = $('<li class="element ' + niceKey + '"><section src="about:blank" scrolling="no"></section></li>');
 
                 }
 
-                newItem.find('iframe').uniqueId();
+                newItem.find('section').uniqueId();
 
-                newItem.find('iframe').attr('src', baseUrl + _Elements.elements[key][x].url);
+                newItem.find('section').attr('src', baseUrl + _Elements.elements[key][x].url);
 
             } else {//we've got a thumbnail
 
-                newItem = $('<li class="element ' + niceKey + '"><img src="' + baseUrl + _Elements.elements[key][x].thumbnail + '" data-src="' + baseUrl + _Elements.elements[key][x].url + '" data-height="' + _Elements.elements[key][x].height + '"></li>')
+                newItem = $('<li class="element ' + niceKey + '"><img src="' + baseUrl + _Elements.elements[key][x].thumbnail + '" data-src="' + baseUrl + _Elements.elements[key][x].url + '" data-height="' + _Elements.elements[key][x].height + '"></li>');
 
             }
 
@@ -1649,11 +1645,11 @@ $(function() {
 
             } else {
 
-                theHeight = 'auto'
+                theHeight = 'auto';
 
             }
 
-            newItem.find('iframe').zoomer({
+            newItem.find('section').zoomer({
                 zoom: 0.25,
                 width: 270,
                 height: theHeight,
@@ -1663,7 +1659,7 @@ $(function() {
         }
 
         //draggables
-        makeDraggable('#page1')
+        makeDraggable('#page1');
 
     }
 
@@ -1690,16 +1686,14 @@ $(function() {
             width: secondMenuWidth
         }, 500);
 
-
-    })
-
+    });
 
 
     $('#menu #main').on('click', 'a:not(.actionButtons)', function(e) {
 
         e.preventDefault();
 
-    })
+    });
 
     $('#menu').mouseleave(function() {
 
@@ -1729,7 +1723,6 @@ $(function() {
 
         if ($(this).val() == 'content') {
 
-
             //close style editor
             closeStyleEditor();
 
@@ -1739,25 +1732,25 @@ $(function() {
 
                 $(this).hide();
 
-            })
+            });
 
 
-            $('#pageList ul li iframe').each(function() {
+            $('#pageList ul li section').each(function() {
 
 
                 //remove old click events
 
                 for (var key in editableItems) {
 
-                    $(this).contents().find(pageContainer + ' ' + key).unbind('hover').unbind('click');
+                    $(this).contents().find(key).unbind('hover').unbind('click');
 
                 }
 
-            })
+            });
 
 
             //active content edit mode
-            $('#pageList ul li iframe').each(function() {
+            $('#pageList ul li section').each(function() {
 
                 //In editor image and icon click disable to prevent frame load
                 $(this).contents().find('a').on('click', function(e) {
@@ -1770,10 +1763,9 @@ $(function() {
                 for (i = 0; i < editableContent.length; ++i) {
 
                     //remove old events
-                    $(this).contents().find(pageContainer + ' ' + editableContent[i]).unbind('click').unbind('hover');
+                    $(this).contents().find(editableContent[i]).unbind('click').unbind('hover');
 
-
-                    $(this).contents().find(pageContainer + ' ' + editableContent[i]).hover(function() {
+                    $(this).contents().find(editableContent[i]).hover(function() {
 
                         $(this).css({'outline': '3px dashed red', 'cursor': 'pointer'})
 
@@ -1784,6 +1776,7 @@ $(function() {
                     }).click(function(e) {
 
                         elToUpdate = $(this);
+                        console.log(elToUpdate.html());
                         e.preventDefault();
 
                         e.stopPropagation();
@@ -1836,8 +1829,7 @@ $(function() {
 
                 }
 
-            })
-
+            });
 
 
         } else if ($(this).val() == 'block') {
@@ -1851,22 +1843,22 @@ $(function() {
 
                 $(this).show();
 
-            })
+            });
 
             //deactivate designmode
 
-            $('#pageList ul li iframe').each(function() {
+            $('#pageList ul li section').each(function() {
 
 
                 for (var key in editableItems) {
-
-                    $(this).contents().find(pageContainer + ' ' + key).unbind('mouseenter mouseleave');
+                    console.log(key);
+                    $(this).contents().find(key).unbind('mouseenter mouseleave');
 
                 }
 
-                this.contentDocument.designMode = "off";
+                this.designMode = "off";
 
-            })
+            });
 
         } else if ($(this).val() == 'styling') {
 
@@ -1880,26 +1872,24 @@ $(function() {
 
 
             //remove contentEditable hovers and clicks
-            $('#pageList ul li iframe').each(function() {
+            $('#pageList ul li section').each(function() {
 
                 for (i = 0; i < editableContent.length; ++i) {
 
-                    $(this).contents().find(pageContainer + ' ' + editableContent[i]).unbind('click').unbind('hover');
+                    $(this).contents().find(editableContent[i]).unbind('click').unbind('hover');
 
                 }
 
             });
 
-
-
             //active styling mode
-            $('#pageList ul li iframe').each(function() {
+            $('#pageList ul li section').each(function() {
 
                 for (var key in editableItems) {
 
-                    $(this).contents().find(pageContainer + ' ' + key).hover(function() {
+                    $(this).contents().find(key).hover(function() {
 
-                        if ($(this).closest('body').width() != $(this).width()) {
+                        if ($(this).closest('div.page').width() != $(this).width()) {
 
                             $(this).css({'outline': '3px dashed red', 'cursor': 'pointer'});
 
@@ -1930,7 +1920,7 @@ $(function() {
 
                 }
 
-            })
+            });
 
         }
 
@@ -1940,30 +1930,8 @@ $(function() {
     $('button#updateContentInFrameSubmit').click(function() {
 
         //alert( elToUpdate.text() )
-        if (elToUpdate.hasClass('pprice') == true)
-        {
-            var text1 = $('#editContentModal #contentToEdit').redactor('code.get');
-
-            var checkprice = /^\d+(\.\d{0,2})?$/;
-            var pricevalid = checkprice.test(text1);
-
-            if (pricevalid == false)
-            {
-                alert("Please enter price only in numbers");
-                return false;
-            }
-
-        }
-
 
         elToUpdate.html($('#editContentModal #contentToEdit').redactor('code.get')).css({'outline': '', 'cursor': ''});
-        var text = elToUpdate.text();
-
-        if (elToUpdate.hasClass('createproduct') == true)
-        {
-            //function to set values for product form 1
-            updateproductinfo(elToUpdate, text);
-        }
 
         $('#editContentModal textarea').each(function() {
 
@@ -1974,98 +1942,13 @@ $(function() {
 
         $('#editContentModal').modal('hide');
 
-        $(this).closest('body').removeClass('modal-open');
+        $(this).closest('div.page').removeClass('modal-open');
 
         //element was deleted, so we've got pending changes
         setPendingChanges(true)
 
-    })
+    });
 
-
-    //set value for product no.1 //..............shubhangee
-    function updateproductinfo(elToUpdate, text)
-    {
-
-        var elem = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.productform1');
-
-        console.log(elem);
-
-        if (elem.find('.productid').val() == "")
-        {
-            var randid = makeid();
-            elem.find('.productid').val(randid);
-
-            var redirecturl = siteUrl + "products/buynow?pid=" + randid;
-
-            console.log($(elToUpdate).parents('div.pricing1').children(':last-child').find('.buynowbtn').attr('href', redirecturl));
-
-        }
-
-        var productid = elem.find('.productid').val();
-
-        if (elToUpdate.hasClass('pname') == true)
-        {
-            elem.find('.productname').val(text);
-        }
-
-        if (elToUpdate.hasClass('pprice') == true)
-        {
-            elem.find('.productprice').val(text);
-
-        }
-
-        if (elToUpdate.hasClass('pdescription') == true)
-        {
-            elem.find('.productdesc').val(text);
-        }
-
-        if (elem.find('.productname').val() == "")
-        {
-            var pname = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.pname').text();
-            elem.find('.productname').val(pname);
-        }
-
-        if (elem.find('.productprice').val() == "")
-        {
-            var pprice = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.pprice').text();
-            elem.find('.productprice').val(pprice);
-        }
-
-        if (elem.find('.productdesc').val() == "")
-        {
-            var desc = $(elToUpdate).parents('div.pricing1').children(':last-child').find('.pdescription').text();
-            elem.find('.productdesc').val(desc);
-        }
-
-        var img1 = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.img1').attr('src');
-
-        var pprice = elem.find('.productprice').val();
-        var pdescription = elem.find('.productdesc').val();
-        var pname = elem.find('.productname').val();
-
-        siteId = $('#pageList ul:visible').attr('data-siteid');
-
-        $.ajax({
-            url: siteUrl + "sites/createuserproducts/",
-            type: "POST",
-            dataType: "json",
-            data: 'site_id=' + siteId + '&productid=' + productid + '&pname=' + pname + '&pprice=' + pprice + '&pdescription=' + pdescription + '&img1=' + img1,
-        }).done(function(response) {
-        });
-
-    }
-
-    //generate random id
-    function makeid()
-    {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        for (var i = 0; i < 10; i++)
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-        return text;
-    }
 
     //close styleEditor
     $('#styleEditor > a.close').click(function(e) {
@@ -2074,7 +1957,7 @@ $(function() {
 
         closeStyleEditor();
 
-    })
+    });
 
 
     //delete blocks from window
@@ -2102,9 +1985,9 @@ $(function() {
                 //element was deleted, so we've got pending changes
                 setPendingChanges(true)
 
-            })
+            });
 
-        })
+        });
 
     });
 
@@ -2114,7 +1997,7 @@ $(function() {
 
         $('#resetBlock').modal('show');
 
-        frameToReset = $(this).closest('li').find('iframe');
+        frameToReset = $(this).closest('li').find('section');
 
         $('#resetBlock').off('click', '#resetBlockConfirm').on('click', '#resetBlockConfirm', function() {
 
@@ -2125,7 +2008,7 @@ $(function() {
             //element was reset, so we've got pending changes
             setPendingChanges(true)
 
-        })
+        });
 
 
     });
@@ -2138,7 +2021,7 @@ $(function() {
     $('#pageList').on("click", ".zoomer-cover > .htmlBlock", function() {
 
         //hide the iframe
-        $(this).closest('.zoomer-wrapper').find('.zoomer-small iframe').hide();
+        $(this).closest('.zoomer-wrapper').find('.zoomer-small section').hide();
 
 
         //disable draggable on the LI
@@ -2154,7 +2037,7 @@ $(function() {
         theId = theEditor.attr('id');
 
         var editor = ace.edit(theId);
-        editor.setValue($(this).closest('.zoomer-wrapper').find('.zoomer-small iframe').contents().find(pageContainer).html());
+        editor.setValue($(this).closest('.zoomer-wrapper').find('.zoomer-small section').contents().find(pageContainer).html());
         editor.setTheme("ace/theme/twilight");
         editor.getSession().setMode("ace/mode/html");
 
@@ -2183,13 +2066,13 @@ $(function() {
 
         $(this).parent().prev().remove();
 
-        $(this).parent().prev().find('.zoomer-small iframe').fadeIn(500);
+        $(this).parent().prev().find('.zoomer-small section').fadeIn(500);
 
         $(this).parent().fadeOut(500, function() {
 
             $(this).remove();
 
-        })
+        });
 
     });
 
@@ -2199,17 +2082,15 @@ $(function() {
         //enable draggable on the LI
         $(this).closest('li').parent().sortable('enable');
 
-
         theId = $(this).closest('.editorButtons').prev().attr('id');
 
         theContent = aceEditors[theId].getValue();
 
-        theiFrame = $(this).parent().prev().find('.zoomer-small iframe');
-
+        theiFrame = $(this).parent().prev().find('.zoomer-small section');
 
         $(this).parent().prev().remove();
 
-        $(this).parent().prev().find('.zoomer-small iframe').show().contents().find(pageContainer).html(theContent);
+        $(this).parent().prev().find('.zoomer-small section').show().contents().find(pageContainer).html(theContent);
 
         //theiFrame.contents().find( pageContainer ).html( theContent );
 
@@ -2217,10 +2098,10 @@ $(function() {
 
             $(this).remove();
 
-        })
+        });
 
         //new page added, we've got pending changes
-        setPendingChanges(true)
+        setPendingChanges(true);
 
     });
 
@@ -2237,85 +2118,6 @@ $(function() {
 
     });
 
-    $('#exportModal').on('shown.bs.modal', function(e) {
-
-        //delete older hidden fields
-
-        $('#exportModal form input[type="hidden"].pages').remove();
-
-        //loop through all pages
-        $('#pageList > ul').each(function() {
-
-            //grab the skeleton markup
-
-            newDocMainParent = $('iframe#skeleton').contents().find(pageContainer);
-
-            //empty out the skeleton
-            newDocMainParent.find('*').remove();
-
-            //loop through page iframes and grab the body stuff
-
-            $(this).find('iframe').each(function() {
-
-                //remove .frameCovers
-
-                theContents = $(this).contents().find(pageContainer);
-
-                theContents.find('.frameCover').each(function() {
-                    $(this).remove();
-                })
-
-
-                toAdd = theContents.html();
-
-
-                //grab scripts
-
-                scripts = $(this).contents().find(pageContainer).find('script');
-
-                if (scripts.size() > 0) {
-
-                    theIframe = document.getElementById("skeleton");
-
-                    scripts.each(function() {
-
-                        if ($(this).text() != '') {//script tags with content
-
-                            var script = theIframe.contentWindow.document.createElement("script");
-                            script.type = 'text/javascript';
-                            script.innerHTML = $(this).text();
-
-                            theIframe.contentWindow.document.getElementById(pageContainer.substring(1)).appendChild(script);
-
-                        } else if ($(this).attr('src') != null) {
-
-                            var script = theIframe.contentWindow.document.createElement("script");
-                            script.type = 'text/javascript';
-                            script.src = $(this).attr('src');
-
-                            theIframe.contentWindow.document.getElementById(pageContainer.substring(1)).appendChild(script)
-
-                        }
-
-                    })
-
-                }
-
-                newDocMainParent.append($(toAdd));
-
-            });
-
-
-            newInput = $('<input type="hidden" name="pages[' + $('#pages li:eq(' + ($(this).index() + 1) + ') a:first').text() + ']" class="pages" value="">');
-
-            $('#exportModal form').prepend(newInput);
-
-            newInput.val("<html>" + $('iframe#skeleton').contents().find('html').html() + "</html>")
-
-        })
-
-    });
-
     $("#previewPage").on('click', function(e) {
         var htmlForm = $('<form action="' + siteUrl + 'sites/preview" method="POST" target="_blank" style="display:none">');
 
@@ -2327,34 +2129,13 @@ $(function() {
             newDocMainParent.find('*').remove();
 
             //loop through page iframes and grab the body stuff
-            $(this).find('iframe').each(function() {
+            $(this).find('section').each(function() {
                 //remove .frameCovers
+                
                 theContents = $(this).contents().find(pageContainer);
 
-//                theContents.find('.frameCover').each(function() {
-//                    $(this).remove();
-//                });
-                toAdd = theContents.html();
+                toAdd = $(this).html();
 
-                //grab scripts
-                scripts = $(this).contents().find(pageContainer).find('script');
-
-                if (scripts.size() > 0) {
-                    theIframe = document.getElementById("skeleton");
-                    scripts.each(function() {
-                        if ($(this).text() != '') {//script tags with content
-                            var script = theIframe.contentWindow.document.createElement("script");
-                            script.type = 'text/javascript';
-                            script.innerHTML = $(this).text();
-                            theIframe.contentWindow.document.getElementById(pageContainer.substring(1)).appendChild(script);
-                        } else if ($(this).attr('src') != null) {
-                            var script = theIframe.contentWindow.document.createElement("script");
-                            script.type = 'text/javascript';
-                            script.src = $(this).attr('src');
-                            theIframe.contentWindow.document.getElementById(pageContainer.substring(1)).appendChild(script);
-                        }
-                    });
-                }
                 newDocMainParent.append($(toAdd));
             });
             newInput = $('<input type="hidden" name="pages[' + $('#pages li:eq(' + ($(this).index() + 1) + ') a:first').text() + ']" class="pages" value="">');
@@ -2375,7 +2156,7 @@ $(function() {
 
         $('#exportModal > form #exportCancel').text('Close Window');
 
-    })
+    });
 
 
     //page menu buttons
@@ -2395,9 +2176,6 @@ $(function() {
                 $(this).closest('li').prepend(theLink);
 
                 $(this).closest('li').removeClass('edit');
-
-                //alert( $(this).parent().index() )
-
 
                 //update the page dropdown
 
@@ -2419,7 +2197,7 @@ $(function() {
 
         }
 
-    })
+    });
 
     $('#addPage').click(function(e) {
 
@@ -2476,19 +2254,16 @@ $(function() {
         $('#pageList > ul').hide();
         $('#pageList').append(newPageList);
 
-
         makeSortable(newPageList);
 
         //draggables
         makeDraggable('#' + 'page' + ($('#pages li').size() - 1));
-
 
         //alter page title
         $('#pageTitle span span').text('page' + ($('#pages li').size() - 1));
 
         $('#frameWrapper').addClass('empty');
         $('#start').fadeIn();
-
 
         //add page to page dropdown
 
@@ -2497,7 +2272,6 @@ $(function() {
         $('#internalLinksDropdown').append(newItem);
 
         $('select#internalLinksDropdown').selectpicker({style: 'btn-sm btn-default', menuStyle: 'dropdown-inverse'});
-
 
         //update heading in pageSettingsModal
         $('#pageSettingsModal h4.modal-title .pName').text('page' + ($('#pages li').size() - 1))
@@ -2540,7 +2314,6 @@ $(function() {
 
         $('#pageTitle span span').text($(this).find('a').text());
 
-
         //page meta data
 
         $('#pageSettingsModal h4.modal-title .pName').text($(this).find('a').text())
@@ -2565,43 +2338,43 @@ $(function() {
 
             } else {
 
-                $('#pageSettingsModal input#pageData_title').val('')
+                $('#pageSettingsModal input#pageData_title').val('');
 
             }
 
             if (typeof pagesData[$(this).find('a').text()] !== 'undefined') {
 
-                $('#pageSettingsModal textarea#pageData_metaKeywords').val(pagesData[$(this).find('a').text()].pages_meta_keywords)
+                $('#pageSettingsModal textarea#pageData_metaKeywords').val(pagesData[$(this).find('a').text()].pages_meta_keywords);
 
             } else {
 
-                $('#pageSettingsModal textarea#pageData_metaKeywords').val('')
+                $('#pageSettingsModal textarea#pageData_metaKeywords').val('');
 
             }
 
             if (typeof pagesData[$(this).find('a').text()] !== 'undefined') {
 
-                $('#pageSettingsModal textarea#pageData_metaDescription').val(pagesData[$(this).find('a').text()].pages_meta_description)
+                $('#pageSettingsModal textarea#pageData_metaDescription').val(pagesData[$(this).find('a').text()].pages_meta_description);
 
             } else {
 
-                $('#pageSettingsModal textarea#pageData_metaDescription').val('')
+                $('#pageSettingsModal textarea#pageData_metaDescription').val('');
 
             }
 
             if (typeof pagesData[$(this).find('a').text()] !== 'undefined') {
 
-                $('#pageSettingsModal textarea#pageData_headerIncludes').val(pagesData[$(this).find('a').text()].pages_header_includes)
+                $('#pageSettingsModal textarea#pageData_headerIncludes').val(pagesData[$(this).find('a').text()].pages_header_includes);
 
             } else {
 
-                $('#pageSettingsModal textarea#pageData_headerIncludes').val('')
+                $('#pageSettingsModal textarea#pageData_headerIncludes').val('');
 
             }
 
         }
 
-    })
+    });
 
 
     $('#pages').on('click', 'li.active .fileSave', function() {
@@ -2628,7 +2401,7 @@ $(function() {
 
         } else {
 
-            alert('Please sure your new page has a unique name')
+            alert('Please sure your new page has a unique name');
 
         }
 
@@ -2638,7 +2411,6 @@ $(function() {
     //edit page button
 
     $('#pages').on('click', 'li.active .fileEdit', function() {
-
 
         theLI = $(this).closest('li');
 
@@ -2658,15 +2430,14 @@ $(function() {
 
             $('#pageTitle span span').text($(this).val())
 
-        })
+        });
 
         theLI.addClass('edit');
-
 
         //changed page title, we've got pending changes
         setPendingChanges(true);
 
-    })
+    });
 
     var theLIIndex;
 
@@ -2681,7 +2452,7 @@ $(function() {
 
             $('#deletePage').modal('hide');
 
-        })
+        });
 
         $('#deletePage').off('click').on('click', '#deletePageConfirm', function() {
 
@@ -2711,7 +2482,7 @@ $(function() {
                 $('#pageTitle span span').text($('#pages li:eq(1)').find('a:first').text())
 
                 //draggables
-                makeDraggable('#' + 'page1')
+                makeDraggable('#' + 'page1');
 
                 //show the start block?
                 pageEmpty();
@@ -2722,9 +2493,9 @@ $(function() {
                 setPendingChanges(true);
             });
 
-        })
+        });
 
-    })
+    });
 
     //save new site
     $('a#savePage').click(function() {
@@ -2794,13 +2565,13 @@ $(function() {
 
         }
 
-    })
+    });
 
     $('#leavePageButton').click(function() {
 
         pendingChanges = false;//prevent the JS alert after confirming user wants to leave
 
-    })
+    });
 
     $(window).bind('beforeunload', function() {
 
@@ -2952,13 +2723,12 @@ $(function() {
                 //enable button
                 $('#publishModal #publishPendingChangesMessage .btn.save').removeClass('disabled');
 
-            })
+            });
 
             if (res.responseCode == 1) {//changes were saved without issues
 
                 //no more pending changes
                 setPendingChanges(false);
-
 
                 //get the correct pages in the Pages section of the publish modal
 
@@ -2977,11 +2747,11 @@ $(function() {
 
                         $(this).closest('tr')[$(this).prop('checked') ? 'addClass' : 'removeClass']('selected-row');
 
-                    })
+                    });
 
                     $('#publishModal_pages tbody').append(theRow)
 
-                })
+                });
 
 
                 //show content
@@ -2989,9 +2759,9 @@ $(function() {
 
             }
 
-        })
+        });
 
-    })
+    });
 
 
     //listen for checkboxes
@@ -3009,7 +2779,7 @@ $(function() {
 
             }
 
-        })
+        });
 
         if (activateButton) {
 
@@ -3021,7 +2791,7 @@ $(function() {
 
         }
 
-    })
+    });
 
 
 
@@ -3052,47 +2822,9 @@ $(function() {
                 newDocMainParent.find('*').remove();
 
                 //loop through page iframes and grab the body stuff
-                $(this).find('iframe').each(function() {
+                $(this).find('section').each(function() {
 
-                    //remove .frameCovers				
-                    theContents = $(this).contents().find(pageContainer);
-
-//                    theContents.find('.frameCover').each(function() {
-//                        $(this).remove();
-//                    });
-
-                    toAdd = theContents.html();
-
-                    //grab scripts
-                    scripts = $(this).contents().find(pageContainer).find('script');
-
-                    if (scripts.size() > 0) {
-
-                        theIframe = document.getElementById("skeleton");
-
-                        scripts.each(function() {
-
-                            if ($(this).text() != '') {//script tags with content
-
-                                var script = theIframe.contentWindow.document.createElement("script");
-                                script.type = 'text/javascript';
-                                script.innerHTML = $(this).text();
-
-                                theIframe.contentWindow.document.getElementById(pageContainer.substring(1)).appendChild(script);
-
-                            } else if ($(this).attr('src') != null) {
-
-                                var script = theIframe.contentWindow.document.createElement("script");
-                                script.type = 'text/javascript';
-                                script.src = $(this).attr('src');
-
-                                theIframe.contentWindow.document.getElementById(pageContainer.substring(1)).appendChild(script);
-
-                            }
-
-                        });
-
-                    }
+                    toAdd = $(this).html();
 
                     newDocMainParent.append($(toAdd));
 
@@ -3121,8 +2853,6 @@ $(function() {
 
     });
 
-
-
     //image uploading
 
     $('input#imageFile').change(function() {
@@ -3139,7 +2869,7 @@ $(function() {
 
         }
 
-    })
+    });
 
 
     $('button#uploadImageButton').click(function() {
@@ -3179,27 +2909,27 @@ $(function() {
                 $('button#uploadImageButton').addClass('disable');
 
                 //hide loader
-                $('#imageModal .loader').fadeOut(500)
+                $('#imageModal .loader').fadeOut(500);
 
                 if (ret.responseCode == 0) {//error
 
-                    $('#imageModal .modal-alerts').append($(ret.responseHTML))
+                    $('#imageModal .modal-alerts').append($(ret.responseHTML));
 
                 } else if (ret.responseCode == 1) {//success
 
                     //append my images
-                    $('#myImagesTab > *').remove()
-                    $('#myImagesTab').append($(ret.myImages))
+                    $('#myImagesTab > *').remove();
+                    $('#myImagesTab').append($(ret.myImages));
 
-                    $('#imageModal .modal-alerts').append($(ret.responseHTML))
+                    $('#imageModal .modal-alerts').append($(ret.responseHTML));
 
                     setTimeout(function() {
                         $('#imageModal .modal-alerts > *').fadeOut(500)
-                    }, 3000)
+                    }, 3000);
 
                 }
 
-            })
+            });
 
         } else {
 
@@ -3207,7 +2937,7 @@ $(function() {
 
         }
 
-    })
+    });
 
 
 
@@ -3217,14 +2947,12 @@ $(function() {
         //disable button
         $(this).addClass('disabled');
 
-
         //hide old alerts
         $('#pageSettingsModal .modal-alerts > *').remove();
 
 
         //show loader
         $('#pageSettingsModal .loader').fadeIn(500);
-
 
         $.ajax({
             url: $('form#pageSettingsForm').attr('action'),
@@ -3238,7 +2966,6 @@ $(function() {
 
             //hide loader
             $('#pageSettingsModal .loader').hide();
-
 
             if (ret.responseCode == 0) {//error
 
@@ -3254,7 +2981,7 @@ $(function() {
                     $('#pageSettingsModal .modal-alerts > *').fadeOut(500, function() {
                         $(this).remove()
                     })
-                }, 3000)
+                }, 3000);
 
                 if (typeof ret.pagesData !== 'undefined') {
 
@@ -3265,7 +2992,7 @@ $(function() {
 
             }
 
-        })
+        });
 
     });
 
@@ -3275,7 +3002,7 @@ $(function() {
 
         $('#editContentModal #contentToEdit').redactor('core.destroy');
 
-    })
+    });
 
     $('#domainSubmittButton').click(function() {
         if ($("input:radio[name='domain']").is(':checked')) {
@@ -3294,7 +3021,7 @@ $(function() {
         }
     });
 
-})
+});
 
 var publishActive = 0;
 var theItem;
@@ -3366,7 +3093,7 @@ function publishAsset() {
 
             setTimeout(function() {
                 $('#publishModal .modal-body > .alert-success').fadeOut(500)
-            }, 2500)
+            }, 2500);
 
         });
 

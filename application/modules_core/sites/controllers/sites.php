@@ -250,7 +250,7 @@ class Sites extends MY_Controller {
                 '<script type="text/javascript" defer="defer" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>',
                 '<script type="text/javascript" defer="defer" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>'
             );
-            $this->template->load('sites', 'sites', 'sites/create', $this->data);
+            $this->template->load('builder', 'sites', 'sites/create', $this->data);
             //$this->load->view('', $this->data);
         }
     }
@@ -580,8 +580,8 @@ class Sites extends MY_Controller {
         if (stristr($pageContent, '<script src="' . base_url('elements') . '/http://')) {
             $pageContent = str_replace('<script src="' . base_url('elements') . '/http://', '<script src="http://', $pageContent);
         }
-        if (strstr($pageContent, 'src="images')) {
-            $pageContent = str_replace('src="images', 'src="' . base_url('elements') . '/images', $pageContent);
+        if (strstr($pageContent, 'src="/elements/images')) {
+            $pageContent = str_replace('src="/elements/images', 'src="' . base_url('elements') . '/images', $pageContent);
         }
         write_file($absPath . '/' . $page . ".html", $pageContent);
 //		}
@@ -692,8 +692,8 @@ class Sites extends MY_Controller {
             if (stristr($pageContent, '<script src="' . base_url('elements') . '/http://')) {
                 $pageContent = str_replace('<script src="' . base_url('elements') . '/http://', '<script src="http://', $pageContent);
             }
-            if (strstr($pageContent, 'src="images')) {
-                $pageContent = str_replace('src="images', 'src="' . base_url('elements') . '/images', $pageContent);
+            if (strstr($pageContent, 'src="/elements/images')) {
+                $pageContent = str_replace('src="/elements/images', 'src="' . base_url('elements') . '/images', $pageContent);
             }
             if (!write_file('./temp/' . $userID . '/' . $page . ".html", '<html>' . $pageContent . '</html>')) {
                 die("Page not created!");

@@ -73,7 +73,7 @@
                             <ul id="page<?php echo $counter; ?>" class="ui-sortable" style="display: <?php if ($counter == 1): ?>block<?php else: ?>none<?php endif; ?>;" data-pagename="<?= $page; ?>" data-siteid="<?= $siteData['site']->sites_id; ?>">
         <?php foreach ($frames as $frame): ?>
                                     <li class="element">
-                                        <iframe id="<?php echo "ui-id-" . ($c + 10000); ?>" frameborder="0" scrolling="0" src="<?php echo site_url('sites/getframe/' . $frame->frames_id) ?>" data-height="<?php echo $frame->frames_height; ?>" data-originalurl="<?php echo $frame->frames_original_url ?>"></iframe>
+                                        <section id="<?php echo "ui-id-" . ($c + 10000); ?>" frameborder="0" scrolling="0" src="<?php echo site_url('sites/getframe/' . $frame->frames_id) ?>" data-height="<?php echo $frame->frames_height; ?>" data-originalurl="<?php echo $frame->frames_original_url ?>"><?php echo $frame->frames_content; ?></section>
                                     </li>
                                     <?php $c++; ?>
                             <?php endforeach; ?>
@@ -2402,7 +2402,7 @@
 
     });
     function setHeight() {
-        $('#pageList li iframe').each(function() {
+        $('#pageList li section').each(function() {
 //            var iFrameID = document.getElementById($(this).attr('id'));
 //            if(iFrameID) {
 //                  // here you can make the height, I delete it first, then I make it again

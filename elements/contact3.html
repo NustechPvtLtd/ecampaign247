@@ -1,174 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Contact</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div id="page" class="page">
+    <style>
+        @media(max-width:767px){
+            .getdirnb{margin-top:20px;}
+        }
 
-        <!-- Loading Bootstrap -->
-        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    </style>
 
-        <!-- Loading Flat UI -->
-        <link href="css/flat-ui.css" rel="stylesheet">
+    <div class="item contact padding-top-0 padding-bottom-0" id="contact3">
 
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/style-contact.css" rel="stylesheet">
+        <div class="wrapper grey">
 
-        <!-- Font Awesome -->
-        <link href="css/font-awesome.css" rel="stylesheet">
+            <div class="container">
 
-        <link rel="shortcut icon" href="images/favicon.ico">
+                <div class="col-md-4">
 
-        <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
-        <!--[if lt IE 9]>
-          <script src="js/html5shiv.js"></script>
-          <script src="js/respond.min.js"></script>
-          
-        <![endif]-->
+                    <h3 class="margin-bottom-40 editContent">Get in touch! We're here for you...</h3>
 
-        <style>
-            @media(max-width:767px){
-                .getdirnb{margin-top:20px;}
-            }
+                    <form role="form" id="contact_form_contact3">
+                        <div class="form-group error">
+                            <p class="small errorMessage" id="name_error" style="display:none">
+                                Name can not be blank.
+                            </p>
+                            <p class="small errorMessage" id="email_error" style="display:none">
+                                Email should be email and can not be blank.
+                            </p>
+                            <p class="small errorMessage" id="phone_error" style="display:none">
+                                Phone should not be blank and contains 10 digit, special symbol have +.
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg" id="name" name="name" placeholder="Your name *">
+                        </div>
 
-        </style>
-    </head>
-    <body>
+                        <div class="form-group">
+                            <input type="email" class="form-control input-lg" id="email" name="email" placeholder="Your email *">
+                        </div>
 
-        <div id="page" class="page">
 
-            <div class="item contact padding-top-0 padding-bottom-0" id="contact3">
+                        <div class="form-group">
+                            <input type="phone" class="form-control input-lg" id="phone" name="phone" placeholder="Your phone number *">
+                        </div>
 
-                <div class="wrapper grey">
+                        <div class="form-group">
+                            <textarea class="form-control" rows="4" name="message" placeholder="Add comment..."></textarea>
+                        </div>
 
-                    <div class="container">
+                        <label class="checkbox" for="checkbox1">
+                            <input type="checkbox" checked value="" id="checkbox1" data-toggle="checkbox">
+                            Keep me in the loop
+                        </label>
 
-                        <div class="col-md-4">
+                        <hr>
 
-                            <h3 class="margin-bottom-40 editContent">Get in touch! We're here for you...</h3>
+                        <button type="button"  id="contact3" class="btn btn-primary btn-embossed btn-lg btn-wide submit">Submit contact form</button>
 
-                            <form role="form" id="contact_form_contact3">
-                                <div class="form-group error">
-                                    <p class="small errorMessage" id="name_error" style="display:none">
-                                        Name can not be blank.
-                                    </p>
-                                    <p class="small errorMessage" id="email_error" style="display:none">
-                                        Email should be email and can not be blank.
-                                    </p>
-                                    <p class="small errorMessage" id="phone_error" style="display:none">
-                                        Phone should not be blank and contains 10 digit, special symbol have +.
-                                    </p>
-                                </div>
+                    </form>
+
+                </div><!-- /.col-md-4 -->
+
+                <div class="col-md-8">
+
+                    <div class="editContent">
+                        <h5>Other ways to get in touch:</h5>
+
+                        <p class="text-light margin-bottom-40">
+                            Nulla non enim leo. Fusce ut magna ut neque gravida elementum eget id ante. Cras pharetra ligula sed risus congue, non iaculis ligula mollis. 
+                        </p>
+                    </div><!-- col-md-8 -->
+
+                    <div class="clearfix"></div>  <br>
+                    <!-- /Address Info -->     				
+                    <div class="col-md-4">
+
+                        <p>
+                            <b class="chead"><span class="fa fa-map-marker"></span>ADDRESS</b><br>
+                            <span id="lbl_address" class="editContent" >
+                                Pune, Maharashtra 411001
+                            </span>
+                        </p>
+
+                        <p>
+                            <b class="chead"><span class="fa fa-phone"></span> PHONE</b><br>
+                            <span class="editContent">012 3456 7890</span>
+                        </p>
+
+                        <p>
+                            <b class="chead"><span class="fa fa-envelope"></span> EMAIL</b><br>
+                            <a href="#" class="editContent">info@something.com</a>
+                        </p></div>
+
+                    <!-- /Map Rendering -->                        
+                    <div class="col-md-8 col-sm-8">
+
+                        <div class="well well-sm">
+                            <div id="map_canvas" style="height:160px; margin: auto;">
+                                <img src="/elements/images/map.jpg" alt="Pune, Maharashtra 411001" class="img-responsive demo-map" />
+                            </div>
+                        </div>
+
+
+
+                        <!--[16:35:39] Mrityunjay Yadav: code to render map[16:36:28] Mrityunjay Yadav: -->         
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <form class="form-horizontal" action="http://maps.google.com/maps" method="get" target="_blank" >
                                 <div class="form-group">
-                                    <input type="text" class="form-control input-lg" id="name" name="name" placeholder="Your name *">
-                                </div>
-
-                                <div class="form-group">
-                                    <input type="email" class="form-control input-lg" id="email" name="email" placeholder="Your email *">
-                                </div>
-                                
-
-                                <div class="form-group">
-                                    <input type="phone" class="form-control input-lg" id="phone" name="phone" placeholder="Your phone number *">
-                                </div>
-
-                                <div class="form-group">
-                                    <textarea class="form-control" rows="4" name="message" placeholder="Add comment..."></textarea>
-                                </div>
-
-                                <label class="checkbox" for="checkbox1">
-                                    <input type="checkbox" checked value="" id="checkbox1" data-toggle="checkbox">
-                                    Keep me in the loop
-                                </label>
-
-                                <hr>
-
-                                <button type="button"  id="contact3" class="btn btn-primary btn-embossed btn-lg btn-wide submit">Submit contact form</button>
-
-                            </form>
-
-                        </div><!-- /.col-md-4 -->
-
-                        <div class="col-md-8">
-
-                            <div class="editContent">
-                                <h5>Other ways to get in touch:</h5>
-
-                                <p class="text-light margin-bottom-40">
-                                    Nulla non enim leo. Fusce ut magna ut neque gravida elementum eget id ante. Cras pharetra ligula sed risus congue, non iaculis ligula mollis. 
-                                </p>
-                            </div><!-- col-md-8 -->
-
-                            <div class="clearfix"></div>  <br>
-                            <!-- /Address Info -->     				
-                            <div class="col-md-4">
-
-                                <p>
-                                    <b class="chead"><span class="fa fa-map-marker"></span>ADDRESS</b><br>
-                                    <span id="lbl_address" class="editContent" >
-                                        Pune, Maharashtra 411001
-                                    </span>
-                                </p>
-
-                                <p>
-                                    <b class="chead"><span class="fa fa-phone"></span> PHONE</b><br>
-                                    <span class="editContent">012 3456 7890</span>
-                                </p>
-
-                                <p>
-                                    <b class="chead"><span class="fa fa-envelope"></span> EMAIL</b><br>
-                                    <a href="#" class="editContent">info@something.com</a>
-                                </p></div>
-    					
-                            <!-- /Map Rendering -->                        
-                            <div class="col-md-8 col-sm-8">
-                                <section>
-                                    <div class="well well-sm">
-                                        <div id="map_canvas" style="height:160px; margin: auto;">
-                                            <img src="images/map.jpg" alt="Pune, Maharashtra 411001" class="img-responsive demo-map" />
-                                        </div>
+                                    <div class="col-sm-8 ">
+                                        <input type="text" class="getdirn form-control" name="saddr" placeholder="Enter your location" style="margin-bottom:0px" />
+                                        <input id="destination_add" type="hidden" name="daddr" value="Pune, Maharashtra 411001" />
                                     </div>
-                                </section>
-
-
-                                <!--[16:35:39] Mrityunjay Yadav: code to render map[16:36:28] Mrityunjay Yadav: -->         
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <form class="form-horizontal" action="http://maps.google.com/maps" method="get" target="_blank" >
-                                            <div class="form-group">
-                                                <div class="col-sm-8 ">
-                                                    <input type="text" class="getdirn form-control" name="saddr" placeholder="Enter your location" style="margin-bottom:0px" />
-                                                    <input id="destination_add" type="hidden" name="daddr" value="Pune, Maharashtra 411001" />
-                                                </div>
-                                                <div class="col-sm-4 ">
-                                                    <input type="submit" class="getdirnb btn btn-primary btn-embossed btn " value="Get directions"  />
-                                                </div>
-                                            </div>
-                                     </form>
+                                    <div class="col-sm-4 ">
+                                        <input type="submit" class="getdirnb btn btn-primary btn-embossed btn " value="Get directions"  />
+                                    </div>
                                 </div>
-                            </div><!-- /.col-md-8 -->
-                        </div> 
+                            </form>
+                        </div>
+                    </div><!-- /.col-md-8 -->
+                </div> 
 
-                </div><!-- /.container -->
+            </div><!-- /.container -->
 
-            </div><!-- /.wrapper -->
+        </div><!-- /.wrapper -->
 
-        </div><!-- /.item -->
+    </div><!-- /.item -->
 
-    </div><!-- /#page -->
-
-    <!-- Load JS here for greater good =============================-->
-    <script src="js/jquery-1.8.3.min.js"></script>
-    <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="js/jquery.ui.touch-punch.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/bootstrap-switch.js"></script>
-    <script src="js/flatui-checkbox.js"></script>
-    <script src="js/flatui-radio.js"></script>
-    <script src="js/jquery.tagsinput.js"></script>
-    <script src="js/jquery.placeholder.js"></script>
-    <script src="js/application.js"></script>
-
-</body>
-</html>
+</div><!-- /#page -->

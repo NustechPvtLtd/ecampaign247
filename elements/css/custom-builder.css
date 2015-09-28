@@ -1,0 +1,288 @@
+/* Custom css for the new builder page. 
+	DAte: 21-09-2015
+*/
+/*
+	COMMON CSS 
+*/
+
+/*
+	CONTENT SPECIFIC CSS 
+*/
+.skin-green #header10 .navbar {
+    background-color: #fbfbfb;
+	position: relative;
+}
+.screen .frameWrapper #pageList #header10 ul {
+    display: block;
+    min-height: auto;
+}
+.screen .frameWrapper #pageList #header10 ul li {
+    padding: 0 1px;
+}
+.skin-green #header10 .navbar .nav a {
+    color: #000;
+    line-height: 46px;
+}
+.skin-green #header5 .navbar {
+    background-color: #34495e;
+    position: absolute;
+}
+.skin-green #header5 .navbar .navbar-header .navbar-brand {
+    color: #fff;
+    margin: 9px 2px;
+}
+.screen .frameWrapper #pageList #header5 ul li a {
+    line-height: 50px;
+}
+.screen .frameWrapper #pageList #header5 ul {
+    display: block;
+    min-height: 50px;
+}
+.screen .frameWrapper #pageList #header5 ul li {
+    overflow: unset;
+}
+.skin-green section #page .navbar .nav .active a {
+    background-color: #1abc9c;
+}
+.skin-green #header5 .navbar .nav a:hover {
+    background-color: #1abc9c;
+}
+.skin-green #header11 .navbar {
+    background-color: #fff;
+}
+#header11 .nav.navbar-nav.navbar-right {
+	display: block;
+    min-height: auto;
+}
+.screen .frameWrapper #pageList #header11 ul li {
+    display: unset;
+	padding: 0 1px;
+}
+.screen .frameWrapper #pageList #header11 ul li a {
+    color: #000;
+    line-height: 50px;
+}
+.skin-green section #page #header11 .navbar .nav .active a {
+    background-color: #e7e7e7;
+}
+#header11 .banner .text-center {
+    max-height: 380px;
+}
+.skin-green #header1 .navbar {
+    background-color: #354b60;
+}
+.screen .frameWrapper #pageList #header1 ul {
+    display: block;
+    min-height: 50px;
+}
+.screen .frameWrapper #pageList #header1 ul li {
+    overflow: unset;
+    padding: 0 1px;
+}
+.skin-green #header1 ul li a {
+    line-height: 50px;
+}
+.skin-green #header6 .navbar {
+    background-color: #34495e;
+}
+.screen .frameWrapper #pageList #header6 ul {
+    display: unset;
+    min-height: 50px;
+}
+.screen .frameWrapper #pageList #header6 ul li {
+    display: unset;
+    padding: 0 1px;
+}
+.skin-green #header6 .navbar .nav a {
+    line-height: 50px;
+}
+.screen .frameWrapper #pageList .carousel-indicators > li {
+    float: left;
+}
+.screen .frameWrapper #pageList .carousel-indicators {
+    margin-left: 47%;
+}
+.screen .frameWrapper #pageList #header2 ul {
+    display: block;
+    min-height: 50px;
+}
+.skin-green #header2 .navbar {
+    background-color: #fff;
+    margin-bottom: 0;
+}
+.skin-green section #page #header2 .navbar .nav a {
+    line-height: 50px;
+}
+#header2 .wrapper.grey {
+    padding: 0;
+}
+.skin-green #header8 .navbar {
+    background-color: #3d566e;
+}
+.screen .frameWrapper #pageList #header8 ul {
+    display: block;
+    min-height: 50px;
+}
+.skin-green section #page #header8 .navbar .nav .active a {
+    background-color: #3d566e;
+}
+#header8 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    min-height: 450px;
+}
+.screen .frameWrapper #pageList #header8 ul li {
+    overflow: auto;
+    padding: 0 2px;
+}
+.skin-green section #page #header8 .navbar .nav a {
+    line-height: 50px;
+}
+.skin-green #header9 .navbar {
+    background-color: #fff;
+}
+.screen .frameWrapper #pageList #header9 ul {
+    display: block;
+    min-height: 50px;
+}
+.skin-green section #page #header9 .navbar .nav .active a {
+    background-color: #3d566e;
+}
+#header9 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    min-height: 450px;
+}
+.screen .frameWrapper #pageList #header9 ul li {
+    overflow: auto;
+    padding: 0 2px;
+}
+.skin-green section #page #header9 .navbar .nav a {
+    line-height: 50px;
+}
+.screen .frameWrapper #pageList #header4 ul {
+    display: block;
+    min-height: 50px;
+}
+.skin-green section #page #header4 .navbar .nav .active a {
+    background-color: #fff;
+    color: #000;
+}
+.skin-green #header7 .navbar {
+    background-color: #3d566e;
+}
+.screen .frameWrapper #pageList #header7 ul {
+    display: block;
+    min-height: 50px;
+}
+.skin-green section #page #header7 .navbar .nav .active a {
+    background-color: #3d566e;
+}
+.screen .frameWrapper #pageList #header7 ul li {
+    overflow: auto;
+    padding: 0 2px;
+}
+.skin-green section #page #header7 .navbar .nav a {
+    line-height: 50px;
+}
+#header3 .image .wrapper .bg {
+    background-attachment: scroll;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("../images/picture1.jpg");
+    background-position: 0 bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#header3 .image .wrapper .bg {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#header3 .wrapper h1, #header3 .wrapper p {
+    color: #fff;
+}
+#page #content_section1.item.content {
+    min-height: 520px;
+}
+#content_section4.item.content {
+    min-height: 331px;
+}
+#content_section5.item.content {
+    min-height: 846px;
+}
+#content_section2.item.content {
+    min-height: 520px;
+}
+#content_section6.item.content {
+    padding-top: 20px;
+}
+#content_section7.item.content {
+    padding-top: 20px;
+}
+#content_section8.item.content {
+    min-height: 725px;
+}
+#footer1 .navbar-brand img {
+    width: 50px;
+}
+.screen .frameWrapper #pageList #footer1 ul {
+    display: block;
+}
+#footer2 img.small {
+    margin: -12px 0 0;
+    padding: 0;
+    width: 60px;
+}
+.screen .frameWrapper #pageList #footer2 ul {
+    display: block;
+    font-size: 16px;
+    margin-top: 9px;
+}
+#footer3 .social h2 {
+    border-bottom: 2px dashed #cbd0d3;
+    color: #ecf0f1;
+    font-size: 34px;
+    margin-top: 0;
+    padding-bottom: 20px;
+}
+#footer3 .item.footer.dark {
+    padding: 10px;
+}
+
+
+
+/*
+
+section .screen .frameWrapper #pageList ul.nav {
+    display: inline-block;
+    height: 100%;
+    list-style: outside none none;
+    margin: 0;
+    min-height:0px;
+    padding: 0;
+}
+.skin-green section header .navbar-white {
+    background: #fff none repeat scroll 0 0;
+}
+section .navbar.navbar-white.navbar-embossed.navbar-lg.navbar-fixed-top {
+    position: relative;
+}
+section .user-panel > .image > img {
+    width: 40px !important;
+}
+body .navbar-header .navbar-brand {
+    padding-top: 15px;
+}
+.skin-green section .navbar .nav a {
+    color: #34495e;
+}
+.skin-green section .navbar-dblue .nav a {
+    color: #fff;
+}
+.skin-green .navbar-dblue {
+    background-color: #34495e;
+}
+.navbar-brand {
+    color: #fff;
+}
+.skin-green .navbar-default {
+    background-color: #f8f8f8;
+}*/
