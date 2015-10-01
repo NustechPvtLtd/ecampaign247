@@ -14,6 +14,7 @@ var editableItems = new Array();
 editableItems['.frameCover'] = ['margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['span.fa'] = ['color', 'font-size'];
 editableItems['.bg.bg1'] = ['background-color'];
+editableItems['nav.navbar'] = ['color', 'font-size', 'background-color', 'font-family'];
 editableItems['nav a, a.edit'] = ['color', 'font-weight', 'text-transform'];
 editableItems['h1'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['h2'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
@@ -22,7 +23,8 @@ editableItems['h4'] = ['color', 'font-size', 'background-color', 'font-family', 
 editableItems['h5'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['p'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['a'] = ['color', 'font-size', 'background-color', 'font-family', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
-editableItems['a.btn, button.btn'] = ['border-radius', 'font-size', 'background-color', 'border', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['a.btn'] = ['border-radius', 'font-size', 'background-color', 'border', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+editableItems['button.btn'] = ['border-radius', 'font-size', 'background-color', 'border', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['img'] = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
 editableItems['hr.dashed'] = ['border-color', 'border-width'];
 editableItems['.divider > span'] = ['color', 'font-size', 'background-color', 'font-family'];
@@ -193,7 +195,7 @@ function prepPagesforSave() {
             $(this).find('section').each(function() {
 
                 frame = {};
-                
+
                 frame['frameContent'] = $(this).html();
 
                 //get real frame height rather then from the array
@@ -312,7 +314,7 @@ function makeSortable(el) {
 
                     ui.item.html('<section src="' + ui.item.find('section').attr('src') + '" scrolling="no" data-originalurl="' + ui.item.find('section').attr('src') + '" frameborder="0" sandbox="allow-same-origin"></section>');
                     if (typeof attr !== typeof undefined && attr !== false) {
-                        
+
                         $.ajax({
                             type: "POST",
                             url: ui.item.find('section').attr('data-originalurl'),
@@ -320,9 +322,9 @@ function makeSortable(el) {
                                 ui.item.find('section').html(data);
                             }
                         });
-                        
+
                     } else {
-                        
+
                         ui.item.html('<section src="' + ui.item.find('section').attr('src') + '" scrolling="no" data-originalurl="' + ui.item.find('section').attr('src') + '" frameborder="0"></section>');
                         $.ajax({
                             type: "POST",
@@ -331,7 +333,7 @@ function makeSortable(el) {
                                 ui.item.find('section').html(data);
                             }
                         });
-                        
+
                     }
 
                     ui.item.find('section').uniqueId();
@@ -420,25 +422,25 @@ $('#element').on('click', 'li', function() {
 
     theHeight = ui.find('img').attr('data-height') * 0.8;
     el.html('<section src="' + ui.find('img').attr('data-src') + '" scrolling="no" data-originalurl="' + ui.find('img').attr('data-src') + '" frameborder="0"></section>');
-    
+
     $.ajax({
         type: "POST",
         url: el.find('section').attr('data-originalurl'),
         success: function(data) {
             el.find('section').html(data);
         }
-    }).done(function(){
+    }).done(function() {
         el.find('section').uniqueId();
 
         el.find('section').zoomer({
-           zoom: 0.8,
-           width: $('#screen').width(),
-           height: theHeight,
-           message: "Drag&Drop Me!"
+            zoom: 0.8,
+            width: $('#screen').width(),
+            height: theHeight,
+            message: "Drag&Drop Me!"
         });
 
         el.find('section').load(function() {
-           heightAdjustment(el.find('section').attr('id'), true);
+            heightAdjustment(el.find('section').attr('id'), true);
         });
 
         //remove the link if it excists
@@ -459,15 +461,15 @@ $('#element').on('click', 'li', function() {
         setPendingChanges(true);
         $('#pageList > ul:visible').append(el);
         $('#pageList > ul:visible li').each(function() {
-           $(this).find('.zoomer-cover > a').remove();
+            $(this).find('.zoomer-cover > a').remove();
         });
         pageEmpty();
         allEmpty();
         $('#start').hide();
     });
 
- });
- 
+});
+
 function buildeStyleElements(el, theSelector) {
 
     for (x = 0; x < editableItems[theSelector].length; x++) {
@@ -620,7 +622,7 @@ function heightAdjustment(el, par) {
     }
 
     //realHeight = theFrame.contentWindow.document.body.offsetHeight;
-    
+
     realHeight = theFrame.offsetHeight;
 
     //alert( realHeight )
@@ -974,11 +976,13 @@ function styleClick(el) {
     $('button#saveStyling').unbind('click').bind('click', function() {
 
         $('#styleEditor #tab1 .form-group:not(#styleElTemplate) input, #styleEditor #tab1 .form-group:not(#styleElTemplate) select').each(function() {
-
-            //alert( $(this).attr('name')+":"+$(this).val() )
-
-            $(el).css($(this).attr('name'), $(this).val())
-
+            
+            if($(this).attr('name')=='background-color'){
+                $(el).style($(this).attr('name'), $(this).val(), 'important');;
+            }else{
+                $(el).css($(this).attr('name'), $(this).val());
+            }
+            
         });
 
 
@@ -986,19 +990,12 @@ function styleClick(el) {
         if ($(el).prop('tagName') == 'A') {
 
             //change the href prop?
-
             if ($('select#internalLinksDropdown').val() != '#') {
-
                 $(el).attr('href', $('select#internalLinksDropdown').val());
-
             } else if ($('select#pageLinksDropdown').val() != '#') {
-
                 $(el).attr('href', $('select#pageLinksDropdown').val());
-
             } else if ($('input#internalLinksCustom').val() != '') {
-
                 $(el).attr('href', $('input#internalLinksCustom').val());
-
             }
 
         }
@@ -1058,7 +1055,7 @@ function styleClick(el) {
 
                 } else if (response.code == 0) {//error
 
-                    alert('Something went wrong: ' + response.response)
+                    alert('Something went wrong: ' + response.response);
 
                 }
 
@@ -1071,7 +1068,7 @@ function styleClick(el) {
             if ($('input#imageURL').val() != '' && $('input#imageURL').val() != $(el).attr('src')) {
 
                 $(el).attr('src', $('input#imageURL').val());
-
+                $(el).load();
             }
 
         }
@@ -1776,7 +1773,7 @@ $(function() {
                     }).click(function(e) {
 
                         elToUpdate = $(this);
-                        console.log(elToUpdate.html());
+
                         e.preventDefault();
 
                         e.stopPropagation();
@@ -1930,8 +1927,28 @@ $(function() {
     $('button#updateContentInFrameSubmit').click(function() {
 
         //alert( elToUpdate.text() )
+        if (elToUpdate.hasClass('pprice') == true)
+        {
+            var text1 = $('#editContentModal #contentToEdit').redactor('code.get');
 
+            var checkprice = /^\d+(\.\d{0,2})?$/;
+            var pricevalid = checkprice.test(text1);
+
+            if (pricevalid == false)
+            {
+                alert("Please enter only numbers");
+                return false;
+            }
+
+        }
         elToUpdate.html($('#editContentModal #contentToEdit').redactor('code.get')).css({'outline': '', 'cursor': ''});
+        var text = elToUpdate.text();
+
+        if (elToUpdate.hasClass('createproduct') == true)
+        {
+            //function to set values for product form 1
+            updateproductinfo(elToUpdate, text);
+        }
 
         $('#editContentModal textarea').each(function() {
 
@@ -1945,10 +1962,88 @@ $(function() {
         $(this).closest('div.page').removeClass('modal-open');
 
         //element was deleted, so we've got pending changes
-        setPendingChanges(true)
+        setPendingChanges(true);
 
     });
 
+    //set value for product no.1 //..............shubhangee
+    function updateproductinfo(elToUpdate, text)
+    {
+        var elem = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.productform1');
+
+        if (elem.find('.productid').val() == "")
+        {
+            var randid = makeid();
+            elem.find('.productid').val(randid);
+
+            var redirecturl = siteUrl + "products/buynow?pid=" + randid;
+            $(elToUpdate).parents('div.pricing1').children(':last-child').find('.buynowbtn').attr('href', redirecturl);
+        }
+
+        var productid = elem.find('.productid').val();
+
+        if (elToUpdate.hasClass('pname') == true)
+        {
+            elem.find('.productname').val(text);
+        }
+
+        if (elToUpdate.hasClass('pprice') == true)
+        {
+            elem.find('.productprice').val(text);
+        }
+
+        if (elToUpdate.hasClass('pdescription') == true)
+        {
+            elem.find('.productdesc').val(text);
+        }
+
+        if (elem.find('.productname').val() == "")
+        {
+            var pname = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.pname').text();
+            elem.find('.productname').val(pname);
+        }
+
+        if (elem.find('.productprice').val() == "")
+        {
+            var pprice = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.pprice').text();
+            elem.find('.productprice').val(pprice);
+        }
+
+        if (elem.find('.productdesc').val() == "")
+        {
+            var desc = $(elToUpdate).parents('div.pricing1').children(':last-child').find('.pdescription').text();
+            elem.find('.productdesc').val(desc);
+        }
+
+        var img1 = $(elToUpdate).parents('div.pricing1').children(':first-child').find('.img1').attr('src');
+
+        var pprice = elem.find('.productprice').val();
+        var pdescription = elem.find('.productdesc').val();
+        var pname = elem.find('.productname').val();
+
+        siteId = $('#pageList ul:visible').attr('data-siteid');
+
+        $.ajax({
+            url: siteUrl + "sites/createuserproducts/",
+            type: "POST",
+            dataType: "json",
+            data: 'site_id=' + siteId + '&productid=' + productid + '&pname=' + pname + '&pprice=' + pprice + '&pdescription=' + pdescription + '&img1=' + img1,
+        }).done(function(response) {
+        });
+
+    }
+
+    //generate random id
+    function makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 10; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
 
     //close styleEditor
     $('#styleEditor > a.close').click(function(e) {
@@ -2131,7 +2226,7 @@ $(function() {
             //loop through page iframes and grab the body stuff
             $(this).find('section').each(function() {
                 //remove .frameCovers
-                
+
                 theContents = $(this).contents().find(pageContainer);
 
                 toAdd = $(this).html();
@@ -3100,3 +3195,68 @@ function publishAsset() {
     }
 
 }
+
+(function($) {    
+  if ($.fn.style) {
+    return;
+  }
+
+  // Escape regex chars with \
+  var escape = function(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+  };
+
+  // For those who need them (< IE 9), add support for CSS functions
+  var isStyleFuncSupported = !!CSSStyleDeclaration.prototype.getPropertyValue;
+  if (!isStyleFuncSupported) {
+    CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
+      return this.getAttribute(a);
+    };
+    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
+      this.setAttribute(styleName, value);
+      var priority = typeof priority != 'undefined' ? priority : '';
+      if (priority != '') {
+        // Add priority manually
+        var rule = new RegExp(escape(styleName) + '\\s*:\\s*' + escape(value) +
+            '(\\s*;)?', 'gmi');
+        this.cssText =
+            this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
+      }
+    };
+    CSSStyleDeclaration.prototype.removeProperty = function(a) {
+      return this.removeAttribute(a);
+    };
+    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
+      var rule = new RegExp(escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?',
+          'gmi');
+      return rule.test(this.cssText) ? 'important' : '';
+    }
+  }
+
+  // The style function
+  $.fn.style = function(styleName, value, priority) {
+    // DOM node
+    var node = this.get(0);
+    // Ensure we have a DOM node
+    if (typeof node == 'undefined') {
+      return this;
+    }
+    // CSSStyleDeclaration
+    var style = this.get(0).style;
+    // Getter/Setter
+    if (typeof styleName != 'undefined') {
+      if (typeof value != 'undefined') {
+        // Set style property
+        priority = typeof priority != 'undefined' ? priority : '';
+        style.setProperty(styleName, value, priority);
+        return this;
+      } else {
+        // Get style property
+        return style.getPropertyValue(styleName);
+      }
+    } else {
+      // Get CSSStyleDeclaration
+      return style;
+    }
+  };
+})(jQuery);

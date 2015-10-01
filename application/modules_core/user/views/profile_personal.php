@@ -88,7 +88,7 @@
     </div>
 </section>
 <script>
-    <?php if(!$this->ion_auth->is_admin()):?>
+    <?php //if(!$this->ion_auth->is_admin()):?>
     $(function(){
         var btnUpload = $('#uploadImageButton');
         var status = $('#notify-container');
@@ -128,5 +128,5 @@
         $('#phone').mask("+91 dd dd dddddd");
         
     });
-    <?php endif;?>
+    <?php //endif;?>
 </script>
